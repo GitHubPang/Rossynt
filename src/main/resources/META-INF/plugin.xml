@@ -20,4 +20,9 @@
         <listener class="org.jetbrains.plugins.template.listeners.MyFileEditorManagerListener"
                   topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
     </applicationListeners>
+
+    <projectListeners>
+        <listener class="org.jetbrains.plugins.template.listeners.MyToolWindowManagerListener"
+                  topic="com.intellij.openapi.wm.ex.ToolWindowManagerListener"/>
+    </projectListeners>
 </idea-plugin>

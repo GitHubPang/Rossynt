@@ -8,6 +8,8 @@ import com.intellij.ui.content.ContentFactory
 
 class MyToolWindowFactory : ToolWindowFactory {
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
+        require(toolWindow.id == MyToolWindow.TOOL_WINDOW_ID)
+
         val myToolWindow = MyToolWindow(project.messageBus)
         val contentFactory = ContentFactory.SERVICE.getInstance()
         val content = contentFactory.createContent(myToolWindow.content, "", false)

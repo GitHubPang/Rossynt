@@ -8,13 +8,18 @@ import java.util.*
 import javax.swing.JButton
 import javax.swing.JLabel
 import javax.swing.JPanel
+import javax.swing.tree.DefaultMutableTreeNode
+import javax.swing.tree.DefaultTreeModel
 
-class MyToolWindow(messageBus: MessageBus) {
+internal class MyToolWindow(messageBus: MessageBus) {
+    companion object {
+        const val TOOL_WINDOW_ID: String = "Roslyn Syntax Tree"  // Must match with toolWindow id in "plugin.xml"
+    }
+
     private var currentFilePath: String? = null
     private var tree: Tree? = null
     private var labelStatusMessage: JLabel? = null
     private var buttonRefreshToolWindow: JButton? = null
-    private var buttonHideToolWindow: JButton? = null
     var content: JPanel? = null
 
     init {
@@ -39,5 +44,10 @@ class MyToolWindow(messageBus: MessageBus) {
         val currentDate = Date()
         labelStatusMessage!!.text = """$currentDate $currentFilePath"""
 //        labelStatusMessage!!.icon = ImageIcon(javaClass.getResource("/toolWindow/Time-icon.png"))
+
+        val model = tree!!.model as DefaultTreeModel
+        val root = model.root as DefaultMutableTreeNode
+        root.add(DefaultMutableTreeNode("another_child"))
+        model.reload(root)
     }
 }
