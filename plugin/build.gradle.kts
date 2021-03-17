@@ -50,6 +50,7 @@ intellij {
 changelog {
     version = properties("pluginVersion")
     groups = emptyList()
+    path = "../CHANGELOG.md"
 }
 
 // Configure detekt plugin.
@@ -102,7 +103,6 @@ tasks {
         // Get the latest available change notes from the changelog file
         changeNotes(
             closure {
-                changelog.path = "../CHANGELOG.md"
                 changelog.getLatest().toHTML()
             }
         )
