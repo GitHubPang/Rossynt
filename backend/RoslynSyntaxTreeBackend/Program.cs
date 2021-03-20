@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RoslynSyntaxTreePrinter {
+namespace RoslynSyntaxTreeBackend {
     internal static class Program {
         private static async Task Main(string[] args) {
             Console.WriteLine(string.Join(" ", args.Reverse()));
