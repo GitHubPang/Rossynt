@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoslynSyntaxTreeBackend", "RoslynSyntaxTreeBackend\RoslynSyntaxTreeBackend.csproj", "{F6EEF6E8-A450-4DC2-A3F8-7DEFC14FB6FA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoslynSyntaxTreeBackend", "RoslynSyntaxTreeBackend\RoslynSyntaxTreeBackend.csproj", "{8CA45FD2-990B-4707-9F36-966C6A363D23}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +8,9 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F6EEF6E8-A450-4DC2-A3F8-7DEFC14FB6FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F6EEF6E8-A450-4DC2-A3F8-7DEFC14FB6FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F6EEF6E8-A450-4DC2-A3F8-7DEFC14FB6FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F6EEF6E8-A450-4DC2-A3F8-7DEFC14FB6FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CA45FD2-990B-4707-9F36-966C6A363D23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CA45FD2-990B-4707-9F36-966C6A363D23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CA45FD2-990B-4707-9F36-966C6A363D23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CA45FD2-990B-4707-9F36-966C6A363D23}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
