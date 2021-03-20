@@ -3,10 +3,6 @@ package org.jetbrains.plugins.template.toolWindow
 import com.intellij.ui.treeStructure.Tree
 import com.intellij.util.messages.MessageBus
 import org.jetbrains.plugins.template.CurrentFileNameChangeNotifier
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
-import java.nio.file.Files.createTempDirectory
 import java.util.*
 import javax.swing.JButton
 import javax.swing.JLabel
@@ -25,6 +21,8 @@ internal class MyToolWindow(messageBus: MessageBus) {
     private var buttonTest: JButton? = null
     var content: JPanel? = null
 
+    // ******************************************************************************** //
+
     init {
         messageBus.connect().subscribe(CurrentFileNameChangeNotifier.TOPIC, object : CurrentFileNameChangeNotifier {
             override fun currentFileNameChanged(filePath: String?) {
@@ -40,17 +38,6 @@ internal class MyToolWindow(messageBus: MessageBus) {
         })
 
         buttonTest!!.addActionListener {
-             javaClass.getResourceAsStream("/raw/tool/rawfile.txt").use { inputStream: InputStream? ->
-                 if (inputStream == null) {
-                     return@use//pang to handle open stream failed
-                 }
-
-                 val file = File.createTempFile("RoslynSyntaxTree_rawfile", ".txt")
-                 file.deleteOnExit()
-                 file.outputStream().use { outputStream: FileOutputStream ->
-                     inputStream.copyTo(outputStream)
-                 }
-             }
         }
         uiUpdateAll()
     }
