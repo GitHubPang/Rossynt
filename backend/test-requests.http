@@ -1,4 +1,4 @@
-﻿GET http://localhost:5000/weatherForecast
+﻿POST http://localhost:5000/syntaxTree/setActiveFile?projectId=abcd&filePath=D%3A%5CPang%5CJetBrains%5Cintellij-plugin-roslyn-syntax-tree%5CGit%5Cbackend%5CRoslynSyntaxTreeBackend%5CStartup.cs
 Accept: application/json
 
 ###
