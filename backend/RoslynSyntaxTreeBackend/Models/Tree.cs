@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Immutable;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -12,14 +11,14 @@ namespace RoslynSyntaxTreeBackend.Models {
     public sealed class Tree {
         [NotNull] private readonly SyntaxTree _syntaxTree;
         [NotNull] private readonly SyntaxNode _root;
-        [NotNull] private readonly IImmutableList<TreeNode> _treeNodes;
+        [NotNull] private readonly IList<TreeNode> _treeNodes = new List<TreeNode>();
 
         // ******************************************************************************** //
 
         private Tree([NotNull] SyntaxTree syntaxTree, [NotNull] SyntaxNode root) {
             _syntaxTree = syntaxTree ?? throw new ArgumentNullException(nameof(syntaxTree));
             _root = root ?? throw new ArgumentNullException(nameof(root));
-            _treeNodes = _root.DescendantNodesAndTokensAndSelf().Select(syntaxNodeOrToken => new TreeNode(syntaxNodeOrToken)).ToImmutableArray();
+            ProcessNode(new TreeNode(_root, null));
         }
 
         [NotNull]
@@ -28,6 +27,18 @@ namespace RoslynSyntaxTreeBackend.Models {
             var syntaxTree = CSharpSyntaxTree.ParseText(fileContent, path: filePath, cancellationToken: cancellationToken);
             var root = await syntaxTree.GetRootAsync(cancellationToken);
             return new Tree(syntaxTree, root);
+        }
+
+        private void ProcessNode([NotNull] TreeNode treeNode) {
+            if (treeNode == null) throw new ArgumentNullException(nameof(treeNode));
+
+            // Save the tree node.
+            _treeNodes.Add(treeNode);
+
+            // Process each child.
+            foreach (var child in treeNode.SyntaxNodeOrToken.ChildNodesAndTokens()) {
+                ProcessNode(new TreeNode(child, treeNode));
+            }
         }
     }
 }
