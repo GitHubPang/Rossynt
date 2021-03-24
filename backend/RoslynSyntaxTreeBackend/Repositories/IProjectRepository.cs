@@ -6,6 +6,7 @@ namespace RoslynSyntaxTreeBackend.Repositories {
         void SetProjectRecord([NotNull] ProjectRecord projectRecord);
 
         [CanBeNull]
+        [Pure]
         ProjectRecord GetProjectRecord([NotNull] string projectId);
 
         void RemoveProjectRecord([NotNull] string projectId);

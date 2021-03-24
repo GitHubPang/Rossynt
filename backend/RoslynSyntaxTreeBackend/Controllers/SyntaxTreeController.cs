@@ -17,15 +17,15 @@ namespace RoslynSyntaxTreeBackend.Controllers {
             _projectRepository = projectRepository ?? throw new ArgumentNullException(nameof(projectRepository));
         }
 
-        [NotNull]
         [HttpPost(nameof(SetActiveFile))]
-        public async Task SetActiveFile([NotNull] string projectId, [NotNull] string filePath) {
-            if (projectId == null) throw new ArgumentNullException(nameof(projectId));
-            if (filePath == null) throw new ArgumentNullException(nameof(filePath));
+        [NotNull]
+        public async Task<string> SetActiveFile([NotNull] [FromForm] SetActiveFileRequest request) {
+            if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var tree = await Tree.CompileFile(filePath, HttpContext.RequestAborted);
-            var projectRecord = new ProjectRecord(projectId, tree);
+            var tree = await Tree.CompileFile(request.FilePath, HttpContext.RequestAborted);
+            var projectRecord = new ProjectRecord(request.ProjectId, tree);
             _projectRepository.SetProjectRecord(projectRecord);
+            return "pqr";
         }
     }
 }
