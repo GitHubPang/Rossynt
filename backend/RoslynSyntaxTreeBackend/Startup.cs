@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RoslynSyntaxTreeBackend.Repositories;
 
 namespace RoslynSyntaxTreeBackend {
     public class Startup {

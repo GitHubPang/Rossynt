@@ -2,8 +2,10 @@
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
+using RoslynSyntaxTreeBackend.Models;
+using RoslynSyntaxTreeBackend.Repositories;
 
-namespace RoslynSyntaxTreeBackend {
+namespace RoslynSyntaxTreeBackend.Controllers {
     [ApiController]
     [Route("[controller]")]
     public class SyntaxTreeController : ControllerBase {
