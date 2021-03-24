@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
-
-#nullable enable
+using JetBrains.Annotations;
 
 namespace RoslynSyntaxTreeBackend {
     public sealed class ProjectRepository : IProjectRepository {
-        private readonly ConcurrentDictionary<string, ProjectRecord> _projectRecords = new ConcurrentDictionary<string, ProjectRecord>();
+        [NotNull] private readonly ConcurrentDictionary<string, ProjectRecord> _projectRecords = new ConcurrentDictionary<string, ProjectRecord>();
 
         // ******************************************************************************** //
 
@@ -15,7 +14,7 @@ namespace RoslynSyntaxTreeBackend {
             _projectRecords[projectRecord.ProjectId] = projectRecord;
         }
 
-        public ProjectRecord? GetProjectRecord(string projectId) {
+        public ProjectRecord GetProjectRecord(string projectId) {
             if (projectId == null) throw new ArgumentNullException(nameof(projectId));
 
             return _projectRecords.TryGetValue(projectId, out var projectRecord) ? projectRecord : null;

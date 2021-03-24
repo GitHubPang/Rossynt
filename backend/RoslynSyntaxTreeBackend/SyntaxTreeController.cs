@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
-
-#nullable enable
 
 namespace RoslynSyntaxTreeBackend {
     [ApiController]
     [Route("[controller]")]
     public class SyntaxTreeController : ControllerBase {
-        private readonly IProjectRepository _projectRepository;
+        [NotNull] private readonly IProjectRepository _projectRepository;
 
         // ******************************************************************************** //
 
-        public SyntaxTreeController(IProjectRepository projectRepository) {
+        public SyntaxTreeController([NotNull] IProjectRepository projectRepository) {
             _projectRepository = projectRepository ?? throw new ArgumentNullException(nameof(projectRepository));
         }
 
+        [NotNull]
         [HttpPost(nameof(SetActiveFile))]
-        public async Task SetActiveFile(string projectId, string filePath) {
+        public async Task SetActiveFile([NotNull] string projectId, [NotNull] string filePath) {
             if (projectId == null) throw new ArgumentNullException(nameof(projectId));
             if (filePath == null) throw new ArgumentNullException(nameof(filePath));
 

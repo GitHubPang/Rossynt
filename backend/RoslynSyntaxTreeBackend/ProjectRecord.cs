@@ -1,15 +1,14 @@
 ﻿using System;
-
-#nullable enable
+using JetBrains.Annotations;
 
 namespace RoslynSyntaxTreeBackend {
     public sealed class ProjectRecord {
-        public string ProjectId { get; }
-        public Tree Tree { get; }
+        [NotNull] public string ProjectId { get; }
+        [NotNull] public Tree Tree { get; }
 
         // ******************************************************************************** //
 
-        public ProjectRecord(string projectId, Tree tree) {
+        public ProjectRecord([NotNull] string projectId, [NotNull] Tree tree) {
             ProjectId = projectId ?? throw new ArgumentNullException(nameof(projectId));
             Tree = tree ?? throw new ArgumentNullException(nameof(tree));
         }
