@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using RoslynSyntaxTreeBackend.Models;
 
 namespace RoslynSyntaxTreeBackend.Repositories {
+    // ReSharper disable AnnotationRedundancyInHierarchy
     public sealed class ProjectRepository : IProjectRepository {
         [NotNull] private readonly ConcurrentDictionary<string, ProjectRecord> _projectRecords = new ConcurrentDictionary<string, ProjectRecord>();
 
@@ -29,4 +30,5 @@ namespace RoslynSyntaxTreeBackend.Repositories {
             _projectRecords.TryRemove(projectId, out _);
         }
     }
+    // ReSharper restore AnnotationRedundancyInHierarchy
 }

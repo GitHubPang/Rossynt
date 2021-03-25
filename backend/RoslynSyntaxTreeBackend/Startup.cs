@@ -6,6 +6,7 @@ using RoslynSyntaxTreeBackend.Repositories;
 
 namespace RoslynSyntaxTreeBackend {
     public class Startup {
+        // ReSharper disable once UnusedParameter.Local
         public Startup(IConfiguration configuration) {
         }
 
