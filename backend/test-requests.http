@@ -2,6 +2,6 @@
 Content-Type: application/x-www-form-urlencoded
 Accept: application/json
 
-ProjectId=abcd&FilePath=D%3A%5CPang%5CJetBrains%5Cintellij-plugin-roslyn-syntax-tree%5CGit%5Cbackend%5CRoslynSyntaxTreeBackend%5CStartup.cs
+ProjectId=abcd&FilePath=Startup.cs
 
 ###
