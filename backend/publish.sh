@@ -18,3 +18,10 @@ docker container rm "${CONTAINER_NAME}" || exit $?
 
 # Delete the executables (we only need the DLLs).
 rm --verbose "${TARGET_PATH}"/*/RoslynSyntaxTreeBackend
+
+# Generate file lists.
+for DIRECTORY in "${TARGET_PATH}"/* ; do
+    pushd "${DIRECTORY}"
+    find . -type f > FileList.txt
+    popd
+done

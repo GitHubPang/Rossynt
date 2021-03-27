@@ -1,3 +1,4 @@
 .gradle
 .idea
 build
+/src/main/resources/raw/RoslynSyntaxTreeBackend/

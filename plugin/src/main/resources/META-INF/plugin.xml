@@ -8,7 +8,7 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="org.jetbrains.plugins.template.services.MyApplicationService"/>
+        <applicationService serviceImplementation="org.example.githubpang.services.BackendService"/>
         <projectService serviceImplementation="org.jetbrains.plugins.template.services.MyProjectService"/>
         <toolWindow id="Roslyn Syntax Tree" secondary="true" icon="AllIcons.Actions.ShowAsTree" anchor="right"
                 factoryClass="org.jetbrains.plugins.template.toolWindow.MyToolWindowFactory"/>
