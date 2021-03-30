@@ -8,9 +8,9 @@ max_line_length = off
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-# https://github.com/dotnet/runtime/blob/0f64b267ac0552f07b06f18103581b880c8c53c6/.editorconfig#L57-L63
-# 2021-01-19T20:55:21Z
-# Last check for update: 2021-03-17
+# https://github.com/dotnet/runtime/blob/29e8a13cc5b8756378e016bf97ff0697deb1a639/.editorconfig#L57-L63
+# 2021-03-23T14:04:52Z
+# Last check for update: 2021-03-30
 # name all constant fields using PascalCase
 dotnet_naming_rule.constant_fields_should_be_pascal_case.severity = suggestion
 dotnet_naming_rule.constant_fields_should_be_pascal_case.symbols  = constant_fields
@@ -19,9 +19,9 @@ dotnet_naming_symbols.constant_fields.applicable_kinds   = field
 dotnet_naming_symbols.constant_fields.required_modifiers = const
 dotnet_naming_style.pascal_case_style.capitalization = pascal_case
 
-# https://github.com/dotnet/runtime/blob/0f64b267ac0552f07b06f18103581b880c8c53c6/.editorconfig#L75-L82
-# 2021-01-19T20:55:21Z
-# Last check for update: 2021-03-17
+# https://github.com/dotnet/runtime/blob/29e8a13cc5b8756378e016bf97ff0697deb1a639/.editorconfig#L75-L82
+# 2021-03-23T14:04:52Z
+# Last check for update: 2021-03-30
 # internal and private fields should be _camelCase
 dotnet_naming_rule.camel_case_for_private_internal_fields.severity = suggestion
 dotnet_naming_rule.camel_case_for_private_internal_fields.symbols  = private_internal_fields

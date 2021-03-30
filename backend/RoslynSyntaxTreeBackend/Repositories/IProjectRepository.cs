@@ -3,12 +3,12 @@ using RoslynSyntaxTreeBackend.Models;
 
 namespace RoslynSyntaxTreeBackend.Repositories {
     public interface IProjectRepository {
-        void SetProjectRecord([NotNull] ProjectRecord projectRecord);
+        void SetTree([NotNull] Tree tree);
 
-        [CanBeNull]
         [Pure]
-        ProjectRecord GetProjectRecord([NotNull] string projectId);
+        [CanBeNull]
+        Tree GetTree();
 
-        void RemoveProjectRecord([NotNull] string projectId);
+        void RemoveTree();
     }
 }

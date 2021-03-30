@@ -1,33 +1,33 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using JetBrains.Annotations;
 using RoslynSyntaxTreeBackend.Models;
 
 namespace RoslynSyntaxTreeBackend.Repositories {
     // ReSharper disable AnnotationRedundancyInHierarchy
     public sealed class ProjectRepository : IProjectRepository {
-        [NotNull] private readonly ConcurrentDictionary<string, ProjectRecord> _projectRecords = new ConcurrentDictionary<string, ProjectRecord>();
+        [NotNull] private readonly object _lock = new object();
+        [CanBeNull] private Tree _tree;
 
         // ******************************************************************************** //
 
-        public void SetProjectRecord([NotNull] ProjectRecord projectRecord) {
-            if (projectRecord == null) throw new ArgumentNullException(nameof(projectRecord));
-
-            _projectRecords[projectRecord.ProjectId] = projectRecord;
+        public void SetTree([NotNull] Tree tree) {
+            lock (_lock) {
+                _tree = tree ?? throw new ArgumentNullException(nameof(tree));
+            }
         }
 
-        [CanBeNull]
         [Pure]
-        public ProjectRecord GetProjectRecord([NotNull] string projectId) {
-            if (projectId == null) throw new ArgumentNullException(nameof(projectId));
-
-            return _projectRecords.TryGetValue(projectId, out var projectRecord) ? projectRecord : null;
+        [CanBeNull]
+        public Tree GetTree() {
+            lock (_lock) {
+                return _tree;
+            }
         }
 
-        public void RemoveProjectRecord([NotNull] string projectId) {
-            if (projectId == null) throw new ArgumentNullException(nameof(projectId));
-
-            _projectRecords.TryRemove(projectId, out _);
+        public void RemoveTree() {
+            lock (_lock) {
+                _tree = null;
+            }
         }
     }
     // ReSharper restore AnnotationRedundancyInHierarchy

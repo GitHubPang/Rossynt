@@ -11,9 +11,10 @@ rm -rf "${TARGET_PATH}"
 docker build --tag "${IMAGE_NAME}" . || exit $?
 
 # Copy artifacts to target path.
+mkdir --parents "${TARGET_PATH}"
 docker container rm "${CONTAINER_NAME}"
 docker container create --name "${CONTAINER_NAME}" "${IMAGE_NAME}" || exit $?
-docker container cp "${CONTAINER_NAME}":/app/ "${TARGET_PATH}" || exit $?
+docker container cp "${CONTAINER_NAME}":/app/. "${TARGET_PATH}" || exit $?
 docker container rm "${CONTAINER_NAME}" || exit $?
 
 # Delete the executables (we only need the DLLs).

@@ -2,6 +2,16 @@
 Content-Type: application/x-www-form-urlencoded
 Accept: application/json
 
-ProjectId=abcd&FilePath=Startup.cs
+FilePath=Startup.cs
 
 ###
+
+POST http://localhost:5000/syntaxTree/resetActiveFile
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
+
+###
+
+POST http://localhost:5000/syntaxTree/ping
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
