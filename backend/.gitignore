@@ -1,3 +1,7 @@
-.idea/
+# Build output
 bin/
 obj/
+
+# ReSharper / Rider
+.idea/
+*.DotSettings.user

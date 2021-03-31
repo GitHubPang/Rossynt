@@ -1,9 +1,11 @@
 package org.example.githubpang.services
 
 import com.intellij.execution.configurations.GeneralCommandLine
+import com.intellij.execution.process.*
 import com.intellij.execution.util.ExecUtil
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.util.Key
 import org.apache.commons.lang3.StringUtils
 import org.example.githubpang.BackendRuntimeVersion
 import java.io.File
@@ -15,15 +17,17 @@ import java.util.regex.Pattern
 
 class BackendService : Disposable {
     private companion object {
-        const val DEPLOY_DIRECTORY_PREFIX = "RoslynSyntaxTreeBackend."
-        const val RESOURCE_BACKEND_PATH = "/raw/RoslynSyntaxTreeBackend"
-        const val RESOURCE_FILE_LIST_FILE_NAME = "FileList.txt"
-        const val BACKEND_DLL_NAME = "RoslynSyntaxTreeBackend.dll"
+        private val LOGGER = Logger.getInstance(BackendService::class.java)
+
+        private const val DEPLOY_DIRECTORY_PREFIX = "RoslynSyntaxTreeBackend."
+        private const val RESOURCE_BACKEND_PATH = "/raw/RoslynSyntaxTreeBackend"
+        private const val RESOURCE_FILE_LIST_FILE_NAME = "FileList.txt"
+        private const val BACKEND_DLL_NAME = "RoslynSyntaxTreeBackend.dll"
 
         /**
          * [Reference](https://docs.microsoft.com/en-us/dotnet/core/install/how-to-detect-installed-versions#check-for-install-folders)
          */
-        val DEFAULT_DOT_NET_PATHS = arrayOf(
+        private val DEFAULT_DOT_NET_PATHS = arrayOf(
             "C:\\program files\\dotnet\\dotnet.exe", // Default location of dotnet executable on Windows.
             "C:\\Users\\User\\.dotnet\\dotnet.exe", // Default location of dotnet executable on Windows as installed by Rider.
             "/home/user/share/dotnet/dotnet", // Default location of dotnet executable on Linux.
@@ -77,14 +81,15 @@ class BackendService : Disposable {
             // Delete deploy directory.
             deployPath?.toFile()?.deleteRecursively()
             deployPath = null
-            //todo some files left behind. Why? Files still held by OS?
+            //todo some files left behind. Why? Files still held by OS? Perhaps should retry
         } catch (e: Exception) {
-            Logger.getInstance(javaClass).info(e)
+            LOGGER.warn(e)
         }
     }
 
     private fun findDotNetPath(): String {
         // todo should allow config dotnet path in settings
+        // todo: import com.intellij.openapi.util.SystemInfoRt; SystemInfoRt.isWindows
         DEFAULT_DOT_NET_PATHS.forEach { dotNetPath ->
             if (!File(dotNetPath).exists()) {
                 return@forEach
@@ -145,6 +150,25 @@ class BackendService : Disposable {
     private fun executeBackend(): Process {
         val deployPath = deployPath ?: throw IllegalStateException()
         val dllFullPath = File(deployPath.toFile(), BACKEND_DLL_NAME).absolutePath
-        return GeneralCommandLine(dotNetPath, dllFullPath).createProcess()
+        val workingDirectory = File(dotNetPath).parent
+        val commandLine = GeneralCommandLine(dotNetPath, dllFullPath, "--urls", "http://*:0").withWorkDirectory(workingDirectory)
+        val process = commandLine.createProcess()
+        val osProcessHandler = OSProcessHandler(process, commandLine.preparedCommandLine)
+        osProcessHandler.addProcessListener(object : ProcessAdapter() {
+            override fun onTextAvailable(event: ProcessEvent, outputType: Key<*>) {
+                super.onTextAvailable(event, outputType)
+
+                if (ProcessOutputType.isStdout(outputType)) {
+                    val pattern = Pattern.compile("http[s]?://.+?:([0-9]+)")
+                    val matcher = pattern.matcher(event.text)
+                    if (matcher.find()) {
+                        val serverPort = matcher.group(1).toInt()
+                        // todo work on server port. Note: here, it's not on original thread!
+                    }
+                }
+            }
+        }, this)
+        osProcessHandler.startNotify()
+        return process
     }
 }
