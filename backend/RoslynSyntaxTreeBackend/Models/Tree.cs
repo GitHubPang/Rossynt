@@ -15,8 +15,9 @@ namespace RoslynSyntaxTreeBackend.Models {
         private Tree([NotNull] SyntaxNode root) {
             if (root == null) throw new ArgumentNullException(nameof(root));
 
-            RootTreeNode = new TreeNode(root, null);
-            ProcessTreeNode(RootTreeNode);
+            var rootTreeNode = new TreeNodeSyntaxOrToken(root, null);
+            ProcessTreeNode(rootTreeNode);
+            RootTreeNode = rootTreeNode;
         }
 
         [NotNull]
@@ -27,12 +28,22 @@ namespace RoslynSyntaxTreeBackend.Models {
             return new Tree(root);
         }
 
-        private static void ProcessTreeNode([NotNull] TreeNode treeNode) {
+        private static void ProcessTreeNode([NotNull] TreeNodeSyntaxOrToken treeNode) {
             if (treeNode == null) throw new ArgumentNullException(nameof(treeNode));
+
+            // Process leading trivia.
+            foreach (var trivia in treeNode.SyntaxNodeOrToken.GetLeadingTrivia()) {
+                _ = new TreeNodeTrivia(true, trivia, treeNode);
+            }
 
             // Process each child.
             foreach (var child in treeNode.SyntaxNodeOrToken.ChildNodesAndTokens()) {
-                ProcessTreeNode(new TreeNode(child, treeNode));
+                ProcessTreeNode(new TreeNodeSyntaxOrToken(child, treeNode));
+            }
+
+            // Process trailing trivia.
+            foreach (var trivia in treeNode.SyntaxNodeOrToken.GetTrailingTrivia()) {
+                _ = new TreeNodeTrivia(false, trivia, treeNode);
             }
         }
     }

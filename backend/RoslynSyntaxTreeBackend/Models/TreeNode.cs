@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using JetBrains.Annotations;
-using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace RoslynSyntaxTreeBackend.Models {
-    [DebuggerDisplay("{DebuggerDisplay,nq}")]
-    public sealed class TreeNode {
+    public abstract class TreeNode {
         [NotNull] public string NodeId { get; } = Guid.NewGuid().ToString("D");
-        public SyntaxNodeOrToken SyntaxNodeOrToken { get; }
 
         // ReSharper disable once MemberCanBePrivate.Global UnusedAutoPropertyAccessor.Global
         [CanBeNull] public TreeNode ParentTreeNode { get; }
@@ -22,15 +20,14 @@ namespace RoslynSyntaxTreeBackend.Models {
 
         // ******************************************************************************** //
 
-        public TreeNode(SyntaxNodeOrToken syntaxNodeOrToken, [CanBeNull] TreeNode parentTreeNode) {
+        protected TreeNode([CanBeNull] TreeNode parentTreeNode) {
             ParentTreeNode = parentTreeNode;
-            SyntaxNodeOrToken = syntaxNodeOrToken;
 
             // Add as parent's child.
             parentTreeNode?._childTreeNodes.Add(this);
         }
 
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public string DebuggerDisplay => SyntaxNodeOrToken.ToString();
+        public abstract SyntaxKind Kind();
+        public abstract TreeNodeType TreeNodeType();
     }
 }

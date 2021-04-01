@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp;
 using RoslynSyntaxTreeBackend.ApplicationLifetime;
 using RoslynSyntaxTreeBackend.Models;
 using RoslynSyntaxTreeBackend.Repositories;
@@ -66,7 +65,8 @@ namespace RoslynSyntaxTreeBackend.Controllers {
 
             var result = new Dictionary<string, object> {
                 ["Id"] = treeNode.NodeId,
-                ["Kind"] = treeNode.SyntaxNodeOrToken.Kind().ToString()
+                ["Type"] = treeNode.TreeNodeType().ToString(),
+                ["Kind"] = treeNode.Kind().ToString()
             };
             if (childNodes.Length > 0) {
                 result["Child"] = childNodes;

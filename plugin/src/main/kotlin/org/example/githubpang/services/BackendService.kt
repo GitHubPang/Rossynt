@@ -37,10 +37,11 @@ class BackendService : Disposable {
 
     // ******************************************************************************** //
 
-    private var dotNetPath: String = ""
-    private var backendRuntimeVersion: BackendRuntimeVersion = BackendRuntimeVersion.DOT_NET_5
+    private var dotNetPath: String? = null
+    private var backendRuntimeVersion: BackendRuntimeVersion? = null
     private var deployPath: Path? = null
     private var backendProcess: Process? = null
+    private var backendUrl: String? = null
 
     // ******************************************************************************** //
 
@@ -102,6 +103,7 @@ class BackendService : Disposable {
     }
 
     private fun getBackendRuntimeVersion(): BackendRuntimeVersion {
+        val dotNetPath = dotNetPath ?: throw IllegalStateException()
         val pattern = Pattern.compile("^Microsoft.AspNetCore.App ([^ ]+) .*$")
         val processOutput = ExecUtil.execAndGetOutput(GeneralCommandLine(dotNetPath, "--list-runtimes"))
 
@@ -130,6 +132,7 @@ class BackendService : Disposable {
     }
 
     private fun deployFiles() {
+        val backendRuntimeVersion = backendRuntimeVersion ?: throw IllegalStateException()
         val deployPath = deployPath ?: throw IllegalStateException()
 
         val fileListFile = "$RESOURCE_BACKEND_PATH/${backendRuntimeVersion.directoryName}/$RESOURCE_FILE_LIST_FILE_NAME"
@@ -148,6 +151,7 @@ class BackendService : Disposable {
     }
 
     private fun executeBackend(): Process {
+        val dotNetPath = dotNetPath ?: throw IllegalStateException()
         val deployPath = deployPath ?: throw IllegalStateException()
         val dllFullPath = File(deployPath.toFile(), BACKEND_DLL_NAME).absolutePath
         val workingDirectory = File(dotNetPath).parent
@@ -159,11 +163,12 @@ class BackendService : Disposable {
                 super.onTextAvailable(event, outputType)
 
                 if (ProcessOutputType.isStdout(outputType)) {
-                    val pattern = Pattern.compile("http[s]?://.+?:([0-9]+)")
+                    val pattern = Pattern.compile("(http[s]?)://.+?:([0-9]+)")
                     val matcher = pattern.matcher(event.text)
                     if (matcher.find()) {
-                        val serverPort = matcher.group(1).toInt()
-                        // todo work on server port. Note: here, it's not on original thread!
+                        val urlScheme = matcher.group(1)
+                        val serverPort = matcher.group(2)
+                        backendUrl = "$urlScheme://localhost:$serverPort" // todo this is not the original UI thread here. Any problems?
                     }
                 }
             }
