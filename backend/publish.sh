@@ -2,6 +2,7 @@
 
 TARGET_PATH=../plugin/src/main/resources/raw/RossyntBackend
 IMAGE_NAME=temp-publish-rossynt-backend
+FILE_LIST_FILE_NAME=FileList.txt
 CONTAINER_NAME=temp-publish-rossynt-backend-container
 
 # Clean target path.
@@ -23,6 +24,6 @@ rm --verbose "${TARGET_PATH}"/*/RossyntBackend
 # Generate file lists.
 for DIRECTORY in "${TARGET_PATH}"/* ; do
     pushd "${DIRECTORY}"
-    find . -type f > FileList.txt
+    find . -type f | grep -v -F "./${FILE_LIST_FILE_NAME}" > "${FILE_LIST_FILE_NAME}"
     popd
 done

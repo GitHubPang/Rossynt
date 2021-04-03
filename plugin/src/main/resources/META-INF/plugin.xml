@@ -8,10 +8,8 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="org.example.githubpang.rossynt.services.BackendService"/>
-        <projectService serviceImplementation="org.example.githubpang.rossynt.services.MyProjectService"/>
         <toolWindow id="Rossynt" secondary="true" icon="AllIcons.Actions.ShowAsTree" anchor="right"
-                factoryClass="org.example.githubpang.rossynt.toolWindow.MyToolWindowFactory"/>
+                    factoryClass="org.example.githubpang.rossynt.toolWindow.MyToolWindowFactory"/>
     </extensions>
 
     <applicationListeners>

@@ -4,6 +4,7 @@ import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.process.*
 import com.intellij.execution.util.ExecUtil
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.util.Key
 import org.apache.commons.lang3.StringUtils
@@ -15,6 +16,7 @@ import java.nio.file.Path
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
+@Service
 class BackendService : Disposable {
     private companion object {
         private val LOGGER = Logger.getInstance(BackendService::class.java)
@@ -142,6 +144,7 @@ class BackendService : Disposable {
                 val outFile = File(deployPath.toFile(), line)
 
                 javaClass.getResourceAsStream(inFile).use { inputStream ->
+                    Files.createDirectories(outFile.parentFile.toPath())
                     FileOutputStream(outFile).use { outputStream ->
                         inputStream.copyTo(outputStream)
                     }
