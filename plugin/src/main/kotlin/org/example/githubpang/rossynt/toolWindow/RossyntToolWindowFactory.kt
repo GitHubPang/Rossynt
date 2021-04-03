@@ -8,15 +8,15 @@ import com.intellij.ui.content.ContentFactory
 import org.example.githubpang.rossynt.services.BackendService
 
 
-class MyToolWindowFactory : ToolWindowFactory {
+class RossyntToolWindowFactory : ToolWindowFactory {
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
-        require(toolWindow.id == MyToolWindow.TOOL_WINDOW_ID)
+        require(toolWindow.id == RossyntToolWindow.TOOL_WINDOW_ID)
 
         project.service<BackendService>() // Load backend service.
 
-        val myToolWindow = MyToolWindow(project.messageBus)
+        val rossyntToolWindow = RossyntToolWindow(project.messageBus)
         val contentFactory = ContentFactory.SERVICE.getInstance()
-        val content = contentFactory.createContent(myToolWindow.content, "", false)
+        val content = contentFactory.createContent(rossyntToolWindow.content, "", false)
         toolWindow.contentManager.addContent(content)
     }
 }

@@ -7,6 +7,7 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.util.Key
+import kotlinx.coroutines.*
 import org.apache.commons.lang3.StringUtils
 import org.example.githubpang.rossynt.BackendRuntimeVersion
 import java.io.File
@@ -25,6 +26,7 @@ class BackendService : Disposable {
         private const val RESOURCE_BACKEND_PATH = "/raw/RossyntBackend"
         private const val RESOURCE_FILE_LIST_FILE_NAME = "FileList.txt"
         private const val BACKEND_DLL_NAME = "RossyntBackend.dll"
+        private const val DELAY_DURATION_MILLISECONDS = (1000 * 60 / 3.5).toLong()
 
         /**
          * [Reference](https://docs.microsoft.com/en-us/dotnet/core/install/how-to-detect-installed-versions#check-for-install-folders)
@@ -39,6 +41,7 @@ class BackendService : Disposable {
 
     // ******************************************************************************** //
 
+    private var backendJob: Job
     private var dotNetPath: String? = null
     private var backendRuntimeVersion: BackendRuntimeVersion? = null
     private var deployPath: Path? = null
@@ -48,29 +51,49 @@ class BackendService : Disposable {
     // ******************************************************************************** //
 
     init {
-        initBackend()
+        backendJob = GlobalScope.launch(Dispatchers.IO) {
+            runBackendRoutine()
+        }
     }
 
     override fun dispose() {
-        shutdownBackend()
+        backendJob.cancel()
     }
 
-    private fun initBackend() {
-        //todo do in background thread. Co-routine?
-        //todo try catch?
+    private suspend fun runBackendRoutine() {
+        try {
+            // Find dot net path.
+            dotNetPath = findDotNetPath()
 
-        // Get basic info.
-        dotNetPath = findDotNetPath()
-        backendRuntimeVersion = getBackendRuntimeVersion()
+            // Get backend runtime version.
+            yield()
+            backendRuntimeVersion = getBackendRuntimeVersion()
 
-        // Create deploy directory.
-        deployPath = Files.createTempDirectory(DEPLOY_DIRECTORY_PREFIX)
+            // Create deploy directory.
+            yield()
+            deployPath = withContext(Dispatchers.IO) { Files.createTempDirectory(DEPLOY_DIRECTORY_PREFIX) }
 
-        // Deploy files.
-        deployFiles()
+            // Deploy files.
+            yield()
+            deployFiles()
 
-        // Execute backend.
-        backendProcess = executeBackend()
+            // Execute backend.
+            yield()
+            backendProcess = executeBackend()
+
+            // Loop until cancelled...
+            while (true) {
+                delay(DELAY_DURATION_MILLISECONDS)
+                val pang = 0
+            }
+
+        } catch (e: Exception) {
+            if (e !is CancellationException) {
+                LOGGER.error(e)
+            }
+        } finally {
+            shutdownBackend()
+        }
     }
 
     private fun shutdownBackend() {

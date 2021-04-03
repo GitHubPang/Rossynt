@@ -10,7 +10,7 @@ import javax.swing.JPanel
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 
-internal class MyToolWindow(messageBus: MessageBus) {
+internal class RossyntToolWindow(messageBus: MessageBus) {
     companion object {
         const val TOOL_WINDOW_ID: String = "Rossynt"  // Must match with toolWindow id in "plugin.xml"
     }

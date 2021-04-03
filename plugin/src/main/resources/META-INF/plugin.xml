@@ -9,7 +9,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow id="Rossynt" secondary="true" icon="AllIcons.Actions.ShowAsTree" anchor="right"
-                    factoryClass="org.example.githubpang.rossynt.toolWindow.MyToolWindowFactory"/>
+                    factoryClass="org.example.githubpang.rossynt.toolWindow.RossyntToolWindowFactory"/>
     </extensions>
 
     <applicationListeners>
