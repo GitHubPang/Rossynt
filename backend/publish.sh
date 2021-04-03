@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-TARGET_PATH=../plugin/src/main/resources/raw/RoslynSyntaxTreeBackend
-IMAGE_NAME=temp-publish-roslyn-syntax-tree-backend
-CONTAINER_NAME=temp-publish-roslyn-syntax-tree-backend-container
+TARGET_PATH=../plugin/src/main/resources/raw/RossyntBackend
+IMAGE_NAME=temp-publish-rossynt-backend
+CONTAINER_NAME=temp-publish-rossynt-backend-container
 
 # Clean target path.
 rm -rf "${TARGET_PATH}"
@@ -18,7 +18,7 @@ docker container cp "${CONTAINER_NAME}":/app/. "${TARGET_PATH}" || exit $?
 docker container rm "${CONTAINER_NAME}" || exit $?
 
 # Delete the executables (we only need the DLLs).
-rm --verbose "${TARGET_PATH}"/*/RoslynSyntaxTreeBackend
+rm --verbose "${TARGET_PATH}"/*/RossyntBackend
 
 # Generate file lists.
 for DIRECTORY in "${TARGET_PATH}"/* ; do

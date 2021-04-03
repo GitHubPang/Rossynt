@@ -1,8 +1,8 @@
 ﻿using System;
 using JetBrains.Annotations;
-using RoslynSyntaxTreeBackend.Models;
+using RossyntBackend.Models;
 
-namespace RoslynSyntaxTreeBackend.Repositories {
+namespace RossyntBackend.Repositories {
     // ReSharper disable AnnotationRedundancyInHierarchy
     public sealed class ProjectRepository : IProjectRepository {
         [NotNull] private readonly object _lock = new object();

@@ -9,7 +9,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RoslynSyntaxTreeBackend.ApplicationLifetime {
+namespace RossyntBackend.ApplicationLifetime {
     public sealed class ApplicationLifetimeService : IApplicationLifetimeService, IDisposable {
         private static readonly TimeSpan CountdownInterval = TimeSpan.FromSeconds(60);
 

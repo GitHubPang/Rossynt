@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-namespace RoslynSyntaxTreeBackend.Models {
+namespace RossyntBackend.Models {
     public sealed class Tree {
         [NotNull] public TreeNode RootTreeNode { get; }
 

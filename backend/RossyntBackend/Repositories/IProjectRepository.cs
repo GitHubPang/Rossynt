@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
-using RoslynSyntaxTreeBackend.Models;
+using RossyntBackend.Models;
 
-namespace RoslynSyntaxTreeBackend.Repositories {
+namespace RossyntBackend.Repositories {
     public interface IProjectRepository {
         void SetTree([NotNull] Tree tree);
 

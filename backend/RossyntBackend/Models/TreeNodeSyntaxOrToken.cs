@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-namespace RoslynSyntaxTreeBackend.Models {
+namespace RossyntBackend.Models {
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public sealed class TreeNodeSyntaxOrToken : TreeNode {
         public SyntaxNodeOrToken SyntaxNodeOrToken { get; }

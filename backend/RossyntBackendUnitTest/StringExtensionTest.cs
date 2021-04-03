@@ -3,9 +3,9 @@ using System.Web;
 using AutoFixture;
 using JetBrains.Annotations;
 using NUnit.Framework;
-using RoslynSyntaxTreeBackend.Utils;
+using RossyntBackend.Utils;
 
-namespace RoslynSyntaxTreeBackendUnitTest {
+namespace RossyntBackendUnitTest {
     public class StringExtensionTest {
         private readonly Fixture _fixture = new Fixture();
 

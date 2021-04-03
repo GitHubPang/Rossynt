@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace RoslynSyntaxTreeBackend.Utils {
+namespace RossyntBackend.Utils {
     public static class StringExtension {
         /// <summary>
         /// Get a substring from the left side of a string.

@@ -19,10 +19,10 @@ class BackendService : Disposable {
     private companion object {
         private val LOGGER = Logger.getInstance(BackendService::class.java)
 
-        private const val DEPLOY_DIRECTORY_PREFIX = "RoslynSyntaxTreeBackend."
-        private const val RESOURCE_BACKEND_PATH = "/raw/RoslynSyntaxTreeBackend"
+        private const val DEPLOY_DIRECTORY_PREFIX = "RossyntBackend."
+        private const val RESOURCE_BACKEND_PATH = "/raw/RossyntBackend"
         private const val RESOURCE_FILE_LIST_FILE_NAME = "FileList.txt"
-        private const val BACKEND_DLL_NAME = "RoslynSyntaxTreeBackend.dll"
+        private const val BACKEND_DLL_NAME = "RossyntBackend.dll"
 
         /**
          * [Reference](https://docs.microsoft.com/en-us/dotnet/core/install/how-to-detect-installed-versions#check-for-install-folders)

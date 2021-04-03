@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RoslynSyntaxTreeBackend.ApplicationLifetime;
-using RoslynSyntaxTreeBackend.Repositories;
+using RossyntBackend.ApplicationLifetime;
+using RossyntBackend.Repositories;
 
-namespace RoslynSyntaxTreeBackend {
+namespace RossyntBackend {
     public class Startup {
         // ReSharper disable once UnusedParameter.Local
         public Startup(IConfiguration configuration) {

@@ -11,23 +11,23 @@ COPY --from=mcr.microsoft.com/dotnet/core/aspnet:2.1 /usr/share/dotnet /usr/shar
 # Copy csproj and restore as distinct layers.
 WORKDIR /source
 COPY *.sln .
-COPY RoslynSyntaxTreeBackendUnitTest/*.csproj ./RoslynSyntaxTreeBackendUnitTest/
-COPY RoslynSyntaxTreeBackend/*.csproj ./RoslynSyntaxTreeBackend/
+COPY RossyntBackendUnitTest/*.csproj ./RossyntBackendUnitTest/
+COPY RossyntBackend/*.csproj ./RossyntBackend/
 RUN dotnet restore
 
 # Copy everything else.
 WORKDIR /source
-COPY RoslynSyntaxTreeBackendUnitTest/. ./RoslynSyntaxTreeBackendUnitTest/
-COPY RoslynSyntaxTreeBackend/. ./RoslynSyntaxTreeBackend/
+COPY RossyntBackendUnitTest/. ./RossyntBackendUnitTest/
+COPY RossyntBackend/. ./RossyntBackend/
 
 # Run unit test.
-WORKDIR /source/RoslynSyntaxTreeBackendUnitTest
+WORKDIR /source/RossyntBackendUnitTest
 RUN dotnet test -c release --framework net5.0 -o /app-unit-test/net5.0
 RUN dotnet test -c release --framework netcoreapp3.1 -o /app-unit-test/netcoreapp3.1
 RUN dotnet test -c release --framework netcoreapp2.1 -o /app-unit-test/netcoreapp2.1
 
 # Build app.
-WORKDIR /source/RoslynSyntaxTreeBackend
+WORKDIR /source/RossyntBackend
 RUN dotnet publish -c release --framework net5.0 -o /app/net5.0 --no-restore
 RUN dotnet publish -c release --framework netcoreapp3.1 -o /app/netcoreapp3.1 --no-restore
 RUN dotnet publish -c release --framework netcoreapp2.1 -o /app/netcoreapp2.1 --no-restore

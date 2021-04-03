@@ -1,8 +1,8 @@
 ﻿<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="RoslynSyntaxTreeBackend .NET Core 3.1" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
-    <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/RoslynSyntaxTreeBackend/RoslynSyntaxTreeBackend.csproj" />
-    <option name="LAUNCH_PROFILE_TFM" value=".NETCoreApp,Version=v3.1" />
-    <option name="LAUNCH_PROFILE_NAME" value="RoslynSyntaxTreeBackend" />
+  <configuration default="false" name="RossyntBackend .NET 5.0" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
+    <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/RossyntBackend/RossyntBackend.csproj" />
+    <option name="LAUNCH_PROFILE_TFM" value="net5.0" />
+    <option name="LAUNCH_PROFILE_NAME" value="RossyntBackend" />
     <option name="USE_EXTERNAL_CONSOLE" value="0" />
     <option name="USE_MONO" value="0" />
     <option name="RUNTIME_ARGUMENTS" value="" />

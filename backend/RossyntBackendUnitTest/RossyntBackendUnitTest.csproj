@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\RoslynSyntaxTreeBackend\RoslynSyntaxTreeBackend.csproj" />
+      <ProjectReference Include="..\RossyntBackend\RossyntBackend.csproj" />
     </ItemGroup>
 
 </Project>

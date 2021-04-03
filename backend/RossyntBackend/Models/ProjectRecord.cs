@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace RoslynSyntaxTreeBackend.Models {
+namespace RossyntBackend.Models {
     public sealed class ProjectRecord {
         [NotNull] public string ProjectId { get; }
         [NotNull] public Tree Tree { get; }

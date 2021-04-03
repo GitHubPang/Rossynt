@@ -4,7 +4,7 @@ using System.Diagnostics;
 using JetBrains.Annotations;
 using Microsoft.CodeAnalysis.CSharp;
 
-namespace RoslynSyntaxTreeBackend.Models {
+namespace RossyntBackend.Models {
     public abstract class TreeNode {
         [NotNull] public string NodeId { get; } = Guid.NewGuid().ToString("D");
 

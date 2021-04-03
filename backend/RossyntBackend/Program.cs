@@ -9,7 +9,7 @@ using Microsoft.AspNetCore;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 
-namespace RoslynSyntaxTreeBackend {
+namespace RossyntBackend {
     // ReSharper disable once ClassNeverInstantiated.Global
     public class Program {
         public static async Task Main(string[] args) {

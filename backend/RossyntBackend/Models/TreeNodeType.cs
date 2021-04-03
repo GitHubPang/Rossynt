@@ -1,4 +1,4 @@
-﻿namespace RoslynSyntaxTreeBackend.Models {
+﻿namespace RossyntBackend.Models {
     public enum TreeNodeType {
         SyntaxNode,
         SyntaxToken,

@@ -1,4 +1,4 @@
-﻿namespace RoslynSyntaxTreeBackend.ApplicationLifetime {
+﻿namespace RossyntBackend.ApplicationLifetime {
     public interface IApplicationLifetimeService {
         void StartCountdown();
         void RestartCountdown();

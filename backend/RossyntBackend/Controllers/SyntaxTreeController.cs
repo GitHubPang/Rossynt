@@ -5,11 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
-using RoslynSyntaxTreeBackend.ApplicationLifetime;
-using RoslynSyntaxTreeBackend.Models;
-using RoslynSyntaxTreeBackend.Repositories;
+using RossyntBackend.ApplicationLifetime;
+using RossyntBackend.Models;
+using RossyntBackend.Repositories;
 
-namespace RoslynSyntaxTreeBackend.Controllers {
+namespace RossyntBackend.Controllers {
     [ApiController]
     [Route("[controller]")]
     public class SyntaxTreeController : ControllerBase {
