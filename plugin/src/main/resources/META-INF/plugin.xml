@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>org.jetbrains.plugins.template</id>
+    <id>org.example.githubpang.rossynt</id>
     <name>Rossynt</name>
     <vendor>GitHubPang</vendor>
 
@@ -9,20 +9,20 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="org.example.githubpang.services.BackendService"/>
-        <projectService serviceImplementation="org.jetbrains.plugins.template.services.MyProjectService"/>
+        <projectService serviceImplementation="org.example.githubpang.rossynt.services.MyProjectService"/>
         <toolWindow id="Rossynt" secondary="true" icon="AllIcons.Actions.ShowAsTree" anchor="right"
-                factoryClass="org.jetbrains.plugins.template.toolWindow.MyToolWindowFactory"/>
+                factoryClass="org.example.githubpang.rossynt.toolWindow.MyToolWindowFactory"/>
     </extensions>
 
     <applicationListeners>
-        <listener class="org.jetbrains.plugins.template.listeners.MyProjectManagerListener"
+        <listener class="org.example.githubpang.rossynt.listeners.MyProjectManagerListener"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
-        <listener class="org.jetbrains.plugins.template.listeners.MyFileEditorManagerListener"
+        <listener class="org.example.githubpang.rossynt.listeners.MyFileEditorManagerListener"
                   topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
     </applicationListeners>
 
     <projectListeners>
-        <listener class="org.jetbrains.plugins.template.listeners.MyToolWindowManagerListener"
+        <listener class="org.example.githubpang.rossynt.listeners.MyToolWindowManagerListener"
                   topic="com.intellij.openapi.wm.ex.ToolWindowManagerListener"/>
     </projectListeners>
 </idea-plugin>

@@ -1,8 +1,8 @@
-package org.jetbrains.plugins.template.listeners
+package org.example.githubpang.rossynt.listeners
 
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent
 import com.intellij.openapi.fileEditor.FileEditorManagerListener
-import org.jetbrains.plugins.template.CurrentFileNameChangeNotifier
+import org.example.githubpang.rossynt.CurrentFileNameChangeNotifier
 
 internal class MyFileEditorManagerListener : FileEditorManagerListener {
     override fun selectionChanged(event: FileEditorManagerEvent) {

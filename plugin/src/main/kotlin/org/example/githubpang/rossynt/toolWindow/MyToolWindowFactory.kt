@@ -1,4 +1,4 @@
-package org.jetbrains.plugins.template.toolWindow
+package org.example.githubpang.rossynt.toolWindow
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project

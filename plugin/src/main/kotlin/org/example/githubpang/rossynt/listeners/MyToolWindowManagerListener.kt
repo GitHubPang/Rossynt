@@ -1,9 +1,9 @@
-package org.jetbrains.plugins.template.listeners
+package org.example.githubpang.rossynt.listeners
 
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowManager
 import com.intellij.openapi.wm.ex.ToolWindowManagerListener
-import org.jetbrains.plugins.template.toolWindow.MyToolWindow
+import org.example.githubpang.rossynt.toolWindow.MyToolWindow
 
 internal class MyToolWindowManagerListener : ToolWindowManagerListener {
     override fun stateChanged(toolWindowManager: ToolWindowManager) {

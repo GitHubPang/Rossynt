@@ -1,8 +1,8 @@
-package org.jetbrains.plugins.template.toolWindow
+package org.example.githubpang.rossynt.toolWindow
 
 import com.intellij.ui.treeStructure.Tree
 import com.intellij.util.messages.MessageBus
-import org.jetbrains.plugins.template.CurrentFileNameChangeNotifier
+import org.example.githubpang.rossynt.CurrentFileNameChangeNotifier
 import java.util.*
 import javax.swing.JButton
 import javax.swing.JLabel
