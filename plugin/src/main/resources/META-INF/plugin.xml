@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>org.jetbrains.plugins.template</id>
-    <name>Template</name>
-    <vendor>JetBrains</vendor>
+    <name>Rossynt</name>
+    <vendor>GitHubPang</vendor>
 
     <!-- Product and plugin compatibility requirements -->
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
