@@ -12,7 +12,7 @@ class RossyntToolWindowFactory : ToolWindowFactory {
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         require(toolWindow.id == RossyntToolWindow.TOOL_WINDOW_ID)
 
-        project.service<BackendService>() // Load backend service.
+        project.service<BackendService>() // Load backend service.//todo any better place to start service?
 
         val rossyntToolWindow = RossyntToolWindow(project.messageBus)
         val contentFactory = ContentFactory.SERVICE.getInstance()

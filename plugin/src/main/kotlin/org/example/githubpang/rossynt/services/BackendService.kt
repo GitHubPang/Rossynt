@@ -7,7 +7,13 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.util.Key
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.features.*
+import io.ktor.client.request.*
+import io.ktor.http.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
 import org.apache.commons.lang3.StringUtils
 import org.example.githubpang.rossynt.BackendRuntimeVersion
 import java.io.File
@@ -64,27 +70,32 @@ class BackendService : Disposable {
         try {
             // Find dot net path.
             dotNetPath = findDotNetPath()
+            LOGGER.info("Found dot net path: $dotNetPath")
 
             // Get backend runtime version.
             yield()
             backendRuntimeVersion = getBackendRuntimeVersion()
+            LOGGER.info("Backend runtime version: $backendRuntimeVersion")
 
             // Create deploy directory.
             yield()
             deployPath = withContext(Dispatchers.IO) { Files.createTempDirectory(DEPLOY_DIRECTORY_PREFIX) }
+            LOGGER.info("Created deploy path: $deployPath")
 
             // Deploy files.
             yield()
             deployFiles()
+            LOGGER.info("Deployed files to path: $deployPath")
 
             // Execute backend.
             yield()
             backendProcess = executeBackend()
+            LOGGER.info("Started backend process, backendUrl = $backendUrl")
 
             // Loop until cancelled...
             while (true) {
                 delay(DELAY_DURATION_MILLISECONDS)
-                val pang = 0
+                pingBackend()   // Ping backend to keep it alive.
             }
 
         } catch (e: Exception) {
@@ -176,15 +187,24 @@ class BackendService : Disposable {
         }
     }
 
-    private fun executeBackend(): Process {
+    private suspend fun executeBackend(): Process {
         val dotNetPath = dotNetPath ?: throw IllegalStateException()
         val deployPath = deployPath ?: throw IllegalStateException()
+
+        // Construct command line.
         val dllFullPath = File(deployPath.toFile(), BACKEND_DLL_NAME).absolutePath
         val workingDirectory = File(dotNetPath).parent
         val commandLine = GeneralCommandLine(dotNetPath, dllFullPath, "--urls", "http://*:0").withWorkDirectory(workingDirectory)
+
+        // Create process.
         val process = commandLine.createProcess()
         val osProcessHandler = OSProcessHandler(process, commandLine.preparedCommandLine)
-        osProcessHandler.addProcessListener(object : ProcessAdapter() {
+
+        // Create channel.
+        val backendUrlChannel = Channel<String>()
+
+        // Listen to process stdout.
+        val processListener = object : ProcessAdapter() {
             override fun onTextAvailable(event: ProcessEvent, outputType: Key<*>) {
                 super.onTextAvailable(event, outputType)
 
@@ -194,12 +214,30 @@ class BackendService : Disposable {
                     if (matcher.find()) {
                         val urlScheme = matcher.group(1)
                         val serverPort = matcher.group(2)
-                        backendUrl = "$urlScheme://localhost:$serverPort" // todo this is not the original UI thread here. Any problems?
+                        val backendUrl = "$urlScheme://localhost:$serverPort"
+
+                        // Send backend url to channel.
+                        GlobalScope.launch(Dispatchers.IO) {
+                            backendUrlChannel.send(backendUrl)
+                        }
                     }
                 }
             }
-        }, this)
+        }
+        osProcessHandler.addProcessListener(processListener, this)
         osProcessHandler.startNotify()
+
+        // Wait until got backend URL from channel.
+        backendUrl = backendUrlChannel.receive()
+
+        // Stop listening.
+        osProcessHandler.removeProcessListener(processListener)
         return process
+    }
+
+    private suspend fun pingBackend() {
+        HttpClient(CIO).use { client ->
+            client.post<Unit>("$backendUrl/syntaxTree/ping")
+        }//todo verify connection actually closed
     }
 }
