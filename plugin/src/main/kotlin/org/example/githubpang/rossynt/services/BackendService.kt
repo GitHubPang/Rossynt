@@ -32,7 +32,9 @@ class BackendService : Disposable {
         private const val RESOURCE_BACKEND_PATH = "/raw/RossyntBackend"
         private const val RESOURCE_FILE_LIST_FILE_NAME = "FileList.txt"
         private const val BACKEND_DLL_NAME = "RossyntBackend.dll"
-        private const val DELAY_DURATION_MILLISECONDS = (1000 * 60 / 3.5).toLong()
+        private const val PING_BACKEND_DELAY_DURATION_MILLISECONDS = (1000 * 60 / 3.5).toLong()
+        private const val DELETE_DEPLOY_PATH_MAX_RETRY_COUNT = 5
+        private const val DELETE_DEPLOY_PATH_DELAY_DURATION_MILLISECONDS = 300L
 
         /**
          * [Reference](https://docs.microsoft.com/en-us/dotnet/core/install/how-to-detect-installed-versions#check-for-install-folders)
@@ -94,7 +96,7 @@ class BackendService : Disposable {
 
             // Loop until cancelled...
             while (true) {
-                delay(DELAY_DURATION_MILLISECONDS)
+                delay(PING_BACKEND_DELAY_DURATION_MILLISECONDS)
                 pingBackend()   // Ping backend to keep it alive.
             }
 
@@ -110,15 +112,25 @@ class BackendService : Disposable {
     private fun shutdownBackend() {
         try {
             // Kill backend process.
+            //todo better send http request to ask server to die gracefully?
             backendProcess?.destroy()
             backendProcess?.waitFor(500, TimeUnit.MILLISECONDS)
             backendProcess?.destroyForcibly()
             backendProcess = null
 
             // Delete deploy directory.
-            deployPath?.toFile()?.deleteRecursively()
+            for (loopIndex in 1..DELETE_DEPLOY_PATH_MAX_RETRY_COUNT) {
+                LOGGER.info("Attempting to delete directory '$deployPath'...")
+                deployPath?.toFile()?.deleteRecursively()
+
+                if (deployPath?.toFile()?.exists() != true) {
+                    LOGGER.info("Directory '$deployPath' successfully deleted.")
+                    break
+                }
+
+                Thread.sleep(DELETE_DEPLOY_PATH_DELAY_DURATION_MILLISECONDS)    // This blocks the thread. Any better way to do this?
+            }
             deployPath = null
-            //todo some files left behind. Why? Files still held by OS? Perhaps should retry
         } catch (e: Exception) {
             LOGGER.warn(e)
         }
