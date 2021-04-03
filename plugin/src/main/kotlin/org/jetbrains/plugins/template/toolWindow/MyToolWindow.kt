@@ -12,7 +12,7 @@ import javax.swing.tree.DefaultTreeModel
 
 internal class MyToolWindow(messageBus: MessageBus) {
     companion object {
-        const val TOOL_WINDOW_ID: String = "Roslyn Syntax Tree"  // Must match with toolWindow id in "plugin.xml"
+        const val TOOL_WINDOW_ID: String = "Rossynt"  // Must match with toolWindow id in "plugin.xml"
     }
 
     private var currentFilePath: String? = null
