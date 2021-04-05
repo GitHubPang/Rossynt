@@ -25,6 +25,7 @@ internal class RossyntToolWindow(project: Project) {
     private var labelStatusMessage: JLabel? = null
     private var buttonTest: JButton? = null
     var content: JPanel? = null
+        private set
 
     // ******************************************************************************** //
 
@@ -40,10 +41,7 @@ internal class RossyntToolWindow(project: Project) {
         })
 
         if (uiTree!!.cellRenderer !is RossyntNodeRenderer) {
-            uiTree!!.cellRenderer= RossyntNodeRenderer()
-        }
-
-        buttonTest!!.addActionListener {
+            uiTree!!.cellRenderer = RossyntNodeRenderer()
         }
 
         uiUpdateTree()
