@@ -33,8 +33,8 @@ class BackendService : Disposable {
         private const val RESOURCE_FILE_LIST_FILE_NAME = "FileList.txt"
         private const val BACKEND_DLL_NAME = "RossyntBackend.dll"
         private const val PING_BACKEND_DELAY_DURATION_MILLISECONDS = (1000 * 60 / 3.5).toLong()
-        private const val DELETE_DEPLOY_PATH_MAX_RETRY_COUNT = 5
-        private const val DELETE_DEPLOY_PATH_DELAY_DURATION_MILLISECONDS = 300L
+        private const val DELETE_DEPLOY_PATH_MAX_RETRY_COUNT = 20
+        private const val DELETE_DEPLOY_PATH_DELAY_DURATION_MILLISECONDS = 75L
 
         /**
          * [Reference](https://docs.microsoft.com/en-us/dotnet/core/install/how-to-detect-installed-versions#check-for-install-folders)
@@ -60,15 +60,23 @@ class BackendService : Disposable {
 
     init {
         backendJob = GlobalScope.launch(Dispatchers.IO) {
-            runBackendRoutine()
+            runBackend()
         }
     }
 
     override fun dispose() {
-        backendJob.cancel()
+        try {
+            LOGGER.info("Backend service dispose begin.")
+            runBlocking(Dispatchers.IO) {
+                backendJob.cancelAndJoin()
+                shutdownBackend()
+            }
+        } finally {
+            LOGGER.info("Backend service dispose end.")
+        }
     }
 
-    private suspend fun runBackendRoutine() {
+    private suspend fun runBackend() {
         try {
             // Find dot net path.
             dotNetPath = findDotNetPath()
@@ -104,19 +112,18 @@ class BackendService : Disposable {
             if (e !is CancellationException) {
                 LOGGER.error(e)
             }
-        } finally {
-            shutdownBackend()
         }
     }
 
-    private fun shutdownBackend() {
+    private suspend fun shutdownBackend() {
         try {
             // Kill backend process.
-            //todo better send http request to ask server to die gracefully?
+            LOGGER.info("Stopping Backend process...")
             backendProcess?.destroy()
-            backendProcess?.waitFor(500, TimeUnit.MILLISECONDS)
+            withContext(Dispatchers.IO) { backendProcess?.waitFor(500, TimeUnit.MILLISECONDS) }
             backendProcess?.destroyForcibly()
             backendProcess = null
+            LOGGER.info("Backend process stopped.")
 
             // Delete deploy directory.
             for (loopIndex in 1..DELETE_DEPLOY_PATH_MAX_RETRY_COUNT) {
@@ -128,7 +135,7 @@ class BackendService : Disposable {
                     break
                 }
 
-                Thread.sleep(DELETE_DEPLOY_PATH_DELAY_DURATION_MILLISECONDS)    // This blocks the thread. Any better way to do this?
+                delay(DELETE_DEPLOY_PATH_DELAY_DURATION_MILLISECONDS)
             }
             deployPath = null
         } catch (e: Exception) {
