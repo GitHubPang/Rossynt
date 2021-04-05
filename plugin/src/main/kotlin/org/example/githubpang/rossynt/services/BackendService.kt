@@ -6,16 +6,20 @@ import com.intellij.execution.util.ExecUtil
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Key
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.features.*
+import io.ktor.client.features.json.*
 import io.ktor.client.request.*
+import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import org.apache.commons.lang3.StringUtils
 import org.example.githubpang.rossynt.BackendRuntimeVersion
+import org.example.githubpang.rossynt.TreeNode
 import java.io.File
 import java.io.FileOutputStream
 import java.nio.file.Files
@@ -49,7 +53,10 @@ internal class BackendService : Disposable {
 
     // ******************************************************************************** //
 
-    private var backendJob: Job
+    var isReady = false
+        private set
+    private var project: Project? = null
+    private var backendJob: Job? = null
     private var dotNetPath: String? = null
     private var backendRuntimeVersion: BackendRuntimeVersion? = null
     private var deployPath: Path? = null
@@ -58,7 +65,8 @@ internal class BackendService : Disposable {
 
     // ******************************************************************************** //
 
-    init {
+    fun initService(project: Project) {
+        this.project = project
         backendJob = GlobalScope.launch(Dispatchers.IO) {
             runBackend()
         }
@@ -68,7 +76,9 @@ internal class BackendService : Disposable {
         try {
             LOGGER.info("Backend service dispose begin.")
             runBlocking(Dispatchers.IO) {
-                backendJob.cancelAndJoin()
+                backendJob?.cancelAndJoin()
+                backendJob = null
+
                 shutdownBackend()
             }
         } finally {
@@ -77,6 +87,8 @@ internal class BackendService : Disposable {
     }
 
     private suspend fun runBackend() {
+        val project = project ?: throw IllegalStateException()
+
         try {
             // Find dot net path.
             dotNetPath = findDotNetPath()
@@ -100,7 +112,13 @@ internal class BackendService : Disposable {
             // Execute backend.
             yield()
             backendProcess = executeBackend()
+            isReady = true
             LOGGER.info("Started backend process, backendUrl = $backendUrl")
+
+            // Publish message.
+            val messageBus = project.messageBus
+            val publisher = messageBus.syncPublisher(BackendServiceNotifier.TOPIC)
+            publisher.backendServiceBecameReady()
 
             // Loop until cancelled...
             while (true) {
@@ -254,9 +272,26 @@ internal class BackendService : Disposable {
         return process
     }
 
+    suspend fun setActiveFile(filePath: String?): TreeNode? {
+        return if (filePath != null) {
+            sendRequestToBackend("syntaxTree/setActiveFile", parametersOf("FilePath", filePath))
+        } else {
+            sendRequestToBackend<String>("syntaxTree/resetActiveFile")
+            null
+        }
+    }
+
     private suspend fun pingBackend() {
-        HttpClient(CIO).use { client ->
-            client.post<Unit>("$backendUrl/syntaxTree/ping")
+        sendRequestToBackend<Unit>("syntaxTree/ping")
+    }
+
+    private suspend inline fun <reified T> sendRequestToBackend(urlPath: String, formParameters: Parameters = Parameters.Empty): T {
+        //todo check isReady?
+        HttpClient(CIO) {
+            install(JsonFeature) { serializer = GsonSerializer() }
+        }.use { client ->
+            //todo what if this throws exception?
+            return client.submitForm("$backendUrl/$urlPath", formParameters)
         }//todo verify connection actually closed
     }
 }

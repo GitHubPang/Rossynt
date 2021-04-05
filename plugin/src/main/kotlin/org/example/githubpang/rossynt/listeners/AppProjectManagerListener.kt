@@ -11,6 +11,6 @@ internal class AppProjectManagerListener : ProjectManagerListener {
 
         // Start Rossynt service.
         val rossyntService = project.service<RossyntService>()
-        rossyntService.setupService(project)
+        rossyntService.initService(project)
     }
 }

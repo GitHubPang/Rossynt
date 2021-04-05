@@ -17,7 +17,7 @@ internal class ProjectToolWindowManagerListener(private var project: Project) : 
 
         val toolWindow = toolWindowManager.getToolWindow(RossyntToolWindow.TOOL_WINDOW_ID)
         if (toolWindow != null) {
-            processRossyntToolWindowIsVisible(toolWindow.isVisible)
+            processRossyntToolWindowIsVisible(toolWindow)
         }
     }
 
@@ -25,16 +25,15 @@ internal class ProjectToolWindowManagerListener(private var project: Project) : 
         super.toolWindowShown(id, toolWindow)
 
         if (id == RossyntToolWindow.TOOL_WINDOW_ID) {
-            processRossyntToolWindowIsVisible(true)
+            processRossyntToolWindowIsVisible(toolWindow)
         }
     }
 
-    private fun processRossyntToolWindowIsVisible(isVisible: Boolean) {
-        if (rossyntToolWindowIsVisible == isVisible) {
+    private fun processRossyntToolWindowIsVisible(toolWindow: ToolWindow) {
+        if (rossyntToolWindowIsVisible == toolWindow.isVisible) {
             return
         }
-
-        rossyntToolWindowIsVisible = isVisible
+        rossyntToolWindowIsVisible = toolWindow.isVisible
 
         // Publish message.
         val messageBus = project.messageBus
