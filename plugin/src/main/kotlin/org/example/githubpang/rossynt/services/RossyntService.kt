@@ -3,6 +3,9 @@ package org.example.githubpang.rossynt.services
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.VirtualFileManager
+import com.intellij.openapi.vfs.newvfs.BulkFileListener
+import com.intellij.openapi.vfs.newvfs.events.VFileEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -51,6 +54,18 @@ internal class RossyntService {
                     // Update tree.
                     updateTree()
                 }
+            }
+        })
+        messageBusConnection.subscribe(VirtualFileManager.VFS_CHANGES, object : BulkFileListener {
+            override fun after(events: MutableList<out VFileEvent>) {
+                super.after(events)
+
+                if (events.none { event -> event.path == currentFilePath }) {
+                    return
+                }
+
+                // Update tree.
+                updateTree()
             }
         })
         messageBusConnection.subscribe(BackendServiceNotifier.TOPIC, object : BackendServiceNotifier {
