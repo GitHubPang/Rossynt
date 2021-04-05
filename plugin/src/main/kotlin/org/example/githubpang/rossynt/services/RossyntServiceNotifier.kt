@@ -1,7 +1,7 @@
 package org.example.githubpang.rossynt.services
 
 import com.intellij.util.messages.Topic
-import org.example.githubpang.rossynt.TreeNode
+import org.example.githubpang.rossynt.trees.TreeNode
 
 internal interface RossyntServiceNotifier {
     companion object {

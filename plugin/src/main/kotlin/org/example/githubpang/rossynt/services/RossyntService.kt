@@ -11,7 +11,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.example.githubpang.rossynt.CurrentFileNotifier
 import org.example.githubpang.rossynt.RossyntToolWindowStateNotifier
-import org.example.githubpang.rossynt.TreeNode
+import org.example.githubpang.rossynt.trees.TreeNode
 
 @Service
 internal class RossyntService {
