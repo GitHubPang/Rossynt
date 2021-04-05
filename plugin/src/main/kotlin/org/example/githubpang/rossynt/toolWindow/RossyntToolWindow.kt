@@ -39,6 +39,10 @@ internal class RossyntToolWindow(project: Project) {
             }
         })
 
+        if (uiTree!!.cellRenderer !is RossyntNodeRenderer) {
+            uiTree!!.cellRenderer= RossyntNodeRenderer()
+        }
+
         buttonTest!!.addActionListener {
         }
 
@@ -46,15 +50,8 @@ internal class RossyntToolWindow(project: Project) {
     }
 
     private fun uiUpdateTree() {
-        val uiTree = uiTree ?: throw IllegalStateException()
-
-//        labelStatusMessage!!.text = """$currentDate $currentFilePath"""
-//        labelStatusMessage!!.icon = ImageIcon(javaClass.getResource("/toolWindow/Time-icon.png"))
         val rootTreeNode = rootTreeNode
-
-        if (uiTree.cellRenderer !is RossyntNodeRenderer) {
-            uiTree.cellRenderer= RossyntNodeRenderer()
-        }
+        val uiTree = uiTree ?: throw IllegalStateException()
 
         val uiModel = uiTree.model as DefaultTreeModel
         if (rootTreeNode != null) {
