@@ -26,7 +26,6 @@ class RossyntService {
                 }
 
                 currentFilePath = filePath
-                startBackendServiceIfNeeded()
             }
         })
         messageBusConnection.subscribe(RossyntToolWindowStateNotifier.TOPIC, object : RossyntToolWindowStateNotifier {
@@ -36,15 +35,12 @@ class RossyntService {
                 }
 
                 toolWindowIsVisible = isVisible
-                startBackendServiceIfNeeded()
+
+                // Start backend service if needed.
+                if (backendService == null && toolWindowIsVisible) {
+                    backendService = project.service()
+                }
             }
         })
-    }
-
-    private fun startBackendServiceIfNeeded() {
-        if (backendService == null && toolWindowIsVisible) {
-            // Start backend service.
-            backendService = project?.service()
-        }
     }
 }
