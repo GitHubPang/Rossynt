@@ -13,14 +13,14 @@
     </extensions>
 
     <applicationListeners>
-        <listener class="org.example.githubpang.rossynt.listeners.MyProjectManagerListener"
+        <listener class="org.example.githubpang.rossynt.listeners.AppProjectManagerListener"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
-        <listener class="org.example.githubpang.rossynt.listeners.MyFileEditorManagerListener"
+        <listener class="org.example.githubpang.rossynt.listeners.AppFileEditorManagerListener"
                   topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
     </applicationListeners>
 
     <projectListeners>
-        <listener class="org.example.githubpang.rossynt.listeners.MyToolWindowManagerListener"
+        <listener class="org.example.githubpang.rossynt.listeners.AppToolWindowManagerListener"
                   topic="com.intellij.openapi.wm.ex.ToolWindowManagerListener"/>
     </projectListeners>
 </idea-plugin>

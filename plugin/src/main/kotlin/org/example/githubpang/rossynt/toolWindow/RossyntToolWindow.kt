@@ -1,8 +1,6 @@
 package org.example.githubpang.rossynt.toolWindow
 
 import com.intellij.ui.treeStructure.Tree
-import com.intellij.util.messages.MessageBus
-import org.example.githubpang.rossynt.CurrentFileNameChangeNotifier
 import java.util.*
 import javax.swing.JButton
 import javax.swing.JLabel
@@ -10,12 +8,11 @@ import javax.swing.JPanel
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 
-internal class RossyntToolWindow(messageBus: MessageBus) {
+internal class RossyntToolWindow {
     companion object {
         const val TOOL_WINDOW_ID: String = "Rossynt"  // Must match with toolWindow id in "plugin.xml"
     }
 
-    private var currentFilePath: String? = null
     private var tree: Tree? = null
     private var labelStatusMessage: JLabel? = null
     private var buttonTest: JButton? = null
@@ -24,19 +21,6 @@ internal class RossyntToolWindow(messageBus: MessageBus) {
     // ******************************************************************************** //
 
     init {
-        messageBus.connect().subscribe(CurrentFileNameChangeNotifier.TOPIC, object : CurrentFileNameChangeNotifier {
-            override fun currentFileNameChanged(filePath: String?) {
-                if (currentFilePath == filePath) {
-                    return
-                }
-
-                currentFilePath = filePath
-
-                // Update UI.
-                uiUpdateAll()
-            }
-        })
-
         buttonTest!!.addActionListener {
         }
         uiUpdateAll()
@@ -44,7 +28,7 @@ internal class RossyntToolWindow(messageBus: MessageBus) {
 
     private fun uiUpdateAll() {
         val currentDate = Date()
-        labelStatusMessage!!.text = """$currentDate $currentFilePath"""
+//        labelStatusMessage!!.text = """$currentDate $currentFilePath"""
 //        labelStatusMessage!!.icon = ImageIcon(javaClass.getResource("/toolWindow/Time-icon.png"))
 
         val model = tree!!.model as DefaultTreeModel
