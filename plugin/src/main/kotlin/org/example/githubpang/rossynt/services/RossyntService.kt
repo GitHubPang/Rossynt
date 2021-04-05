@@ -7,7 +7,7 @@ import org.example.githubpang.rossynt.CurrentFileNotifier
 import org.example.githubpang.rossynt.RossyntToolWindowStateNotifier
 
 @Service
-class RossyntService {
+internal class RossyntService {
     private var project: Project? = null
     private var currentFilePath: String? = null
     private var toolWindowIsVisible = false

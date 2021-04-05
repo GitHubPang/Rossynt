@@ -7,7 +7,7 @@ import com.intellij.openapi.wm.ex.ToolWindowManagerListener
 import org.example.githubpang.rossynt.RossyntToolWindowStateNotifier
 import org.example.githubpang.rossynt.toolWindow.RossyntToolWindow
 
-internal class AppToolWindowManagerListener(private var project: Project) : ToolWindowManagerListener {
+internal class ProjectToolWindowManagerListener(private var project: Project) : ToolWindowManagerListener {
     private var rossyntToolWindowIsVisible: Boolean = false
 
     // ******************************************************************************** //

@@ -2,7 +2,7 @@ package org.example.githubpang.rossynt
 
 import com.intellij.util.messages.Topic
 
-interface RossyntToolWindowStateNotifier {
+internal interface RossyntToolWindowStateNotifier {
     companion object {
         val TOPIC = Topic.create("${RossyntToolWindowStateNotifier::class.qualifiedName}", RossyntToolWindowStateNotifier::class.java)
     }

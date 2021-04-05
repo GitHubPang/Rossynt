@@ -20,7 +20,7 @@
     </applicationListeners>
 
     <projectListeners>
-        <listener class="org.example.githubpang.rossynt.listeners.AppToolWindowManagerListener"
+        <listener class="org.example.githubpang.rossynt.listeners.ProjectToolWindowManagerListener"
                   topic="com.intellij.openapi.wm.ex.ToolWindowManagerListener"/>
     </projectListeners>
 </idea-plugin>

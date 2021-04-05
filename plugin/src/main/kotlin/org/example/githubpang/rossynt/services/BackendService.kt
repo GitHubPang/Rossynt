@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
 @Service
-class BackendService : Disposable {
+internal class BackendService : Disposable {
     private companion object {
         private val LOGGER = Logger.getInstance(BackendService::class.java)
 

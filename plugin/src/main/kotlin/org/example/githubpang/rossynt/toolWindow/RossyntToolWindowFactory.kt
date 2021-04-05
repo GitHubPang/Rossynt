@@ -5,8 +5,7 @@ import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.content.ContentFactory
 
-
-class RossyntToolWindowFactory : ToolWindowFactory {
+internal class RossyntToolWindowFactory : ToolWindowFactory {
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         require(toolWindow.id == RossyntToolWindow.TOOL_WINDOW_ID)
 
