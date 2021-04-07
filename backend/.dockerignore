@@ -1,3 +1,4 @@
-/.idea
-/RoslynSyntaxTreeBackend/bin
-/RoslynSyntaxTreeBackend/obj
+/.idea/
+/.run/
+**/bin/
+**/obj/
