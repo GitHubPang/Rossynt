@@ -20,6 +20,6 @@ namespace RoslynSyntaxTreeBackend.Models {
         public override TreeNodeType TreeNodeType() => _treeNodeType;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public string DebuggerDisplay => _syntaxTrivia.ToString();
+        public string DebuggerDisplay => $"({TreeNodeType()}) {_syntaxTrivia}";
     }
 }

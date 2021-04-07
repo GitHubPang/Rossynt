@@ -15,6 +15,6 @@ namespace RoslynSyntaxTreeBackend.Models {
         public override TreeNodeType TreeNodeType() => SyntaxNodeOrToken.IsNode ? Models.TreeNodeType.SyntaxNode : Models.TreeNodeType.SyntaxToken;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public string DebuggerDisplay => SyntaxNodeOrToken.ToString();
+        public string DebuggerDisplay => $"({TreeNodeType()}) {SyntaxNodeOrToken}";
     }
 }
