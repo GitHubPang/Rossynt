@@ -29,5 +29,9 @@ namespace RossyntBackend.Models {
 
         public abstract SyntaxKind Kind();
         public abstract TreeNodeType TreeNodeType();
+
+        [Pure]
+        [NotNull]
+        public abstract string ShortString();
     }
 }

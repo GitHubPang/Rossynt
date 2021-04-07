@@ -19,6 +19,10 @@ namespace RossyntBackend.Models {
         public override SyntaxKind Kind() => _syntaxTrivia.Kind();
         public override TreeNodeType TreeNodeType() => _treeNodeType;
 
+        [Pure]
+        [NotNull]
+        public override string ShortString() => _syntaxTrivia.ToString();
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public string DebuggerDisplay => $"({TreeNodeType()}) {_syntaxTrivia}";
     }

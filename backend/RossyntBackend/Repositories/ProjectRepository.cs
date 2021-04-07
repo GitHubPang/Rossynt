@@ -3,7 +3,6 @@ using JetBrains.Annotations;
 using RossyntBackend.Models;
 
 namespace RossyntBackend.Repositories {
-    // ReSharper disable AnnotationRedundancyInHierarchy
     public sealed class ProjectRepository : IProjectRepository {
         [NotNull] private readonly object _lock = new object();
         [CanBeNull] private Tree _tree;
@@ -30,5 +29,4 @@ namespace RossyntBackend.Repositories {
             }
         }
     }
-    // ReSharper restore AnnotationRedundancyInHierarchy
 }

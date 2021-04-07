@@ -14,6 +14,10 @@ namespace RossyntBackend.Models {
         public override SyntaxKind Kind() => SyntaxNodeOrToken.Kind();
         public override TreeNodeType TreeNodeType() => SyntaxNodeOrToken.IsNode ? Models.TreeNodeType.SyntaxNode : Models.TreeNodeType.SyntaxToken;
 
+        [Pure]
+        [NotNull]
+        public override string ShortString() => SyntaxNodeOrToken.ToString();
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public string DebuggerDisplay => $"({TreeNodeType()}) {SyntaxNodeOrToken}";
     }

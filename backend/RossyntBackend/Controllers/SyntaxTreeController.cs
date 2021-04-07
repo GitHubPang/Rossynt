@@ -8,11 +8,16 @@ using Microsoft.AspNetCore.Mvc;
 using RossyntBackend.ApplicationLifetime;
 using RossyntBackend.Models;
 using RossyntBackend.Repositories;
+using RossyntBackend.Utils;
 
 namespace RossyntBackend.Controllers {
     [ApiController]
     [Route("[controller]")]
     public class SyntaxTreeController : ControllerBase {
+        private const int DisplayStringMaxLength = 32;
+
+        // ******************************************************************************** //
+
         [NotNull] private readonly IProjectRepository _projectRepository;
         [NotNull] private readonly IApplicationLifetimeService _applicationLifetimeService;
 
@@ -65,6 +70,7 @@ namespace RossyntBackend.Controllers {
 
             var result = new Dictionary<string, object> {
                 ["Id"] = treeNode.NodeId,
+                ["Str"] = DisplayStr(treeNode),
                 ["Type"] = treeNode.TreeNodeType().ToString(),
                 ["Kind"] = treeNode.Kind().ToString()
             };
@@ -73,6 +79,15 @@ namespace RossyntBackend.Controllers {
             }
 
             return result;
+        }
+
+        [Pure]
+        [NotNull]
+        private static string DisplayStr([NotNull] TreeNode treeNode) {
+            if (treeNode == null) throw new ArgumentNullException(nameof(treeNode));
+
+            var shortString = treeNode.ShortString();
+            return shortString.Length > DisplayStringMaxLength ? shortString.SurrogateSafeLeft(DisplayStringMaxLength) + "…" : shortString;
         }
     }
 }
