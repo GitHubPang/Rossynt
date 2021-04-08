@@ -1,4 +1,4 @@
-package com.intellij.ide.hierarchy.ui
+package org.example.githubpang.rossynt.ui
 
 import com.intellij.icons.AllIcons
 import com.intellij.ide.util.treeView.NodeRenderer

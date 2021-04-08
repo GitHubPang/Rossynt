@@ -1,6 +1,6 @@
 package org.example.githubpang.rossynt.toolWindow
 
-import com.intellij.ide.hierarchy.ui.RossyntNodeRenderer
+import org.example.githubpang.rossynt.ui.RossyntNodeRenderer
 import com.intellij.openapi.project.Project
 import com.intellij.ui.treeStructure.Tree
 import kotlinx.coroutines.Dispatchers
