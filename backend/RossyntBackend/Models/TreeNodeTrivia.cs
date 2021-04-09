@@ -1,7 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using JetBrains.Annotations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using RossyntBackend.Utils;
 
 namespace RossyntBackend.Models {
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
@@ -25,7 +27,7 @@ namespace RossyntBackend.Models {
 
         [Pure]
         [NotNull]
-        public override object RawObject() => _syntaxTrivia;
+        public override IReadOnlyDictionary<string, string> RawProperties() => ObjectUtil.GetObjectProperties(_syntaxTrivia);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public string DebuggerDisplay => $"({TreeNodeType()}) {_syntaxTrivia}";

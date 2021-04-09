@@ -36,6 +36,6 @@ namespace RossyntBackend.Models {
 
         [Pure]
         [NotNull]
-        public abstract object RawObject();
+        public abstract IReadOnlyDictionary<string, string> RawProperties();
     }
 }

@@ -62,6 +62,7 @@ namespace RossyntBackend.Controllers {
         }
 
         [HttpPost(nameof(GetNodeInfo))]
+        [NotNull]
         public IReadOnlyDictionary<string, string> GetNodeInfo([NotNull] [FromForm] GetNodeInfoRequest request) {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
@@ -80,8 +81,7 @@ namespace RossyntBackend.Controllers {
             }
 
             // Prepare response.
-            var rawObject = treeNode.RawObject();
-            return rawObject.GetType().GetProperties().ToDictionary(propertyInfo => propertyInfo.Name, propertyInfo => $"{propertyInfo.GetValue(rawObject)}");
+            return treeNode.RawProperties();
         }
 
         [Pure]

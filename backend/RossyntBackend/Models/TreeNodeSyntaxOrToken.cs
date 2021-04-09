@@ -1,7 +1,10 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using JetBrains.Annotations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using RossyntBackend.Utils;
 
 namespace RossyntBackend.Models {
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
@@ -20,7 +23,17 @@ namespace RossyntBackend.Models {
 
         [Pure]
         [NotNull]
-        public override object RawObject() => SyntaxNodeOrToken;
+        public override IReadOnlyDictionary<string, string> RawProperties() {
+            var basicProperties = ObjectUtil.GetObjectProperties(SyntaxNodeOrToken);
+            var moreProperties = ObjectUtil.GetObjectProperties(SyntaxNodeOrToken.IsNode ? (object) (SyntaxNodeOrToken.AsNode() ?? throw new InvalidOperationException("AsNode() is null.")) : SyntaxNodeOrToken.AsToken());
+
+            var rawProperties = new Dictionary<string, string>(basicProperties);
+            foreach (var (moreKey, moreValue) in moreProperties) {
+                rawProperties[moreKey] = moreValue;
+            }
+
+            return rawProperties;
+        }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public string DebuggerDisplay => $"({TreeNodeType()}) {SyntaxNodeOrToken}";
