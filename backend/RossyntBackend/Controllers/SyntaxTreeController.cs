@@ -61,6 +61,29 @@ namespace RossyntBackend.Controllers {
             _projectRepository.RemoveTree();
         }
 
+        [HttpPost(nameof(GetNodeInfo))]
+        public IReadOnlyDictionary<string, string> GetNodeInfo([NotNull] [FromForm] GetNodeInfoRequest request) {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+
+            // Restart application lifetime countdown.
+            _applicationLifetimeService.RestartCountdown();
+
+            // Get tree.
+            var tree = _projectRepository.GetTree();
+            if (tree == null) {
+                throw new InvalidOperationException("No tree in repository.");
+            }
+
+            // Get tree node.
+            if (!tree.TreeNodes.TryGetValue(request.NodeId, out var treeNode)) {
+                throw new InvalidOperationException($"Tree node not found. NodeId = {request.NodeId}");
+            }
+
+            // Prepare response.
+            var rawObject = treeNode.RawObject();
+            return rawObject.GetType().GetProperties().ToDictionary(propertyInfo => propertyInfo.Name, propertyInfo => $"{propertyInfo.GetValue(rawObject)}");
+        }
+
         [Pure]
         [NotNull]
         private static IReadOnlyDictionary<string, object> RenderTree([NotNull] TreeNode treeNode) {

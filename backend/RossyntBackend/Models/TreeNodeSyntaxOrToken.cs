@@ -18,6 +18,10 @@ namespace RossyntBackend.Models {
         [NotNull]
         public override string ShortString() => SyntaxNodeOrToken.ToString();
 
+        [Pure]
+        [NotNull]
+        public override object RawObject() => SyntaxNodeOrToken;
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public string DebuggerDisplay => $"({TreeNodeType()}) {SyntaxNodeOrToken}";
     }

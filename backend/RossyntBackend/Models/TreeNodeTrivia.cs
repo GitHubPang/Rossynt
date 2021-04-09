@@ -23,6 +23,10 @@ namespace RossyntBackend.Models {
         [NotNull]
         public override string ShortString() => _syntaxTrivia.ToString();
 
+        [Pure]
+        [NotNull]
+        public override object RawObject() => _syntaxTrivia;
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public string DebuggerDisplay => $"({TreeNodeType()}) {_syntaxTrivia}";
     }

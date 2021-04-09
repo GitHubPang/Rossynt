@@ -4,6 +4,20 @@ Accept: application/json
 
 FilePath=Startup.cs
 
+> {%
+if(response.body.Id) {
+    client.global.set("nodeId", response.body.Id);
+}
+%}
+
+###
+
+POST http://localhost:5000/syntaxTree/getNodeInfo
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
+
+NodeId={{nodeId}}
+
 ###
 
 POST http://localhost:5000/syntaxTree/resetActiveFile

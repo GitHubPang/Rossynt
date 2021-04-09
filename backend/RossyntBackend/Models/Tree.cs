@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,12 +11,23 @@ namespace RossyntBackend.Models {
     public sealed class Tree {
         [NotNull] public TreeNode RootTreeNode { get; }
 
+        /// <summary>
+        /// Key is <see cref="TreeNode.NodeId"/> of <see cref="TreeNode"/>.
+        /// </summary>
+        [NotNull] private readonly Dictionary<string, TreeNode> _treeNodes = new Dictionary<string, TreeNode>();
+
+        /// <summary>
+        /// Key is <see cref="TreeNode.NodeId"/> of <see cref="TreeNode"/>.
+        /// </summary>
+        [NotNull]
+        public IReadOnlyDictionary<string, TreeNode> TreeNodes => _treeNodes;
+
         // ******************************************************************************** //
 
         private Tree([NotNull] SyntaxNode root) {
             if (root == null) throw new ArgumentNullException(nameof(root));
 
-            var rootTreeNode = new TreeNodeSyntaxOrToken(root, null);
+            var rootTreeNode = AddTreeNode(new TreeNodeSyntaxOrToken(root, null));
             ProcessTreeNode(rootTreeNode);
             RootTreeNode = rootTreeNode;
         }
@@ -28,23 +40,29 @@ namespace RossyntBackend.Models {
             return new Tree(root);
         }
 
-        private static void ProcessTreeNode([NotNull] TreeNodeSyntaxOrToken treeNode) {
+        private void ProcessTreeNode([NotNull] TreeNodeSyntaxOrToken treeNode) {
             if (treeNode == null) throw new ArgumentNullException(nameof(treeNode));
 
             // Process leading trivia.
             foreach (var trivia in treeNode.SyntaxNodeOrToken.GetLeadingTrivia()) {
-                _ = new TreeNodeTrivia(true, trivia, treeNode);
+                AddTreeNode(new TreeNodeTrivia(true, trivia, treeNode));
             }
 
             // Process each child.
             foreach (var child in treeNode.SyntaxNodeOrToken.ChildNodesAndTokens()) {
-                ProcessTreeNode(new TreeNodeSyntaxOrToken(child, treeNode));
+                ProcessTreeNode(AddTreeNode(new TreeNodeSyntaxOrToken(child, treeNode)));
             }
 
             // Process trailing trivia.
             foreach (var trivia in treeNode.SyntaxNodeOrToken.GetTrailingTrivia()) {
-                _ = new TreeNodeTrivia(false, trivia, treeNode);
+                AddTreeNode(new TreeNodeTrivia(false, trivia, treeNode));
             }
+        }
+
+        [NotNull]
+        private TTreeNode AddTreeNode<TTreeNode>([NotNull] TTreeNode treeNode) where TTreeNode : TreeNode {
+            _treeNodes.Add(treeNode.NodeId, treeNode);
+            return treeNode;
         }
     }
 }

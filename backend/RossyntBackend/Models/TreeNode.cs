@@ -33,5 +33,9 @@ namespace RossyntBackend.Models {
         [Pure]
         [NotNull]
         public abstract string ShortString();
+
+        [Pure]
+        [NotNull]
+        public abstract object RawObject();
     }
 }
