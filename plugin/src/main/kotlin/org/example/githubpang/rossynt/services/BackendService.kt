@@ -179,12 +179,16 @@ internal class BackendService : Disposable {
         val deployPath = deployPath ?: throw IllegalStateException()
 
         val fileListFile = "$RESOURCE_BACKEND_PATH/${backendRuntimeVersion.directoryName}/$RESOURCE_FILE_LIST_FILE_NAME"
-        javaClass.getResourceAsStream(fileListFile).bufferedReader().useLines { lines ->
+        val fileListStream = javaClass.getResourceAsStream(fileListFile)
+            ?: throw Exception("Error loading file list file.")
+        fileListStream.bufferedReader().useLines { lines ->
             for (line in lines) {
                 val inFile = "$RESOURCE_BACKEND_PATH/${backendRuntimeVersion.directoryName}/$line"
                 val outFile = File(deployPath.toFile(), line)
 
                 javaClass.getResourceAsStream(inFile).use { inputStream ->
+                    if (inputStream == null) throw Exception("Error loading file: $inFile")
+
                     Files.createDirectories(outFile.parentFile.toPath())
                     FileOutputStream(outFile).use { outputStream ->
                         inputStream.copyTo(outputStream)

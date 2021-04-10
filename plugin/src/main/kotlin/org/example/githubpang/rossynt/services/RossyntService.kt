@@ -77,6 +77,7 @@ internal class RossyntService {
     }
 
     private fun updateTree() {
+        //todo should check file extension?
         val project = project ?: throw IllegalStateException()
         val backendService = backendService ?: return//todo return here is correct?
         if (backendService.isReady) {
