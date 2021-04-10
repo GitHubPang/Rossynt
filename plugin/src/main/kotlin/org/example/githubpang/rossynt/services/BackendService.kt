@@ -1,8 +1,10 @@
 package org.example.githubpang.rossynt.services
 
 import com.intellij.execution.configurations.GeneralCommandLine
-import com.intellij.execution.process.*
-import com.intellij.execution.util.ExecUtil
+import com.intellij.execution.process.OSProcessHandler
+import com.intellij.execution.process.ProcessAdapter
+import com.intellij.execution.process.ProcessEvent
+import com.intellij.execution.process.ProcessOutputType
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.Logger
@@ -10,15 +12,11 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Key
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
-import io.ktor.client.features.*
 import io.ktor.client.features.json.*
-import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import org.apache.commons.lang3.StringUtils
-import org.example.githubpang.rossynt.BackendRuntimeVersion
 import org.example.githubpang.rossynt.trees.TreeNode
 import java.io.File
 import java.io.FileOutputStream
@@ -96,7 +94,8 @@ internal class BackendService : Disposable {
 
             // Get backend runtime version.
             yield()
-            backendRuntimeVersion = getBackendRuntimeVersion()
+            val backendRuntimeVersionFinder = BackendRuntimeVersionFinder(dotNetPath ?: throw IllegalStateException())
+            backendRuntimeVersion = backendRuntimeVersionFinder.backendRuntimeVersion
             LOGGER.info("Backend runtime version: $backendRuntimeVersion")
 
             // Create deploy directory.
@@ -173,35 +172,6 @@ internal class BackendService : Disposable {
         }
 
         throw IllegalStateException()//todo
-    }
-
-    private fun getBackendRuntimeVersion(): BackendRuntimeVersion {
-        val dotNetPath = dotNetPath ?: throw IllegalStateException()
-        val pattern = Pattern.compile("^Microsoft.AspNetCore.App ([^ ]+) .*$")
-        val processOutput = ExecUtil.execAndGetOutput(GeneralCommandLine(dotNetPath, "--list-runtimes"))
-
-        var highestBackendRuntimeVersion: BackendRuntimeVersion? = null
-        processOutput.stdoutLines.forEach { stdoutLine ->
-            val matcher = pattern.matcher(stdoutLine)
-            if (!matcher.matches()) {
-                return@forEach
-            }
-
-            val version = matcher.group(1)
-            val majorVersion = StringUtils.split(version, '.')[0].toInt()
-            val backendRuntimeVersion = BackendRuntimeVersion.values().find { majorVersion == it.majorVersion }
-                ?: return@forEach
-
-            if (highestBackendRuntimeVersion == null || highestBackendRuntimeVersion!!.majorVersion < backendRuntimeVersion.majorVersion) {
-                highestBackendRuntimeVersion = backendRuntimeVersion
-            }
-        }
-
-        if (highestBackendRuntimeVersion == null) {
-            throw IllegalStateException()//todo
-        }
-
-        return highestBackendRuntimeVersion as BackendRuntimeVersion
     }
 
     private fun deployFiles() {

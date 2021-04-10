@@ -1,0 +1,31 @@
+package org.example.githubpang.rossynt.services
+
+import org.junit.Assert
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
+
+@RunWith(Parameterized::class)
+class BackendRuntimeVersionFinderTest internal constructor(private var line: String, private var backendRuntimeVersion: BackendRuntimeVersion?) {
+    companion object {
+        @JvmStatic
+        @Parameterized.Parameters
+        fun data(): Array<Any> {
+            return arrayOf(
+                arrayOf("""Microsoft.AspNetCore.App 3.1.9 [C:\Users\User\.dotnet\shared\Microsoft.AspNetCore.App]""", BackendRuntimeVersion.DOT_NET_CORE_3),
+                arrayOf("""Microsoft.AspNetCore.App 5.0.1 [C:\Users\User\.dotnet\shared\Microsoft.AspNetCore.App]""", BackendRuntimeVersion.DOT_NET_5),
+                arrayOf("""Microsoft.NETCore.App 3.1.9 [C:\Users\User\.dotnet\shared\Microsoft.NETCore.App]""", null),
+                arrayOf("""Microsoft.NETCore.App 5.0.1 [C:\Users\User\.dotnet\shared\Microsoft.NETCore.App]""", null),
+                arrayOf("""Microsoft.WindowsDesktop.App 3.1.9 [C:\Users\User\.dotnet\shared\Microsoft.WindowsDesktop.App]""", null),
+                arrayOf("""Microsoft.WindowsDesktop.App 5.0.1 [C:\Users\User\.dotnet\shared\Microsoft.WindowsDesktop.App]""", null),
+            )
+        }
+    }
+
+    // ******************************************************************************** //
+
+    @Test
+    fun extractVersionFromLine() {
+        Assert.assertEquals(backendRuntimeVersion, BackendRuntimeVersionFinder.extractVersionFromLine(line))
+    }
+}

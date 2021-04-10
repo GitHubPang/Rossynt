@@ -1,4 +1,4 @@
-package org.example.githubpang.rossynt
+package org.example.githubpang.rossynt.services
 
 internal enum class BackendRuntimeVersion(val majorVersion: Int, val directoryName: String) {
     DOT_NET_CORE_2(2, "netcoreapp2.1"),
