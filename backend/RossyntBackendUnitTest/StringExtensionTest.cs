@@ -40,7 +40,7 @@ namespace RossyntBackendUnitTest {
 
         [Test]
         public void SurrogateSafeLeft_ArgumentNullException() {
-            const string inputString = (string) null;
+            const string inputString = null;
             // ReSharper disable once AssignNullToNotNullAttribute
             Assert.Catch<ArgumentNullException>(() => _ = inputString.SurrogateSafeLeft(_fixture.Create<int>()));
         }
