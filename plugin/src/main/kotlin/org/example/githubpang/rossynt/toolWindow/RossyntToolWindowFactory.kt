@@ -11,7 +11,7 @@ internal class RossyntToolWindowFactory : ToolWindowFactory {
 
         val rossyntToolWindow = RossyntToolWindow(project)
         val contentFactory = ContentFactory.SERVICE.getInstance()
-        val content = contentFactory.createContent(rossyntToolWindow.content, "", false)
+        val content = contentFactory.createContent(rossyntToolWindow.rootComponent, "", false)
         toolWindow.contentManager.addContent(content)
     }
 }

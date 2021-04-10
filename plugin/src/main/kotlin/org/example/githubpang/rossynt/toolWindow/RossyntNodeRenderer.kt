@@ -1,4 +1,4 @@
-package org.example.githubpang.rossynt.ui
+package org.example.githubpang.rossynt.toolWindow
 
 import com.intellij.icons.AllIcons
 import com.intellij.ide.util.treeView.NodeRenderer
@@ -25,16 +25,16 @@ class RossyntNodeRenderer : NodeRenderer() {
 
     override fun customizeCellRenderer(tree: JTree, value: Any, selected: Boolean, expanded: Boolean, leaf: Boolean, row: Int, hasFocus: Boolean) {
         val treeNode = TreeUtil.getUserObject(TreeNode::class.java, value)
-        if (treeNode != null) {
+        icon = if (treeNode != null) {
             val nodeIcon = when (treeNode.Type) {
                 TreeNodeType.SyntaxNode -> AllIcons.Nodes.Folder
                 TreeNodeType.SyntaxToken -> AllIcons.Actions.Words
                 TreeNodeType.LeadingTrivia -> AllIcons.Actions.InlayRenameInComments
                 TreeNodeType.TrailingTrivia -> AllIcons.Actions.InlayRenameInComments
             }
-            icon = fixIconIfNeeded(nodeIcon, selected, hasFocus)
+            fixIconIfNeeded(nodeIcon, selected, hasFocus)
         } else {
-            icon = null
+            null
         }
 
         super.customizeCellRenderer(tree, value, selected, expanded, leaf, row, hasFocus)
