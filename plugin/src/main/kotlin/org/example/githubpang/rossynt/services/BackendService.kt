@@ -255,6 +255,10 @@ internal class BackendService : Disposable {
         }
     }
 
+    suspend fun getNodeInfo(nodeId: String): Map<String, String> {
+        return sendRequestToBackend("syntaxTree/getNodeInfo", parametersOf("NodeId", nodeId))
+    }
+
     private suspend fun pingBackend() {
         sendRequestToBackend<Unit>("syntaxTree/ping")
     }

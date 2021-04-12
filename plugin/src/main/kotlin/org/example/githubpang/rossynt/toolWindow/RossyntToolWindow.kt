@@ -1,12 +1,14 @@
 package org.example.githubpang.rossynt.toolWindow
 
+import com.google.common.collect.ImmutableList
+import com.google.common.collect.ImmutableMap
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.ui.JBSplitter
 import com.intellij.ui.ScrollPaneFactory
 import com.intellij.ui.treeStructure.Tree
 import com.intellij.util.ui.tree.TreeUtil
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
+import org.example.githubpang.rossynt.services.RossyntService
 import org.example.githubpang.rossynt.services.RossyntServiceNotifier
 import org.example.githubpang.rossynt.trees.TreeNode
 import javax.swing.JComponent
@@ -23,28 +25,46 @@ internal class RossyntToolWindow(project: Project) {
 
     // ******************************************************************************** //
 
-    private class MyTableModel : AbstractTableModel() {
-        override fun getRowCount(): Int {
-            return 25
+    private inner class UiTableModel : AbstractTableModel() {
+        override fun getRowCount(): Int = this@RossyntToolWindow.currentNodeInfo.size + when (this@RossyntToolWindow.selectedTreeNode) {
+            null -> 0
+            else -> 1
         }
 
-        override fun getColumnCount(): Int {
-            return 2
-        }
+        override fun getColumnCount(): Int = 2
 
         override fun getValueAt(rowIndex: Int, columnIndex: Int): Any {
-            return "Hello World Hello World Hello World"
+            val rowValue = getRowValueAt(rowIndex)
+            return when (columnIndex) {
+                0 -> rowValue.first
+                1 -> rowValue.second
+                else -> ""
+            }
+        }
+
+        private fun getRowValueAt(rowIndex: Int): Pair<String, String> {
+            val selectedTreeNode = this@RossyntToolWindow.selectedTreeNode
+            var rowIndex = rowIndex
+
+            if (selectedTreeNode != null && --rowIndex < 0) {
+                return Pair("Kind", selectedTreeNode.Kind)
+            }
+
+            return this@RossyntToolWindow.currentNodeInfo[rowIndex]
         }
     }
 
     // ******************************************************************************** //
 
     // Data.
+    private val rossyntService: RossyntService = project.service()
     private var rootTreeNode: TreeNode? = null
+    private var selectedTreeNode: TreeNode? = null
+    private var currentNodeInfo: ImmutableList<Pair<String, String>> = ImmutableList.of()
 
     // UI.
     private val uiTree: Tree = Tree()
-    private val uiTable: JTable = JTable(MyTableModel())
+    private val uiTable: JTable = JTable(UiTableModel())
     private val uiSplitter: JBSplitter = JBSplitter()
     val rootComponent: JComponent
         get() {
@@ -61,12 +81,11 @@ internal class RossyntToolWindow(project: Project) {
         uiTree.selectionModel.selectionMode = SINGLE_TREE_SELECTION
         uiTree.addTreeSelectionListener {
             val treeNode = TreeUtil.getUserObject(TreeNode::class.java, uiTree.lastSelectedPathComponent)
-            if (treeNode == null) {
-                println("No selection")
-                return@addTreeSelectionListener
-            }
+            selectedTreeNode = treeNode
+            rossyntService.setCurrentNodeId(treeNode?.Id)
 
-            println("Selected treeNode: $treeNode")
+            // Update UI.
+            uiUpdateTable()
         }
 
         // Setup table.
@@ -80,16 +99,27 @@ internal class RossyntToolWindow(project: Project) {
         // Subscribe messages.
         project.messageBus.connect().subscribe(RossyntServiceNotifier.TOPIC, object : RossyntServiceNotifier {
             override fun treeUpdated(rootTreeNode: TreeNode?) {
-                runBlocking(Dispatchers.Main) {
-                    this@RossyntToolWindow.rootTreeNode = rootTreeNode
+                this@RossyntToolWindow.rootTreeNode = rootTreeNode
+                selectedTreeNode = null
 
-                    uiUpdateTree()
+                // Update UI.
+                uiUpdateTree()
+            }
+
+            override fun currentNodeInfoUpdated(currentNodeInfo: ImmutableMap<String, String>?) {
+                this@RossyntToolWindow.currentNodeInfo = when {
+                    currentNodeInfo != null -> ImmutableList.copyOf(currentNodeInfo.toList().sortedBy { pair -> pair.first })
+                    else -> ImmutableList.of()
                 }
+
+                // Update UI.
+                uiUpdateTable()
             }
         })
 
         // Update UI.
         uiUpdateTree()
+        uiUpdateTable()
     }
 
     private fun uiUpdateTree() {
@@ -103,6 +133,10 @@ internal class RossyntToolWindow(project: Project) {
         } else {
             uiModel.setRoot(null)
         }
+    }
+
+    private fun uiUpdateTable() {
+        (uiTable.model as AbstractTableModel).fireTableDataChanged()
     }
 
     private fun createUiNode(uiParentNode: DefaultMutableTreeNode?, treeNode: TreeNode): DefaultMutableTreeNode {

@@ -1,5 +1,6 @@
 package org.example.githubpang.rossynt.services
 
+import com.google.common.collect.ImmutableMap
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
@@ -17,9 +18,11 @@ import org.example.githubpang.rossynt.trees.TreeNode
 internal class RossyntService {
     private var project: Project? = null
     private var currentFilePath: String? = null
+    private var currentNodeId: String? = null
     private var toolWindowIsVisible = false
     private var backendService: BackendService? = null
     private var rootTreeNode: TreeNode? = null
+    private var currentNodeInfo: ImmutableMap<String, String> = ImmutableMap.of()
 
     // ******************************************************************************** //
 
@@ -34,9 +37,11 @@ internal class RossyntService {
                     return
                 }
                 currentFilePath = filePath
+                currentNodeId = null
 
-                // Update tree.
+                // Update data.
                 updateTree()
+                updateCurrentNodeInfo()
             }
         })
         messageBusConnection.subscribe(RossyntToolWindowStateNotifier.TOPIC, object : RossyntToolWindowStateNotifier {
@@ -51,8 +56,9 @@ internal class RossyntService {
                     backendService = project.service()
                     backendService?.initService(project)
 
-                    // Update tree.
+                    // Update data.
                     updateTree()
+                    updateCurrentNodeInfo()
                 }
             }
         })
@@ -64,16 +70,26 @@ internal class RossyntService {
                     return
                 }
 
-                // Update tree.
+                currentNodeId = null
+
+                // Update data.
                 updateTree()
+                updateCurrentNodeInfo()
             }
         })
         messageBusConnection.subscribe(BackendServiceNotifier.TOPIC, object : BackendServiceNotifier {
             override fun backendServiceBecameReady() {
-                // Update tree.
+                // Update data.
                 updateTree()
             }
         })
+    }
+
+    fun setCurrentNodeId(nodeId: String?) {
+        currentNodeId = nodeId
+
+        // Update data.
+        updateCurrentNodeInfo()
     }
 
     private fun updateTree() {
@@ -83,15 +99,45 @@ internal class RossyntService {
         if (backendService.isReady) {
             //todo should do something if current request in progress
             GlobalScope.launch(Dispatchers.IO) {
-                rootTreeNode = backendService.setActiveFile(currentFilePath)
+                val result = backendService.setActiveFile(currentFilePath)
+                launch(Dispatchers.Main) {
+                    rootTreeNode = result
 
-                // Publish message.
-                val messageBus = project.messageBus
-                val publisher = messageBus.syncPublisher(RossyntServiceNotifier.TOPIC)
-                publisher.treeUpdated(rootTreeNode)
+                    // Publish message.
+                    val messageBus = project.messageBus
+                    val publisher = messageBus.syncPublisher(RossyntServiceNotifier.TOPIC)
+                    publisher.treeUpdated(rootTreeNode)
+                }
             }
         } else {
             //todo what to do here?
+        }
+    }
+
+    private fun updateCurrentNodeInfo() {
+        //todo should check file extension?
+        val project = project ?: throw IllegalStateException()
+        val backendService = backendService ?: return//todo return here is correct?
+        val currentNodeId = currentNodeId
+        if (currentNodeId != null) {
+            if (backendService.isReady) {
+                //todo should do something if current request in progress
+                GlobalScope.launch(Dispatchers.IO) {
+                    val result = ImmutableMap.copyOf(backendService.getNodeInfo(currentNodeId))
+                    launch(Dispatchers.Main) {
+                        currentNodeInfo = result
+
+                        // Publish message.
+                        val messageBus = project.messageBus
+                        val publisher = messageBus.syncPublisher(RossyntServiceNotifier.TOPIC)
+                        publisher.currentNodeInfoUpdated(currentNodeInfo)
+                    }
+                }
+            } else {
+                //todo what to do here?
+            }
+        } else {
+            currentNodeInfo = ImmutableMap.of()
         }
     }
 }
