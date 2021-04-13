@@ -63,7 +63,8 @@ internal class BackendService : Disposable {
 
     // ******************************************************************************** //
 
-    fun initService(project: Project) {
+    fun startBackendService(project: Project) {
+        require(this.project == null)
         this.project = project
         backendJob = GlobalScope.launch(Dispatchers.IO) {
             runBackend()
@@ -124,7 +125,6 @@ internal class BackendService : Disposable {
                 delay(PING_BACKEND_DELAY_DURATION_MILLISECONDS)
                 pingBackend()   // Ping backend to keep it alive.
             }
-
         } catch (e: Exception) {
             if (e !is CancellationException) {
                 LOGGER.error(e)
@@ -256,20 +256,24 @@ internal class BackendService : Disposable {
     }
 
     suspend fun getNodeInfo(nodeId: String): Map<String, String> {
-        return sendRequestToBackend("syntaxTree/getNodeInfo", parametersOf("NodeId", nodeId))
+        return sendRequestToBackend("syntaxTree/getNodeInfo", parametersOf("NodeId", nodeId)) ?: HashMap()
     }
 
     private suspend fun pingBackend() {
         sendRequestToBackend<Unit>("syntaxTree/ping")
     }
 
-    private suspend inline fun <reified T> sendRequestToBackend(urlPath: String, formParameters: Parameters = Parameters.Empty): T {
+    private suspend inline fun <reified T> sendRequestToBackend(urlPath: String, formParameters: Parameters = Parameters.Empty): T? {
         //todo check isReady?
-        HttpClient(CIO) {
-            install(JsonFeature) { serializer = GsonSerializer() }
-        }.use { client ->
-            //todo what if this throws exception?
-            return client.submitForm("$backendUrl/$urlPath", formParameters)
-        }//todo verify connection actually closed
+        try {
+            HttpClient(CIO) {
+                install(JsonFeature) { serializer = GsonSerializer() }
+            }.use { client ->
+                return client.submitForm("$backendUrl/$urlPath", formParameters)
+            }
+        } catch (e: Exception) {
+            LOGGER.error(e)
+            return null
+        }
     }
 }

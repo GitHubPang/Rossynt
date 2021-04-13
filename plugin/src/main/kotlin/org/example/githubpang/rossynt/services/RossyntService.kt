@@ -26,7 +26,7 @@ internal class RossyntService {
 
     // ******************************************************************************** //
 
-    fun initService(project: Project) {
+    fun startRossyntService(project: Project) {
         require(this.project == null)
         this.project = project
 
@@ -54,7 +54,7 @@ internal class RossyntService {
                 // Start backend service if needed.
                 if (backendService == null && toolWindowIsVisible) {
                     backendService = project.service()
-                    backendService?.initService(project)
+                    backendService?.startBackendService(project)
 
                     // Update data.
                     updateTree()
