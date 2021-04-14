@@ -14,18 +14,22 @@ namespace RossyntBackend.Models {
         // ******************************************************************************** //
 
         public TreeNodeSyntaxOrToken(SyntaxNodeOrToken syntaxNodeOrToken, [CanBeNull] TreeNode parentTreeNode) : base(parentTreeNode) => SyntaxNodeOrToken = syntaxNodeOrToken;
-        public override SyntaxKind Kind() => SyntaxNodeOrToken.Kind();
+        public override SyntaxKind SyntaxKind() => SyntaxNodeOrToken.Kind();
         public override TreeNodeCategory TreeNodeCategory() => SyntaxNodeOrToken.IsNode ? Models.TreeNodeCategory.SyntaxNode : Models.TreeNodeCategory.SyntaxToken;
 
         [Pure]
         [NotNull]
-        public override string ShortString() => SyntaxNodeOrToken.ToString();
+        public override string RawString() => SyntaxNodeOrToken.ToString();
+
+        [Pure]
+        [NotNull]
+        public override Type RawType() => RawObject().GetType();
 
         [Pure]
         [NotNull]
         public override IReadOnlyDictionary<string, string> RawProperties() {
             var basicProperties = ObjectUtil.GetObjectProperties(SyntaxNodeOrToken);
-            var moreProperties = ObjectUtil.GetObjectProperties(SyntaxNodeOrToken.IsNode ? (object) (SyntaxNodeOrToken.AsNode() ?? throw new InvalidOperationException("AsNode() is null.")) : SyntaxNodeOrToken.AsToken());
+            var moreProperties = ObjectUtil.GetObjectProperties(RawObject());
 
             var rawProperties = new Dictionary<string, string>(basicProperties);
             foreach (var (moreKey, moreValue) in moreProperties) {
@@ -37,5 +41,11 @@ namespace RossyntBackend.Models {
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public string DebuggerDisplay => $"({TreeNodeCategory()}) {SyntaxNodeOrToken}";
+
+        [Pure]
+        [NotNull]
+        private object RawObject() {
+            return SyntaxNodeOrToken.IsNode ? (object) (SyntaxNodeOrToken.AsNode() ?? throw new InvalidOperationException($"{nameof(SyntaxNodeOrToken.AsNode)}() is null.")) : SyntaxNodeOrToken.AsToken();
+        }
     }
 }

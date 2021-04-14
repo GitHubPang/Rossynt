@@ -27,12 +27,16 @@ namespace RossyntBackend.Models {
             parentTreeNode?._childTreeNodes.Add(this);
         }
 
-        public abstract SyntaxKind Kind();
+        public abstract SyntaxKind SyntaxKind();
         public abstract TreeNodeCategory TreeNodeCategory();
 
         [Pure]
         [NotNull]
-        public abstract string ShortString();
+        public abstract string RawString();
+
+        [Pure]
+        [NotNull]
+        public abstract Type RawType();
 
         [Pure]
         [NotNull]

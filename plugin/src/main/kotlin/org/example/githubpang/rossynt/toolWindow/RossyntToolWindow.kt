@@ -23,12 +23,17 @@ internal class RossyntToolWindow(project: Project) {
         const val TOOL_WINDOW_ID: String = "Rossynt"  // Must match with toolWindow id in "plugin.xml"
     }
 
+    private enum class SpecialRow {
+        RawType,
+        SyntaxKind,
+    }
+
     // ******************************************************************************** //
 
     private inner class UiTableModel : AbstractTableModel() {
         override fun getRowCount(): Int = this@RossyntToolWindow.currentNodeInfo.size + when (this@RossyntToolWindow.selectedTreeNode) {
             null -> 0
-            else -> 1
+            else -> SpecialRow.values().size
         }
 
         override fun getColumnCount(): Int = 2
@@ -46,8 +51,17 @@ internal class RossyntToolWindow(project: Project) {
             val selectedTreeNode = this@RossyntToolWindow.selectedTreeNode
             var rowIndex = rowIndex
 
-            if (selectedTreeNode != null && --rowIndex < 0) {
-                return Pair("Kind", selectedTreeNode.kind)
+            if (selectedTreeNode != null) {
+                val specialRows = SpecialRow.values()
+
+                if (rowIndex < specialRows.size) {
+                    return when (specialRows[rowIndex]) {
+                        SpecialRow.RawType -> Pair("Type", selectedTreeNode.rawType)
+                        SpecialRow.SyntaxKind -> Pair("Kind", selectedTreeNode.syntaxKind)
+                    }
+                }
+
+                rowIndex -= specialRows.size
             }
 
             return this@RossyntToolWindow.currentNodeInfo[rowIndex]

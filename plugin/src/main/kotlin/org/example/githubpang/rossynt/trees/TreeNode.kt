@@ -5,14 +5,15 @@ import com.google.gson.annotations.SerializedName
 
 internal data class TreeNode(
     @SerializedName("Id") val nodeId: String,
-    @SerializedName("Str") val str: String,
     @SerializedName("Cat") val treeNodeCategory: TreeNodeCategory,
-    @SerializedName("Kind") val kind: String,
-    @SerializedName("Child") private val childNodes: List<TreeNode>?
+    @SerializedName("Type") val rawType: String,
+    @SerializedName("Kind") val syntaxKind: String,
+    @SerializedName("Str") val shortString: String,
+    @SerializedName("Child") private val childTreeNodes: List<TreeNode>?
 ) {
     fun childTreeNodes(): ImmutableList<TreeNode> {
-        return if (childNodes != null) {
-            ImmutableList.copyOf(childNodes)
+        return if (childTreeNodes != null) {
+            ImmutableList.copyOf(childTreeNodes)
         } else
             ImmutableList.of()
     }
@@ -20,6 +21,6 @@ internal data class TreeNode(
     //todo better not override toString?
     override fun toString(): String {
         //todo what about line breaks? white spaces?
-        return kind + " " + str
+        return syntaxKind + " " + shortString
     }
 }

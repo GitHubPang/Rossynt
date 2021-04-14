@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using JetBrains.Annotations;
 using Microsoft.CodeAnalysis;
@@ -18,12 +19,16 @@ namespace RossyntBackend.Models {
             _syntaxTrivia = syntaxTrivia;
         }
 
-        public override SyntaxKind Kind() => _syntaxTrivia.Kind();
+        public override SyntaxKind SyntaxKind() => _syntaxTrivia.Kind();
         public override TreeNodeCategory TreeNodeCategory() => _treeNodeCategory;
 
         [Pure]
         [NotNull]
-        public override string ShortString() => _syntaxTrivia.ToString();
+        public override string RawString() => _syntaxTrivia.ToString();
+
+        [Pure]
+        [NotNull]
+        public override Type RawType() => _syntaxTrivia.GetType();
 
         [Pure]
         [NotNull]

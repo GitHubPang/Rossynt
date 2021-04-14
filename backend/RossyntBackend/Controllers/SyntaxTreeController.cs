@@ -14,7 +14,7 @@ namespace RossyntBackend.Controllers {
     [ApiController]
     [Route("[controller]")]
     public class SyntaxTreeController : ControllerBase {
-        private const int DisplayStringMaxLength = 32;
+        private const int ShortStringMaxLength = 32;
 
         // ******************************************************************************** //
 
@@ -93,9 +93,10 @@ namespace RossyntBackend.Controllers {
 
             var result = new Dictionary<string, object> {
                 ["Id"] = treeNode.NodeId,
-                ["Str"] = DisplayStr(treeNode),
                 ["Cat"] = treeNode.TreeNodeCategory().ToString(),
-                ["Kind"] = treeNode.Kind().ToString()
+                ["Type"] = treeNode.RawType().Name,
+                ["Kind"] = treeNode.SyntaxKind().ToString(),
+                ["Str"] = ShortString(treeNode)
             };
             if (childNodes.Length > 0) {
                 result["Child"] = childNodes;
@@ -106,11 +107,11 @@ namespace RossyntBackend.Controllers {
 
         [Pure]
         [NotNull]
-        private static string DisplayStr([NotNull] TreeNode treeNode) {
+        private static string ShortString([NotNull] TreeNode treeNode) {
             if (treeNode == null) throw new ArgumentNullException(nameof(treeNode));
 
-            var shortString = treeNode.ShortString();
-            return shortString.Length > DisplayStringMaxLength ? shortString.SurrogateSafeLeft(DisplayStringMaxLength) + "…" : shortString;
+            var rawString = treeNode.RawString();
+            return rawString.Length > ShortStringMaxLength ? rawString.SurrogateSafeLeft(ShortStringMaxLength) + "…" : rawString;
         }
     }
 }
