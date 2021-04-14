@@ -47,7 +47,7 @@ internal class RossyntToolWindow(project: Project) {
             var rowIndex = rowIndex
 
             if (selectedTreeNode != null && --rowIndex < 0) {
-                return Pair("Kind", selectedTreeNode.Kind)
+                return Pair("Kind", selectedTreeNode.kind)
             }
 
             return this@RossyntToolWindow.currentNodeInfo[rowIndex]
@@ -82,7 +82,7 @@ internal class RossyntToolWindow(project: Project) {
         uiTree.addTreeSelectionListener {
             val treeNode = TreeUtil.getUserObject(TreeNode::class.java, uiTree.lastSelectedPathComponent)
             selectedTreeNode = treeNode
-            rossyntService.setCurrentNodeId(treeNode?.Id)
+            rossyntService.setCurrentNodeId(treeNode?.nodeId)
 
             // Update UI.
             uiUpdateTable()

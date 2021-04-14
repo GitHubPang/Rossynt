@@ -15,7 +15,7 @@ namespace RossyntBackend.Models {
 
         public TreeNodeSyntaxOrToken(SyntaxNodeOrToken syntaxNodeOrToken, [CanBeNull] TreeNode parentTreeNode) : base(parentTreeNode) => SyntaxNodeOrToken = syntaxNodeOrToken;
         public override SyntaxKind Kind() => SyntaxNodeOrToken.Kind();
-        public override TreeNodeType TreeNodeType() => SyntaxNodeOrToken.IsNode ? Models.TreeNodeType.SyntaxNode : Models.TreeNodeType.SyntaxToken;
+        public override TreeNodeCategory TreeNodeCategory() => SyntaxNodeOrToken.IsNode ? Models.TreeNodeCategory.SyntaxNode : Models.TreeNodeCategory.SyntaxToken;
 
         [Pure]
         [NotNull]
@@ -36,6 +36,6 @@ namespace RossyntBackend.Models {
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public string DebuggerDisplay => $"({TreeNodeType()}) {SyntaxNodeOrToken}";
+        public string DebuggerDisplay => $"({TreeNodeCategory()}) {SyntaxNodeOrToken}";
     }
 }

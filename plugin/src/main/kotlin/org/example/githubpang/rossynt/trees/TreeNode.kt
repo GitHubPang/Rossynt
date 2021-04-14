@@ -1,11 +1,18 @@
 package org.example.githubpang.rossynt.trees
 
 import com.google.common.collect.ImmutableList
+import com.google.gson.annotations.SerializedName
 
-internal data class TreeNode(val Id: String, val Str: String, val Type: TreeNodeType, val Kind: String, private val Child: List<TreeNode>?) {
+internal data class TreeNode(
+    @SerializedName("Id") val nodeId: String,
+    @SerializedName("Str") val str: String,
+    @SerializedName("Cat") val treeNodeCategory: TreeNodeCategory,
+    @SerializedName("Kind") val kind: String,
+    @SerializedName("Child") private val childNodes: List<TreeNode>?
+) {
     fun childTreeNodes(): ImmutableList<TreeNode> {
-        return if (Child != null) {
-            ImmutableList.copyOf(Child)
+        return if (childNodes != null) {
+            ImmutableList.copyOf(childNodes)
         } else
             ImmutableList.of()
     }
@@ -13,6 +20,6 @@ internal data class TreeNode(val Id: String, val Str: String, val Type: TreeNode
     //todo better not override toString?
     override fun toString(): String {
         //todo what about line breaks? white spaces?
-        return Kind + " " + Str
+        return kind + " " + str
     }
 }

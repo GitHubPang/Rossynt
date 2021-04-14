@@ -8,18 +8,18 @@ using RossyntBackend.Utils;
 namespace RossyntBackend.Models {
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public sealed class TreeNodeTrivia : TreeNode {
-        private readonly TreeNodeType _treeNodeType;
+        private readonly TreeNodeCategory _treeNodeCategory;
         private readonly SyntaxTrivia _syntaxTrivia;
 
         // ******************************************************************************** //
 
         public TreeNodeTrivia(bool isLeading, SyntaxTrivia syntaxTrivia, [CanBeNull] TreeNode parentTreeNode) : base(parentTreeNode) {
-            _treeNodeType = isLeading ? Models.TreeNodeType.LeadingTrivia : Models.TreeNodeType.TrailingTrivia;
+            _treeNodeCategory = isLeading ? Models.TreeNodeCategory.LeadingTrivia : Models.TreeNodeCategory.TrailingTrivia;
             _syntaxTrivia = syntaxTrivia;
         }
 
         public override SyntaxKind Kind() => _syntaxTrivia.Kind();
-        public override TreeNodeType TreeNodeType() => _treeNodeType;
+        public override TreeNodeCategory TreeNodeCategory() => _treeNodeCategory;
 
         [Pure]
         [NotNull]
@@ -30,6 +30,6 @@ namespace RossyntBackend.Models {
         public override IReadOnlyDictionary<string, string> RawProperties() => ObjectUtil.GetObjectProperties(_syntaxTrivia);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public string DebuggerDisplay => $"({TreeNodeType()}) {_syntaxTrivia}";
+        public string DebuggerDisplay => $"({TreeNodeCategory()}) {_syntaxTrivia}";
     }
 }

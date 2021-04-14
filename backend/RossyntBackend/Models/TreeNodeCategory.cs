@@ -2,7 +2,7 @@
     /// <remarks>
     /// Note: must sync with front end.
     /// </remarks>
-    public enum TreeNodeType {
+    public enum TreeNodeCategory {
         SyntaxNode,
         SyntaxToken,
         LeadingTrivia,

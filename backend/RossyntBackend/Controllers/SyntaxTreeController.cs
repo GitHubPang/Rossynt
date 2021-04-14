@@ -94,7 +94,7 @@ namespace RossyntBackend.Controllers {
             var result = new Dictionary<string, object> {
                 ["Id"] = treeNode.NodeId,
                 ["Str"] = DisplayStr(treeNode),
-                ["Type"] = treeNode.TreeNodeType().ToString(),
+                ["Cat"] = treeNode.TreeNodeCategory().ToString(),
                 ["Kind"] = treeNode.Kind().ToString()
             };
             if (childNodes.Length > 0) {
