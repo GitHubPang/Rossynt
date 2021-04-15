@@ -23,6 +23,7 @@ import java.io.FileOutputStream
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.regex.Pattern
 
 @Service
@@ -35,6 +36,7 @@ internal class BackendService : Disposable {
         private const val RESOURCE_FILE_LIST_FILE_NAME = "FileList.txt"
         private const val BACKEND_DLL_NAME = "RossyntBackend.dll"
         private const val PING_BACKEND_DELAY_DURATION_MILLISECONDS = (1000 * 60 / 3.5).toLong()
+        private const val RETRY_SEND_REQUEST_DURATION_MILLISECONDS = 1000L
         private const val DELETE_DEPLOY_PATH_MAX_RETRY_COUNT = 20
         private const val DELETE_DEPLOY_PATH_DELAY_DURATION_MILLISECONDS = 75L
 
@@ -51,8 +53,10 @@ internal class BackendService : Disposable {
 
     // ******************************************************************************** //
 
+    @Volatile
     var isReady = false
         private set
+    var isDisposed: AtomicBoolean = AtomicBoolean()
     private var project: Project? = null
     private var backendJob: Job? = null
     private var dotNetPath: String? = null
@@ -72,6 +76,10 @@ internal class BackendService : Disposable {
     }
 
     override fun dispose() {
+        if (!isDisposed.compareAndSet(false, true)) {
+            return
+        }
+
         try {
             LOGGER.info("Backend service dispose begin.")
             runBlocking(Dispatchers.IO) {
@@ -264,8 +272,23 @@ internal class BackendService : Disposable {
     }
 
     private suspend inline fun <reified T> sendRequestToBackend(urlPath: String, formParameters: Parameters = Parameters.Empty): T? {
-        //todo check isReady?
         try {
+            while (true) {
+                // Skip if already disposed.
+                if (isDisposed.get()) {
+                    return null
+                }
+
+                // Retry later if not ready yet.
+                if (!isReady) {
+                    delay(RETRY_SEND_REQUEST_DURATION_MILLISECONDS)
+                    continue
+                }
+
+                break
+            }
+
+            // Do HTTP request.
             HttpClient(CIO) {
                 install(JsonFeature) { serializer = GsonSerializer() }
             }.use { client ->
