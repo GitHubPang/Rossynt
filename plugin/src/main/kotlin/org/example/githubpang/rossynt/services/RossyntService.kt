@@ -3,6 +3,8 @@ package org.example.githubpang.rossynt.services
 import com.google.common.collect.ImmutableMap
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
+import com.intellij.openapi.fileEditor.FileEditorManagerEvent
+import com.intellij.openapi.fileEditor.FileEditorManagerListener
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.openapi.vfs.newvfs.BulkFileListener
@@ -10,7 +12,6 @@ import com.intellij.openapi.vfs.newvfs.events.VFileEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.example.githubpang.rossynt.CurrentFileNotifier
 import org.example.githubpang.rossynt.RossyntToolWindowStateNotifier
 import org.example.githubpang.rossynt.trees.TreeNode
 
@@ -31,11 +32,24 @@ internal class RossyntService {
         this.project = project
 
         val messageBusConnection = project.messageBus.connect()
-        messageBusConnection.subscribe(CurrentFileNotifier.TOPIC, object : CurrentFileNotifier {
-            override fun currentFileChanged(filePath: String?) {
+        messageBusConnection.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, object : FileEditorManagerListener {
+            override fun selectionChanged(event: FileEditorManagerEvent) {
+                super.selectionChanged(event)
+
+                // Get event file path.
+                val file = event.newFile
+                val filePath = if (file != null && file.isValid && file.isInLocalFileSystem) {
+                    file.path
+                } else {
+                    null
+                }
+
+                // Skip if no change.
                 if (currentFilePath == filePath) {
                     return
                 }
+
+                // Set current data.
                 currentFilePath = filePath
                 currentNodeId = null
 
