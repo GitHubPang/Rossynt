@@ -10,5 +10,5 @@ internal interface RossyntServiceNotifier {
     }
 
     fun treeUpdated(rootTreeNode: TreeNode?)
-    fun currentNodeInfoUpdated(currentNodeInfo: ImmutableMap<String, String>?)
+    fun nodeInfoUpdated(nodeInfo: ImmutableMap<String, String>?)
 }

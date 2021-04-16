@@ -31,7 +31,7 @@ internal class RossyntToolWindow(project: Project) {
     // ******************************************************************************** //
 
     private inner class UiTableModel : AbstractTableModel() {
-        override fun getRowCount(): Int = this@RossyntToolWindow.currentNodeInfo.size + when (this@RossyntToolWindow.selectedTreeNode) {
+        override fun getRowCount(): Int = this@RossyntToolWindow.nodeInfo.size + when (this@RossyntToolWindow.selectedTreeNode) {
             null -> 0
             else -> SpecialRow.values().size
         }
@@ -64,7 +64,7 @@ internal class RossyntToolWindow(project: Project) {
                 rowIndex -= specialRows.size
             }
 
-            return this@RossyntToolWindow.currentNodeInfo[rowIndex]
+            return this@RossyntToolWindow.nodeInfo[rowIndex]
         }
     }
 
@@ -74,7 +74,7 @@ internal class RossyntToolWindow(project: Project) {
     private val rossyntService: RossyntService = project.service()
     private var rootTreeNode: TreeNode? = null
     private var selectedTreeNode: TreeNode? = null
-    private var currentNodeInfo: ImmutableList<Pair<String, String>> = ImmutableList.of()
+    private var nodeInfo: ImmutableList<Pair<String, String>> = ImmutableList.of()
 
     // UI.
     private val uiTree: Tree = Tree()
@@ -120,9 +120,9 @@ internal class RossyntToolWindow(project: Project) {
                 uiUpdateTree()
             }
 
-            override fun currentNodeInfoUpdated(currentNodeInfo: ImmutableMap<String, String>?) {
-                this@RossyntToolWindow.currentNodeInfo = when {
-                    currentNodeInfo != null -> ImmutableList.copyOf(currentNodeInfo.toList().sortedBy { pair -> pair.first })
+            override fun nodeInfoUpdated(nodeInfo: ImmutableMap<String, String>?) {
+                this@RossyntToolWindow.nodeInfo = when {
+                    nodeInfo != null -> ImmutableList.copyOf(nodeInfo.toList().sortedBy { pair -> pair.first })
                     else -> ImmutableList.of()
                 }
 

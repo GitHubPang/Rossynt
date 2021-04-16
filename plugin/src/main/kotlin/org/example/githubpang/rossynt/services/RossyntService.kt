@@ -14,16 +14,30 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.example.githubpang.rossynt.RossyntToolWindowStateNotifier
 import org.example.githubpang.rossynt.trees.TreeNode
+import java.util.*
+import javax.annotation.concurrent.Immutable
 
 @Service
 internal class RossyntService {
+    @Immutable
+    private class State(val filePath: String? = null, val nodeId: String? = null) {
+        val uniqueId: UUID = UUID.randomUUID()
+    }
+
+    @Immutable
+    private class Data(val filePath: String? = null, val rootTreeNode: TreeNode? = null, val nodeId: String? = null, val nodeInfo: ImmutableMap<String, String> = ImmutableMap.of())
+
+    // ******************************************************************************** //
+
     private var project: Project? = null
-    private var currentFilePath: String? = null
-    private var currentNodeId: String? = null
+
     private var toolWindowIsVisible = false
     private var backendService: BackendService? = null
-    private var rootTreeNode: TreeNode? = null
-    private var currentNodeInfo: ImmutableMap<String, String> = ImmutableMap.of()
+    private var isBackendServiceStarted = false
+
+    private var expectedState: State = State()
+    private var isRefreshingCurrentData = false
+    private var currentData: Data = Data()
 
     // ******************************************************************************** //
 
@@ -45,17 +59,15 @@ internal class RossyntService {
                 }
 
                 // Skip if no change.
-                if (currentFilePath == filePath) {
+                if (filePath == expectedState.filePath) {
                     return
                 }
 
-                // Set current data.
-                currentFilePath = filePath
-                currentNodeId = null
+                // Update expected state.
+                expectedState = State(filePath)
 
-                // Update data.
-                updateTree()
-                updateCurrentNodeInfo()
+                // Refresh current data.
+                refreshCurrentData()
             }
         })
         messageBusConnection.subscribe(RossyntToolWindowStateNotifier.TOPIC, object : RossyntToolWindowStateNotifier {
@@ -69,10 +81,6 @@ internal class RossyntService {
                 if (backendService == null && toolWindowIsVisible) {
                     backendService = project.service()
                     backendService?.startBackendService(project)
-
-                    // Update data.
-                    updateTree()
-                    updateCurrentNodeInfo()
                 }
             }
         })
@@ -80,78 +88,117 @@ internal class RossyntService {
             override fun after(events: MutableList<out VFileEvent>) {
                 super.after(events)
 
-                if (events.none { event -> event.path == currentFilePath }) {
+                if (events.none { event -> event.path == expectedState.filePath }) {
                     return
                 }
 
-                currentNodeId = null
+                // Update expected state.
+                expectedState = State(expectedState.filePath)
 
-                // Update data.
-                updateTree()
-                updateCurrentNodeInfo()
+                // Refresh current data.
+                refreshCurrentData()
             }
         })
         messageBusConnection.subscribe(BackendServiceNotifier.TOPIC, object : BackendServiceNotifier {
             override fun backendServiceBecameReady() {
-                // Update data.
-                updateTree()
+                isBackendServiceStarted = true
+
+                // Refresh current data.
+                refreshCurrentData()
             }
         })
     }
 
     fun setCurrentNodeId(nodeId: String?) {
-        currentNodeId = nodeId
+        // Update expected state.
+        expectedState = State(expectedState.filePath, nodeId)
 
-        // Update data.
-        updateCurrentNodeInfo()
+        // Refresh current data.
+        refreshCurrentData()
     }
 
-    private fun updateTree() {
-        //todo should check file extension?
-        val project = project ?: throw IllegalStateException()
-        val backendService = backendService ?: return//todo return here is correct?
-        if (backendService.isReady) {
-            //todo should do something if current request in progress
-            GlobalScope.launch(Dispatchers.IO) {
-                val result = backendService.setActiveFile(currentFilePath)
-                launch(Dispatchers.Main) {
-                    rootTreeNode = result
+    private fun refreshCurrentData() {
+        val backendService = backendService ?: return
 
-                    // Publish message.
-                    val messageBus = project.messageBus
-                    val publisher = messageBus.syncPublisher(RossyntServiceNotifier.TOPIC)
-                    publisher.treeUpdated(rootTreeNode)
-                }
-            }
-        } else {
-            //todo what to do here?
+        if (!isBackendServiceStarted) {
+            return
         }
+
+        if (isRefreshingCurrentData) {
+            return
+        }
+        isRefreshingCurrentData = true
+
+        //todo should check file extension?
+
+        // If file path outdated, update tree.
+        if (currentData.filePath != expectedState.filePath) {
+            setCurrentData(Data())
+
+            val fetchingState = expectedState
+            GlobalScope.launch(Dispatchers.IO) {
+                val rootTreeNode = backendService.setActiveFile(fetchingState.filePath)
+                launch(Dispatchers.Main) {
+                    if (fetchingState.uniqueId == expectedState.uniqueId) {
+                        setCurrentData(Data(fetchingState.filePath, rootTreeNode))
+                    }
+
+                    isRefreshingCurrentData = false
+                    refreshCurrentData()
+                }
+            }
+
+            return
+        }
+
+        // If node id outdated, update node info.
+        if (currentData.nodeId != expectedState.nodeId) {
+            setCurrentData(Data(currentData.filePath, currentData.rootTreeNode))
+
+            val fetchingState = expectedState
+            GlobalScope.launch(Dispatchers.IO) {
+                val nodeInfo = when {
+                    fetchingState.nodeId != null -> ImmutableMap.copyOf(backendService.getNodeInfo(fetchingState.nodeId))
+                    else -> ImmutableMap.of()
+                }
+                launch(Dispatchers.Main) {
+                    if (fetchingState.uniqueId == expectedState.uniqueId) {
+                        setCurrentData(Data(currentData.filePath, currentData.rootTreeNode, fetchingState.nodeId, nodeInfo))
+                    }
+
+                    isRefreshingCurrentData = false
+                    refreshCurrentData()
+                }
+            }
+
+            return
+        }
+
+        // Everything is updated. Done.
+        isRefreshingCurrentData = false
     }
 
-    private fun updateCurrentNodeInfo() {
-        //todo should check file extension?
+    private fun setCurrentData(newData: Data) {
         val project = project ?: throw IllegalStateException()
-        val backendService = backendService ?: return//todo return here is correct?
-        val currentNodeId = currentNodeId
-        if (currentNodeId != null) {
-            if (backendService.isReady) {
-                //todo should do something if current request in progress
-                GlobalScope.launch(Dispatchers.IO) {
-                    val result = ImmutableMap.copyOf(backendService.getNodeInfo(currentNodeId))
-                    launch(Dispatchers.Main) {
-                        currentNodeInfo = result
 
-                        // Publish message.
-                        val messageBus = project.messageBus
-                        val publisher = messageBus.syncPublisher(RossyntServiceNotifier.TOPIC)
-                        publisher.currentNodeInfoUpdated(currentNodeInfo)
-                    }
-                }
-            } else {
-                //todo what to do here?
-            }
-        } else {
-            currentNodeInfo = ImmutableMap.of()
+        // Update current data.
+        val oldData = currentData
+        currentData = newData
+
+        // If tree has changed...
+        if (currentData.rootTreeNode != oldData.rootTreeNode) {
+            // Publish message.
+            val messageBus = project.messageBus
+            val publisher = messageBus.syncPublisher(RossyntServiceNotifier.TOPIC)
+            publisher.treeUpdated(currentData.rootTreeNode)
+        }
+
+        // If node info has changed...
+        if (currentData.nodeInfo != oldData.nodeInfo) {
+            // Publish message.
+            val messageBus = project.messageBus
+            val publisher = messageBus.syncPublisher(RossyntServiceNotifier.TOPIC)
+            publisher.nodeInfoUpdated(currentData.nodeInfo)
         }
     }
 }

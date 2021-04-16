@@ -54,9 +54,8 @@ internal class BackendService : Disposable {
     // ******************************************************************************** //
 
     @Volatile
-    var isReady = false
-        private set
-    var isDisposed: AtomicBoolean = AtomicBoolean()
+    private var isReady = false
+    private var isDisposed: AtomicBoolean = AtomicBoolean()
     private var project: Project? = null
     private var backendJob: Job? = null
     private var dotNetPath: String? = null
