@@ -19,7 +19,10 @@ namespace RossyntBackend.Models {
             _syntaxTrivia = syntaxTrivia;
         }
 
+        [Pure]
         public override SyntaxKind SyntaxKind() => _syntaxTrivia.Kind();
+
+        [Pure]
         public override TreeNodeCategory TreeNodeCategory() => _treeNodeCategory;
 
         [Pure]

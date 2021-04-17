@@ -14,7 +14,11 @@ namespace RossyntBackend.Models {
         // ******************************************************************************** //
 
         public TreeNodeSyntaxOrToken(SyntaxNodeOrToken syntaxNodeOrToken, [CanBeNull] TreeNode parentTreeNode) : base(parentTreeNode) => SyntaxNodeOrToken = syntaxNodeOrToken;
+
+        [Pure]
         public override SyntaxKind SyntaxKind() => SyntaxNodeOrToken.Kind();
+
+        [Pure]
         public override TreeNodeCategory TreeNodeCategory() => SyntaxNodeOrToken.IsNode ? Models.TreeNodeCategory.SyntaxNode : Models.TreeNodeCategory.SyntaxToken;
 
         [Pure]
