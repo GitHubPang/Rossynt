@@ -253,9 +253,9 @@ internal class BackendService : Disposable {
         return process
     }
 
-    suspend fun setActiveFile(filePath: String?): TreeNode? {
-        return if (filePath != null) {
-            sendRequestToBackend("syntaxTree/setActiveFile", parametersOf("FilePath", filePath))
+    suspend fun compileFile(fileText: String?, filePath: String?): TreeNode? {
+        return if (fileText != null && filePath != null) {
+            sendRequestToBackend("syntaxTree/compileFile", parametersOf("FileText", fileText).plus(parametersOf("FilePath", filePath)))
         } else {
             sendRequestToBackend<String>("syntaxTree/resetActiveFile")
             null

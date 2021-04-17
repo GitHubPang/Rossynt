@@ -1,14 +1,16 @@
 package org.example.githubpang.rossynt.services
 
 import com.google.common.collect.ImmutableMap
+import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
+import com.intellij.openapi.editor.EditorFactory
+import com.intellij.openapi.editor.event.DocumentEvent
+import com.intellij.openapi.editor.event.DocumentListener
+import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent
 import com.intellij.openapi.fileEditor.FileEditorManagerListener
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.vfs.VirtualFileManager
-import com.intellij.openapi.vfs.newvfs.BulkFileListener
-import com.intellij.openapi.vfs.newvfs.events.VFileEvent
 import com.intellij.openapi.wm.ex.ToolWindowManagerListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -20,14 +22,20 @@ import java.util.*
 import javax.annotation.concurrent.Immutable
 
 @Service
-internal class RossyntService {
+internal class RossyntService : Disposable {
     @Immutable
-    private class State(val filePath: String? = null, val nodeId: String? = null) {
+    private class State(val fileText: String?, val filePath: String?, val nodeId: String?) {
         val uniqueId: UUID = UUID.randomUUID()
+
+        constructor() : this(null, null, null)
     }
 
     @Immutable
-    private class Data(val filePath: String? = null, val rootTreeNode: TreeNode? = null, val nodeId: String? = null, val nodeInfo: ImmutableMap<String, String> = ImmutableMap.of())
+    private class Data(val fileText: String?, val filePath: String?, val rootTreeNode: TreeNode?, val nodeId: String?, nodeInfo: ImmutableMap<String, String>?) {
+        val nodeInfo: ImmutableMap<String, String> = nodeInfo ?: ImmutableMap.of()
+
+        constructor() : this(null, null, null, null, null)
+    }
 
     // ******************************************************************************** //
 
@@ -42,6 +50,8 @@ internal class RossyntService {
     private var currentData: Data = Data()
 
     // ******************************************************************************** //
+
+    override fun dispose() = Unit
 
     fun startRossyntService(project: Project) {
         require(this.project == null)
@@ -67,7 +77,8 @@ internal class RossyntService {
                 }
 
                 // Update expected state.
-                expectedState = State(filePath)
+                val fileText = FileEditorManager.getInstance(project).selectedTextEditor?.document?.text
+                expectedState = State(fileText, filePath, null)
 
                 // Refresh current data.
                 refreshCurrentData()
@@ -87,21 +98,6 @@ internal class RossyntService {
                 }
             }
         })
-        messageBusConnection.subscribe(VirtualFileManager.VFS_CHANGES, object : BulkFileListener {
-            override fun after(events: MutableList<out VFileEvent>) {
-                super.after(events)
-
-                if (events.none { event -> event.path == expectedState.filePath }) {
-                    return
-                }
-
-                // Update expected state.
-                expectedState = State(expectedState.filePath)
-
-                // Refresh current data.
-                refreshCurrentData()
-            }
-        })
         messageBusConnection.subscribe(BackendServiceNotifier.TOPIC, object : BackendServiceNotifier {
             override fun backendServiceBecameReady() {
                 isBackendServiceStarted = true
@@ -110,11 +106,28 @@ internal class RossyntService {
                 refreshCurrentData()
             }
         })
+
+        EditorFactory.getInstance().eventMulticaster.addDocumentListener(object : DocumentListener {
+            override fun documentChanged(event: DocumentEvent) {
+                super.documentChanged(event)
+
+                if (FileEditorManager.getInstance(project).selectedTextEditor?.document != event.document) {
+                    return
+                }
+
+                // Update expected state.
+                val fileText = event.document.text
+                expectedState = State(fileText, expectedState.filePath, null)
+
+                // Refresh current data.
+                refreshCurrentData()
+            }
+        }, this)
     }
 
     fun setCurrentNodeId(nodeId: String?) {
         // Update expected state.
-        expectedState = State(expectedState.filePath, nodeId)
+        expectedState = State(expectedState.fileText, expectedState.filePath, nodeId)
 
         // Refresh current data.
         refreshCurrentData()
@@ -134,16 +147,16 @@ internal class RossyntService {
 
         //todo should check file extension?
 
-        // If file path outdated, update tree.
-        if (currentData.filePath != expectedState.filePath) {
+        // If file text or file path outdated, update tree.
+        if (currentData.fileText != expectedState.fileText || currentData.filePath != expectedState.filePath) {
             setCurrentData(Data())
 
             val fetchingState = expectedState
             GlobalScope.launch(Dispatchers.IO) {
-                val rootTreeNode = backendService.setActiveFile(fetchingState.filePath)
+                val rootTreeNode = backendService.compileFile(fetchingState.fileText, fetchingState.filePath)
                 launch(Dispatchers.Main) {
                     if (fetchingState.uniqueId == expectedState.uniqueId) {
-                        setCurrentData(Data(fetchingState.filePath, rootTreeNode))
+                        setCurrentData(Data(fetchingState.fileText, fetchingState.filePath, rootTreeNode, null, null))
                     }
 
                     isRefreshingCurrentData = false
@@ -156,7 +169,7 @@ internal class RossyntService {
 
         // If node id outdated, update node info.
         if (currentData.nodeId != expectedState.nodeId) {
-            setCurrentData(Data(currentData.filePath, currentData.rootTreeNode))
+            setCurrentData(Data(currentData.fileText, currentData.filePath, currentData.rootTreeNode, null, null))
 
             val fetchingState = expectedState
             GlobalScope.launch(Dispatchers.IO) {
@@ -166,7 +179,7 @@ internal class RossyntService {
                 }
                 launch(Dispatchers.Main) {
                     if (fetchingState.uniqueId == expectedState.uniqueId) {
-                        setCurrentData(Data(currentData.filePath, currentData.rootTreeNode, fetchingState.nodeId, nodeInfo))
+                        setCurrentData(Data(currentData.fileText, currentData.filePath, currentData.rootTreeNode, fetchingState.nodeId, nodeInfo))
                     }
 
                     isRefreshingCurrentData = false
