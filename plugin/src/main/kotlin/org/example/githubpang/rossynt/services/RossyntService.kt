@@ -9,10 +9,12 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.openapi.vfs.newvfs.BulkFileListener
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent
+import com.intellij.openapi.wm.ex.ToolWindowManagerListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.example.githubpang.rossynt.RossyntToolWindowStateNotifier
+import org.example.githubpang.rossynt.listeners.ProjectToolWindowManagerListener
 import org.example.githubpang.rossynt.trees.TreeNode
 import java.util.*
 import javax.annotation.concurrent.Immutable
@@ -46,6 +48,7 @@ internal class RossyntService {
         this.project = project
 
         val messageBusConnection = project.messageBus.connect()
+        messageBusConnection.subscribe(ToolWindowManagerListener.TOPIC, ProjectToolWindowManagerListener(project))
         messageBusConnection.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, object : FileEditorManagerListener {
             override fun selectionChanged(event: FileEditorManagerEvent) {
                 super.selectionChanged(event)
