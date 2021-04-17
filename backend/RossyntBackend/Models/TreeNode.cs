@@ -42,6 +42,9 @@ namespace RossyntBackend.Models {
         public abstract Type RawType();
 
         [Pure]
+        public abstract bool IsMissing();
+
+        [Pure]
         [NotNull]
         public abstract IReadOnlyDictionary<string, string> RawProperties();
     }

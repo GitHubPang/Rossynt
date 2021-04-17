@@ -34,6 +34,9 @@ namespace RossyntBackend.Models {
         public override Type RawType() => _syntaxTrivia.GetType();
 
         [Pure]
+        public override bool IsMissing() => false;
+
+        [Pure]
         [NotNull]
         public override IReadOnlyDictionary<string, string> RawProperties() => ObjectUtil.GetObjectProperties(_syntaxTrivia);
 

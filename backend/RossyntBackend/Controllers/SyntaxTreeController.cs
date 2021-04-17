@@ -98,6 +98,11 @@ namespace RossyntBackend.Controllers {
                 ["Kind"] = treeNode.SyntaxKind().ToString(),
                 ["Str"] = ShortString(treeNode)
             };
+
+            if (treeNode.IsMissing()) {
+                result["IsMissing"] = 1;
+            }
+
             if (childNodes.Length > 0) {
                 result["Child"] = childNodes;
             }

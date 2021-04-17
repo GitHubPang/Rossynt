@@ -30,6 +30,9 @@ namespace RossyntBackend.Models {
         public override Type RawType() => RawObject().GetType();
 
         [Pure]
+        public override bool IsMissing() => SyntaxNodeOrToken.IsMissing;
+
+        [Pure]
         [NotNull]
         public override IReadOnlyDictionary<string, string> RawProperties() {
             var basicProperties = ObjectUtil.GetObjectProperties(SyntaxNodeOrToken);
