@@ -11,9 +11,12 @@ import com.intellij.util.ui.tree.TreeUtil
 import org.example.githubpang.rossynt.services.RossyntService
 import org.example.githubpang.rossynt.services.RossyntServiceNotifier
 import org.example.githubpang.rossynt.trees.TreeNode
+import java.awt.Component
+import java.awt.Font
 import javax.swing.JComponent
 import javax.swing.JTable
 import javax.swing.table.AbstractTableModel
+import javax.swing.table.DefaultTableCellRenderer
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 import javax.swing.tree.TreeSelectionModel.SINGLE_TREE_SELECTION
@@ -68,6 +71,17 @@ internal class RossyntToolWindow(project: Project) {
         }
     }
 
+    private class UiTableCellRenderer : DefaultTableCellRenderer() {
+        override fun getTableCellRendererComponent(table: JTable?, value: Any?, isSelected: Boolean, hasFocus: Boolean, row: Int, column: Int): Component {
+            val component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column)
+            if (row < SpecialRow.values().size) {
+                component.font = component.font.deriveFont(Font.BOLD)
+            }
+
+            return component
+        }
+    }
+
     // ******************************************************************************** //
 
     // Data.
@@ -104,6 +118,7 @@ internal class RossyntToolWindow(project: Project) {
 
         // Setup table.
         uiTable.tableHeader = null
+        uiTable.setDefaultRenderer(Object::class.java, UiTableCellRenderer())
 
         // Setup splitter.
         uiSplitter.orientation = true
