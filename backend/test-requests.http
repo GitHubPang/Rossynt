@@ -1,8 +1,8 @@
-﻿POST http://localhost:5000/syntaxTree/setActiveFile
+﻿POST http://localhost:5000/syntaxTree/compileFile
 Content-Type: application/x-www-form-urlencoded
 Accept: application/json
 
-FilePath=Startup.cs
+FilePath=missing.cs&FileText=using+System.Unknown%3B+class+Program+%7Bpublic+void+F%28%29+%7B%7D%7D
 
 > {%
 if(response.body.Id) {

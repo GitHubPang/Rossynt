@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -33,9 +32,8 @@ namespace RossyntBackend.Models {
         }
 
         [NotNull]
-        public static async Task<Tree> CompileFile([NotNull] string filePath, CancellationToken cancellationToken) {
-            var fileContent = await File.ReadAllTextAsync(filePath, cancellationToken);
-            var syntaxTree = CSharpSyntaxTree.ParseText(fileContent, path: filePath, cancellationToken: cancellationToken);
+        public static async Task<Tree> CompileFile([NotNull] string fileText, [NotNull] string filePath, CancellationToken cancellationToken) {
+            var syntaxTree = CSharpSyntaxTree.ParseText(fileText, path: filePath, cancellationToken: cancellationToken);
             var root = await syntaxTree.GetRootAsync(cancellationToken);
             return new Tree(root);
         }

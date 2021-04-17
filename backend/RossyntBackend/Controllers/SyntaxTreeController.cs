@@ -34,16 +34,16 @@ namespace RossyntBackend.Controllers {
             _applicationLifetimeService.RestartCountdown();
         }
 
-        [HttpPost(nameof(SetActiveFile))]
+        [HttpPost(nameof(CompileFile))]
         [NotNull, ItemNotNull]
-        public async Task<IReadOnlyDictionary<string, object>> SetActiveFile([NotNull] [FromForm] SetActiveFileRequest request) {
+        public async Task<IReadOnlyDictionary<string, object>> CompileFile([NotNull] [FromForm] CompileFileRequest request) {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             // Restart application lifetime countdown.
             _applicationLifetimeService.RestartCountdown();
 
             // Compile tree.
-            var tree = await Tree.CompileFile(request.FilePath, HttpContext.RequestAborted);
+            var tree = await Tree.CompileFile(request.FileText, request.FilePath, HttpContext.RequestAborted);
 
             // Save in repository.
             _projectRepository.SetTree(tree);
