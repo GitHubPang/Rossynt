@@ -6,7 +6,7 @@ import com.intellij.ide.projectView.PresentationData
 import com.intellij.navigation.ItemPresentation
 import com.intellij.navigation.NavigationItem
 import com.intellij.openapi.editor.colors.CodeInsightColors
-import org.example.githubpang.rossynt.AppIcons
+import icons.PluginIcons
 
 internal data class TreeNode(
     @SerializedName("Id") val nodeId: String,
@@ -37,10 +37,10 @@ internal data class TreeNode(
         syntaxKind,
         shortString, //todo what about line breaks? white spaces? null characters?
         when (treeNodeCategory) {
-            TreeNodeCategory.SyntaxNode -> AppIcons.TreeNodeCategorySyntaxNode
-            TreeNodeCategory.SyntaxToken -> AppIcons.TreeNodeCategorySyntaxToken
-            TreeNodeCategory.LeadingTrivia -> AppIcons.TreeNodeCategoryTrivia
-            TreeNodeCategory.TrailingTrivia -> AppIcons.TreeNodeCategoryTrivia
+            TreeNodeCategory.SyntaxNode -> PluginIcons.TreeNodeCategorySyntaxNode
+            TreeNodeCategory.SyntaxToken -> PluginIcons.TreeNodeCategorySyntaxToken
+            TreeNodeCategory.LeadingTrivia -> PluginIcons.TreeNodeCategoryTrivia
+            TreeNodeCategory.TrailingTrivia -> PluginIcons.TreeNodeCategoryTrivia
         },
         if (isError()) CodeInsightColors.ERRORS_ATTRIBUTES else null
     )

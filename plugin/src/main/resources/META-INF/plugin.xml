@@ -8,7 +8,7 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="Rossynt" secondary="true" icon="AllIcons.Actions.ShowAsTree" anchor="right"
+        <toolWindow id="Rossynt" secondary="true" icon="PluginIcons.ToolWindowIcon" anchor="right"
                     factoryClass="org.example.githubpang.rossynt.toolWindow.RossyntToolWindowFactory"/>
     </extensions>
 
