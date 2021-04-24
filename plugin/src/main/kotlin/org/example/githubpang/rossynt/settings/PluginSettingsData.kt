@@ -14,6 +14,9 @@ internal class PluginSettingsData : PersistentStateComponent<PluginSettingsData?
 
     var dotNetPath: String? = null
         set(value) {
+            if (field == value) {
+                return
+            }
             field = value
 
             // Publish message.
