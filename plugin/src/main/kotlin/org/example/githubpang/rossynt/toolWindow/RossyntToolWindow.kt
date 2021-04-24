@@ -52,6 +52,8 @@ internal class RossyntToolWindow(project: Project) {
 
         private fun getRowValueAt(rowIndex: Int): Pair<String, String> {
             val selectedTreeNode = this@RossyntToolWindow.selectedTreeNode
+
+            @Suppress("NAME_SHADOWING")
             var rowIndex = rowIndex
 
             if (selectedTreeNode != null) {
