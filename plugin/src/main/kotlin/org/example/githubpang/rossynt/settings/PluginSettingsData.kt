@@ -1,5 +1,6 @@
 package org.example.githubpang.rossynt.settings
 
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.*
 import com.intellij.util.xmlb.XmlSerializerUtil
 
@@ -12,6 +13,14 @@ internal class PluginSettingsData : PersistentStateComponent<PluginSettingsData?
     }
 
     var dotNetPath: String? = null
+        set(value) {
+            field = value
+
+            // Publish message.
+            val messageBus = ApplicationManager.getApplication()?.messageBus
+            val publisher = messageBus?.syncPublisher(PluginSettingsNotifier.TOPIC)
+            publisher?.pluginSettingsUpdated()
+        }
 
     // ******************************************************************************** //
 
