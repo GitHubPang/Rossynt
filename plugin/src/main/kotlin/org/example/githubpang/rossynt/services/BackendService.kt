@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.regex.Pattern
 
 @Service
-internal class BackendService : Disposable {
+internal class BackendService : Disposable, IBackendService {
     private companion object {
         private val LOGGER = Logger.getInstance(BackendService::class.java)
 
@@ -66,7 +66,7 @@ internal class BackendService : Disposable {
 
     // ******************************************************************************** //
 
-    fun startBackendService(project: Project) {
+    override fun startBackendService(project: Project) {
         require(this.project == null)
         this.project = project
         backendJob = GlobalScope.launch(Dispatchers.IO) {
@@ -253,7 +253,7 @@ internal class BackendService : Disposable {
         return process
     }
 
-    suspend fun compileFile(fileText: String?, filePath: String?): TreeNode? {
+    override suspend fun compileFile(fileText: String?, filePath: String?): TreeNode? {
         return if (fileText != null && filePath != null) {
             sendRequestToBackend("syntaxTree/compileFile", parametersOf("FileText", fileText).plus(parametersOf("FilePath", filePath)))
         } else {
@@ -262,7 +262,7 @@ internal class BackendService : Disposable {
         }
     }
 
-    suspend fun getNodeInfo(nodeId: String): Map<String, String> {
+    override suspend fun getNodeInfo(nodeId: String): Map<String, String> {
         return sendRequestToBackend("syntaxTree/getNodeInfo", parametersOf("NodeId", nodeId)) ?: HashMap()
     }
 

@@ -42,7 +42,7 @@ internal class RossyntService : Disposable {
     private var project: Project? = null
 
     private var toolWindowIsVisible = false
-    private var backendService: BackendService? = null
+    private var backendService: IBackendService? = null
     private var isBackendServiceStarted = false
 
     private var expectedState: State = State()
@@ -93,7 +93,7 @@ internal class RossyntService : Disposable {
 
                 // Start backend service if needed.
                 if (backendService == null && toolWindowIsVisible) {
-                    backendService = project.service()
+                    backendService = project.service<BackendService>()
                     backendService?.startBackendService(project)
                 }
             }
