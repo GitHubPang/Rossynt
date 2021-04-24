@@ -10,6 +10,11 @@
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow id="Rossynt" secondary="true" icon="PluginIcons.ToolWindowIcon" anchor="right"
                     factoryClass="org.example.githubpang.rossynt.toolWindow.RossyntToolWindowFactory"/>
+
+        <applicationConfigurable parentId="tools"
+                                 instance="org.example.githubpang.rossynt.settings.PluginSettingsConfigurable"
+                                 id="org.example.githubpang.rossynt.settings.PluginSettingsConfigurable"
+                                 displayName="Rossynt"/>
     </extensions>
 
     <applicationListeners>
