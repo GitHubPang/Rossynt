@@ -184,8 +184,7 @@ internal class BackendService : IBackendService {
         val deployPath = deployPath ?: throw IllegalStateException()
 
         val fileListFile = "$RESOURCE_BACKEND_PATH/${backendRuntimeVersion.directoryName}/$RESOURCE_FILE_LIST_FILE_NAME"
-        val fileListStream = javaClass.getResourceAsStream(fileListFile)
-            ?: throw Exception("Error loading file list file.")
+        val fileListStream = javaClass.getResourceAsStream(fileListFile) ?: throw Exception("Error loading file list file.")
         fileListStream.bufferedReader().useLines { lines ->
             for (line in lines) {
                 val inFile = "$RESOURCE_BACKEND_PATH/${backendRuntimeVersion.directoryName}/$line"
