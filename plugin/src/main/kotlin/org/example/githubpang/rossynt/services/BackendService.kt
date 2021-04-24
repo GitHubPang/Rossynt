@@ -9,6 +9,7 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Key
+import com.intellij.openapi.util.SystemInfoRt
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.features.json.*
@@ -42,12 +43,17 @@ internal class BackendService : IBackendService {
         /**
          * [Reference](https://docs.microsoft.com/en-us/dotnet/core/install/how-to-detect-installed-versions#check-for-install-folders)
          */
-        private val DEFAULT_DOT_NET_PATHS = arrayOf(
-            "C:\\program files\\dotnet\\dotnet.exe", // Default location of dotnet executable on Windows.
-            "C:\\Users\\User\\.dotnet\\dotnet.exe", // Default location of dotnet executable on Windows as installed by Rider.
-            "/home/user/share/dotnet/dotnet", // Default location of dotnet executable on Linux.
-            "/usr/local/share/dotnet/dotnet", // Default location of dotnet executable on macOS.
-        )
+        private val DEFAULT_DOT_NET_PATHS = if (SystemInfoRt.isWindows) {
+            arrayOf(
+                "C:\\program files\\dotnet\\dotnet.exe", // Default location of dotnet executable on Windows.
+                "C:\\Users\\User\\.dotnet\\dotnet.exe", // Default location of dotnet executable on Windows as installed by Rider.
+            )
+        } else {
+            arrayOf(
+                "/home/user/share/dotnet/dotnet", // Default location of dotnet executable on Linux.
+                "/usr/local/share/dotnet/dotnet", // Default location of dotnet executable on macOS.
+            )
+        }
     }
 
     // ******************************************************************************** //
@@ -171,7 +177,6 @@ internal class BackendService : IBackendService {
     }
 
     private fun autoFindDotNetPath(): String {
-        // todo: import com.intellij.openapi.util.SystemInfoRt; SystemInfoRt.isWindows
         DEFAULT_DOT_NET_PATHS.forEach { dotNetPath ->
             if (!File(dotNetPath).exists()) {
                 return@forEach
