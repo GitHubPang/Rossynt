@@ -93,7 +93,7 @@ internal class RossyntService : Disposable {
 
                 // Start backend service if needed.
                 if (backendService == null && toolWindowIsVisible) {
-                    backendService = project.service<BackendService>()
+                    backendService = project.service<RestartableBackendService>()
                     backendService?.startBackendService(project)
                 }
             }

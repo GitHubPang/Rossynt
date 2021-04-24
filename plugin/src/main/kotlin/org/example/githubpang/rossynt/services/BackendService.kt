@@ -6,7 +6,6 @@ import com.intellij.execution.process.ProcessAdapter
 import com.intellij.execution.process.ProcessEvent
 import com.intellij.execution.process.ProcessOutputType
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Key
@@ -26,8 +25,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.regex.Pattern
 
-@Service
-internal class BackendService : Disposable, IBackendService {
+internal class BackendService : IBackendService {
     private companion object {
         private val LOGGER = Logger.getInstance(BackendService::class.java)
 
@@ -118,7 +116,7 @@ internal class BackendService : Disposable, IBackendService {
 
             // Execute backend.
             yield()
-            backendProcess = executeBackend()
+            backendProcess = executeBackend(project)
             isReady = true
             LOGGER.info("Started backend process, backendUrl = $backendUrl")
 
@@ -205,7 +203,7 @@ internal class BackendService : Disposable, IBackendService {
         }
     }
 
-    private suspend fun executeBackend(): Process {
+    private suspend fun executeBackend(parentDisposable: Disposable): Process {
         val dotNetPath = dotNetPath ?: throw IllegalStateException()
         val deployPath = deployPath ?: throw IllegalStateException()
 
@@ -242,7 +240,7 @@ internal class BackendService : Disposable, IBackendService {
                 }
             }
         }
-        osProcessHandler.addProcessListener(processListener, this)
+        osProcessHandler.addProcessListener(processListener, parentDisposable)
         osProcessHandler.startNotify()
 
         // Wait until got backend URL from channel.
