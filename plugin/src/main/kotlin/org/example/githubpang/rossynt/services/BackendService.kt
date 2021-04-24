@@ -16,6 +16,7 @@ import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import org.example.githubpang.rossynt.settings.PluginSettingsData
 import org.example.githubpang.rossynt.trees.TreeNode
 import java.io.File
 import java.io.FileOutputStream
@@ -166,7 +167,10 @@ internal class BackendService : IBackendService {
     }
 
     private fun findDotNetPath(): String {
-        // todo should allow config dotnet path in settings
+        return PluginSettingsData.instance.dotNetPath ?: autoFindDotNetPath()
+    }
+
+    private fun autoFindDotNetPath(): String {
         // todo: import com.intellij.openapi.util.SystemInfoRt; SystemInfoRt.isWindows
         DEFAULT_DOT_NET_PATHS.forEach { dotNetPath ->
             if (!File(dotNetPath).exists()) {
