@@ -300,7 +300,7 @@ internal class BackendService : IBackendService {
                 return client.submitForm("$backendUrl/$urlPath", formParameters)
             }
         } catch (e: Exception) {
-            LOGGER.error(e)
+            LOGGER.warn(e)
             return null
         }
     }
