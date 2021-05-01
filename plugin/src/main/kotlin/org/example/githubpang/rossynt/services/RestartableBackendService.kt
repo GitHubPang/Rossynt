@@ -2,9 +2,6 @@ package org.example.githubpang.rossynt.services
 
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.example.githubpang.rossynt.settings.PluginSettingsNotifier
 import org.example.githubpang.rossynt.trees.TreeNode
 
@@ -19,9 +16,7 @@ internal class RestartableBackendService : IBackendService {
 
         project.messageBus.connect().subscribe(PluginSettingsNotifier.TOPIC, object : PluginSettingsNotifier {
             override fun pluginSettingsUpdated() {
-                GlobalScope.launch(Dispatchers.Main) {
-                    recreateBackendService(project)
-                }
+                recreateBackendService(project)
             }
         })
     }
