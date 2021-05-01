@@ -3,6 +3,11 @@ package org.example.githubpang.rossynt.toolWindow
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableMap
 import com.intellij.openapi.components.service
+import com.intellij.openapi.editor.colors.EditorColors
+import com.intellij.openapi.editor.markup.HighlighterLayer
+import com.intellij.openapi.editor.markup.HighlighterTargetArea
+import com.intellij.openapi.editor.markup.RangeHighlighter
+import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
 import com.intellij.ui.JBSplitter
 import com.intellij.ui.ScrollPaneFactory
@@ -21,7 +26,7 @@ import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 import javax.swing.tree.TreeSelectionModel.SINGLE_TREE_SELECTION
 
-internal class RossyntToolWindow(project: Project) {
+internal class RossyntToolWindow(private val project: Project) {
     companion object {
         const val TOOL_WINDOW_ID: String = "Rossynt"  // Must match with toolWindow id in "plugin.xml"
     }
@@ -100,6 +105,7 @@ internal class RossyntToolWindow(project: Project) {
         get() {
             return uiSplitter
         }
+    private val rangeHighlighters: MutableSet<RangeHighlighter> = mutableSetOf()
 
     // ******************************************************************************** //
 
@@ -113,6 +119,9 @@ internal class RossyntToolWindow(project: Project) {
             val treeNode = TreeUtil.getUserObject(TreeNode::class.java, uiTree.lastSelectedPathComponent)
             selectedTreeNode = treeNode
             rossyntService.setCurrentNodeId(treeNode?.nodeId)
+
+            // Update highlight.
+            updateRangeHighlighters()
 
             // Update UI.
             uiUpdateTable()
@@ -132,6 +141,9 @@ internal class RossyntToolWindow(project: Project) {
             override fun treeUpdated(rootTreeNode: TreeNode?) {
                 this@RossyntToolWindow.rootTreeNode = rootTreeNode
                 selectedTreeNode = null
+
+                // Update highlight.
+                updateRangeHighlighters()
 
                 // Update UI.
                 uiUpdateTree()
@@ -179,5 +191,27 @@ internal class RossyntToolWindow(project: Project) {
         }
 
         return uiNode
+    }
+
+    private fun updateRangeHighlighters() {
+        // Remove old highlight.
+        removeRangeHighlighters()
+
+        // Add new highlight.
+        val textRange = selectedTreeNode?.textRange
+        if (textRange != null) {
+            val rangeHighlighter = FileEditorManager.getInstance(project).selectedTextEditor?.markupModel?.addRangeHighlighter(
+                EditorColors.SEARCH_RESULT_ATTRIBUTES, textRange.startOffset, textRange.endOffset, HighlighterLayer.SELECTION - 2,
+                HighlighterTargetArea.EXACT_RANGE
+            )
+            if (rangeHighlighter != null) {
+                rangeHighlighters.add(rangeHighlighter)
+            }
+        }
+    }
+
+    private fun removeRangeHighlighters() {
+        rangeHighlighters.forEach { rangeHighlighter -> rangeHighlighter.dispose() }
+        rangeHighlighters.clear()
     }
 }

@@ -6,17 +6,37 @@ import com.intellij.ide.projectView.PresentationData
 import com.intellij.navigation.ItemPresentation
 import com.intellij.navigation.NavigationItem
 import com.intellij.openapi.editor.colors.CodeInsightColors
+import com.intellij.openapi.util.TextRange
 import icons.PluginIcons
+import org.apache.commons.lang3.StringUtils
 
 internal data class TreeNode(
     @SerializedName("Id") val nodeId: String,
     @SerializedName("Cat") val treeNodeCategory: TreeNodeCategory,
     @SerializedName("Type") val rawType: String,
     @SerializedName("Kind") val syntaxKind: String,
-    @SerializedName("Str") val shortString: String,
+    @SerializedName("Str") private val str: String?,
+    @SerializedName("Span") private val span: String?,
     @SerializedName("IsMissing") private val isMissingInt: Int,
     @SerializedName("Child") private val childTreeNodes: List<TreeNode>?
 ) : NavigationItem {
+    private val shortString: String
+        get() {
+            return str ?: ""
+        }
+
+    val textRange: TextRange?
+        get() {
+            return if (span != null) {
+                val components = StringUtils.split(span, ',')
+                val start = components[0].toInt()
+                val length = components[1].toInt()
+                return TextRange.from(start, length)
+            } else {
+                null
+            }
+        }
+
     private val isMissing: Boolean
         get() {
             return isMissingInt == 1
