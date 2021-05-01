@@ -3,12 +3,15 @@ package org.example.githubpang.rossynt.toolWindow
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableMap
 import com.intellij.icons.AllIcons
+import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.actionSystem.ToggleAction
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.colors.EditorColors
 import com.intellij.openapi.editor.markup.HighlighterLayer
 import com.intellij.openapi.editor.markup.HighlighterTargetArea
 import com.intellij.openapi.editor.markup.RangeHighlighter
 import com.intellij.openapi.fileEditor.FileEditorManager
+import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.ui.JBSplitter
@@ -92,6 +95,22 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         }
     }
 
+    private inner class ToggleByWordDiffAction : ToggleAction("Highlight Node in Source", null, AllIcons.Actions.Highlighting), DumbAware {
+        override fun isSelected(e: AnActionEvent): Boolean {
+            return isHighlightSelectedTreeNode
+        }
+
+        override fun setSelected(e: AnActionEvent, state: Boolean) {
+            if (isHighlightSelectedTreeNode == state) {
+                return
+            }
+            isHighlightSelectedTreeNode = state
+
+            // Update highlight.
+            updateRangeHighlighters()
+        }
+    }
+
     // ******************************************************************************** //
 
     // Data.
@@ -99,6 +118,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
     private var rootTreeNode: TreeNode? = null
     private var selectedTreeNode: TreeNode? = null
     private var nodeInfo: ImmutableList<Pair<String, String>> = ImmutableList.of()
+    private var isHighlightSelectedTreeNode = false
 
     // UI.
     private val uiTree: Tree = Tree()
@@ -113,10 +133,10 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
     // ******************************************************************************** //
 
     init {
-        // Add tool window button.
+        // Add tool window buttons.
         val collapseAction = CollapseAllAction(uiTree)
         collapseAction.templatePresentation.icon = AllIcons.Actions.Collapseall
-        toolWindow.setTitleActions(listOf(collapseAction))
+        toolWindow.setTitleActions(listOf(ToggleByWordDiffAction(), collapseAction))
 
         // Setup tree.
         if (uiTree.cellRenderer !is RossyntNodeRenderer) {
@@ -207,7 +227,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
 
         // Add new highlight.
         val textRange = selectedTreeNode?.textRange
-        if (textRange != null) {
+        if (isHighlightSelectedTreeNode && textRange != null) {
             val rangeHighlighter = FileEditorManager.getInstance(project).selectedTextEditor?.markupModel?.addRangeHighlighter(
                 EditorColors.SEARCH_RESULT_ATTRIBUTES, textRange.startOffset, textRange.endOffset, HighlighterLayer.SELECTION - 2,
                 HighlighterTargetArea.EXACT_RANGE
