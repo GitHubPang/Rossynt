@@ -2,6 +2,7 @@ package org.example.githubpang.rossynt.toolWindow
 
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableMap
+import com.intellij.icons.AllIcons
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.colors.EditorColors
 import com.intellij.openapi.editor.markup.HighlighterLayer
@@ -9,9 +10,11 @@ import com.intellij.openapi.editor.markup.HighlighterTargetArea
 import com.intellij.openapi.editor.markup.RangeHighlighter
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.wm.ToolWindow
 import com.intellij.ui.JBSplitter
 import com.intellij.ui.ScrollPaneFactory
 import com.intellij.ui.treeStructure.Tree
+import com.intellij.ui.treeStructure.actions.CollapseAllAction
 import com.intellij.util.ui.tree.TreeUtil
 import org.example.githubpang.rossynt.services.RossyntService
 import org.example.githubpang.rossynt.services.RossyntServiceNotifier
@@ -26,7 +29,7 @@ import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 import javax.swing.tree.TreeSelectionModel.SINGLE_TREE_SELECTION
 
-internal class RossyntToolWindow(private val project: Project) {
+internal class RossyntToolWindow(private val project: Project, toolWindow: ToolWindow) {
     companion object {
         const val TOOL_WINDOW_ID: String = "Rossynt"  // Must match with toolWindow id in "plugin.xml"
     }
@@ -110,6 +113,11 @@ internal class RossyntToolWindow(private val project: Project) {
     // ******************************************************************************** //
 
     init {
+        // Add tool window button.
+        val collapseAction = CollapseAllAction(uiTree)
+        collapseAction.templatePresentation.icon = AllIcons.Actions.Collapseall
+        toolWindow.setTitleActions(listOf(collapseAction))
+
         // Setup tree.
         if (uiTree.cellRenderer !is RossyntNodeRenderer) {
             uiTree.cellRenderer = RossyntNodeRenderer()
