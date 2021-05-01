@@ -17,6 +17,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.example.githubpang.rossynt.RossyntToolWindowStateNotifier
 import org.example.githubpang.rossynt.listeners.ProjectToolWindowManagerListener
+import org.example.githubpang.rossynt.settings.PluginSettingsNotifier
 import org.example.githubpang.rossynt.trees.TreeNode
 import java.util.*
 import javax.annotation.concurrent.Immutable
@@ -101,6 +102,15 @@ internal class RossyntService : Disposable {
         messageBusConnection.subscribe(BackendServiceNotifier.TOPIC, object : BackendServiceNotifier {
             override fun backendServiceBecameReady() {
                 isBackendServiceStarted = true
+
+                // Refresh current data.
+                refreshCurrentData()
+            }
+        })
+        project.messageBus.connect().subscribe(PluginSettingsNotifier.TOPIC, object : PluginSettingsNotifier {
+            override fun pluginSettingsUpdated() {
+                // Reset current data.
+                setCurrentData(Data())
 
                 // Refresh current data.
                 refreshCurrentData()
