@@ -155,8 +155,6 @@ internal class RossyntService : Disposable {
         }
         isRefreshingCurrentData = true
 
-        //todo should check file extension?
-
         // If file text or file path outdated, update tree.
         if (currentData.fileText != expectedState.fileText || currentData.filePath != expectedState.filePath) {
             setCurrentData(Data())
