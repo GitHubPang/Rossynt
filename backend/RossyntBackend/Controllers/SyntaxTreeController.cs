@@ -96,8 +96,12 @@ namespace RossyntBackend.Controllers {
                 ["Cat"] = treeNode.TreeNodeCategory().ToString(),
                 ["Type"] = treeNode.RawType().Name,
                 ["Kind"] = treeNode.SyntaxKind().ToString(),
-                ["Str"] = ShortString(treeNode)
             };
+
+            var shortString = ShortString(treeNode);
+            if (shortString.Length > 0) {
+                result["Str"] = shortString;
+            }
 
             var textSpan = treeNode.Span();
             if (textSpan.Length > 0) {
