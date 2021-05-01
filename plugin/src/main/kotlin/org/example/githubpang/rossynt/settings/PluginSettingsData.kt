@@ -23,10 +23,12 @@ internal class PluginSettingsData : PersistentStateComponent<PluginSettingsData?
             field = value
 
             GlobalScope.launch(Dispatchers.Main) {
-                // Publish message.
-                val messageBus = ApplicationManager.getApplication()?.messageBus
-                val publisher = messageBus?.syncPublisher(PluginSettingsNotifier.TOPIC)
-                publisher?.pluginSettingsUpdated()
+                if (this@PluginSettingsData == instance) {
+                    // Publish message.
+                    val messageBus = ApplicationManager.getApplication()?.messageBus
+                    val publisher = messageBus?.syncPublisher(PluginSettingsNotifier.TOPIC)
+                    publisher?.pluginSettingsUpdated()
+                }
             }
         }
 
