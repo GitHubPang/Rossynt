@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using JetBrains.Annotations;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Text;
 
 namespace RossyntBackend.Models {
     public abstract class TreeNode {
@@ -40,6 +41,9 @@ namespace RossyntBackend.Models {
         [Pure]
         [NotNull]
         public abstract Type RawType();
+
+        [Pure]
+        public abstract TextSpan Span();
 
         [Pure]
         public abstract bool IsMissing();

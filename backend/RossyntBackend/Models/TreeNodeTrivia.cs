@@ -4,6 +4,7 @@ using System.Diagnostics;
 using JetBrains.Annotations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Text;
 using RossyntBackend.Utils;
 
 namespace RossyntBackend.Models {
@@ -32,6 +33,9 @@ namespace RossyntBackend.Models {
         [Pure]
         [NotNull]
         public override Type RawType() => _syntaxTrivia.GetType();
+
+        [Pure]
+        public override TextSpan Span() => _syntaxTrivia.Span;
 
         [Pure]
         public override bool IsMissing() => false;

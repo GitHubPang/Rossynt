@@ -4,6 +4,7 @@ using System.Diagnostics;
 using JetBrains.Annotations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Text;
 using RossyntBackend.Utils;
 
 namespace RossyntBackend.Models {
@@ -28,6 +29,9 @@ namespace RossyntBackend.Models {
         [Pure]
         [NotNull]
         public override Type RawType() => RawObject().GetType();
+
+        [Pure]
+        public override TextSpan Span() => SyntaxNodeOrToken.Span;
 
         [Pure]
         public override bool IsMissing() => SyntaxNodeOrToken.IsMissing;
