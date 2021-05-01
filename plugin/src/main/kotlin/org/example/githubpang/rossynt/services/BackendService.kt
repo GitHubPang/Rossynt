@@ -138,7 +138,7 @@ internal class BackendService : IBackendService {
                 pingBackend()   // Ping backend to keep it alive.
             }
         } catch (e: Exception) {
-            if (e !is CancellationException) {
+            if (e !is CancellationException && !isDisposed.get()) {
                 LOGGER.error(e)
             }
         }
@@ -168,7 +168,9 @@ internal class BackendService : IBackendService {
             }
             deployPath = null
         } catch (e: Exception) {
-            LOGGER.warn(e)
+            if (!isDisposed.get()) {
+                LOGGER.warn(e)
+            }
         }
     }
 
@@ -300,7 +302,9 @@ internal class BackendService : IBackendService {
                 return client.submitForm("$backendUrl/$urlPath", formParameters)
             }
         } catch (e: Exception) {
-            LOGGER.warn(e)
+            if (!isDisposed.get()) {
+                LOGGER.warn(e)
+            }
             return null
         }
     }
