@@ -219,7 +219,7 @@ internal class BackendService : IBackendService {
         // Construct command line.
         val dllFullPath = File(deployPath.toFile(), BACKEND_DLL_NAME).absolutePath
         val workingDirectory = File(dotNetPath).parent
-        val commandLine = GeneralCommandLine(dotNetPath, dllFullPath, "--urls", "http://*:0").withWorkDirectory(workingDirectory)
+        @Suppress("HttpUrlsUsage") val commandLine = GeneralCommandLine(dotNetPath, dllFullPath, "--urls", "http://*:0").withWorkDirectory(workingDirectory)
 
         // Create process.
         val process = commandLine.createProcess()
