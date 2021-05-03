@@ -105,7 +105,7 @@ namespace RossyntBackend.Controllers {
 
             var textSpan = treeNode.Span();
             if (textSpan.Length > 0) {
-                result["Span"] = $"{textSpan.Start},{textSpan.Length}";
+                result["Span"] = textSpan.Length == 1 ? $"{textSpan.Start}" : $"{textSpan.Start},{textSpan.Length}";
             }
 
             if (treeNode.IsMissing()) {
