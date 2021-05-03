@@ -6,7 +6,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
 @RunWith(Parameterized::class)
-class BackendRuntimeVersionFinderTest internal constructor(private var line: String, private var backendRuntimeVersion: BackendRuntimeVersion?) {
+class BackendRuntimeVersionFinderTest internal constructor(private val line: String, private val backendRuntimeVersion: BackendRuntimeVersion?) {
     companion object {
         @JvmStatic
         @Parameterized.Parameters
