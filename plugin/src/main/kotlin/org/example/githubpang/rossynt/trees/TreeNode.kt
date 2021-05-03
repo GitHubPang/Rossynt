@@ -30,7 +30,7 @@ internal data class TreeNode(
             return if (span != null) {
                 val components = StringUtils.split(span, ',')
                 val start = components[0].toInt()
-                val length = components[1].toInt()
+                val length = if (components.size > 1) components[1].toInt() else 1
                 return TextRange.from(start, length)
             } else {
                 null
