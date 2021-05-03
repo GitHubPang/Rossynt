@@ -25,7 +25,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
-import java.util.regex.Pattern
 
 internal class BackendService : IBackendService {
     private companion object {
@@ -235,16 +234,11 @@ internal class BackendService : IBackendService {
                 super.onTextAvailable(event, outputType)
 
                 if (ProcessOutputType.isStdout(outputType)) {
-                    val pattern = Pattern.compile("(http[s]?)://.+?:([0-9]+)")
-                    val matcher = pattern.matcher(event.text)
-                    if (matcher.find()) {
-                        val urlScheme = matcher.group(1)
-                        val serverPort = matcher.group(2)
-                        val backendUrl = "$urlScheme://localhost:$serverPort"
-
+                    val parseResult = BackendProcessOutputParser.parseText(event.text)
+                    if (parseResult != null) {
                         // Send backend url to channel.
                         GlobalScope.launch(Dispatchers.IO) {
-                            backendUrlChannel.send(backendUrl)
+                            backendUrlChannel.send(parseResult.backendUrl)
                         }
                     }
                 }
