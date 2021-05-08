@@ -14,11 +14,21 @@
 - [ ] Click the <kbd>Watch</kbd> button on the top of the [IntelliJ Platform Plugin Template][template] to be notified about releases containing new features and fixes.
 
 <!-- Plugin description -->
-This Fancy IntelliJ Platform Plugin is going to be your implementation of the brilliant ideas that you have.
+Roslyn syntax tree viewer for JetBrains Rider and all other IntelliJ IDEA-based IDEs.
 
-This specific section is a source for the [plugin.xml](/src/main/resources/META-INF/plugin.xml) file which will be extracted by the [Gradle](/build.gradle.kts) during the build process.
+## System Requirements
 
-To keep everything working, do not remove `<!-- ... -->` sections. 
+* [ASP.NET Core Runtime](https://dotnet.microsoft.com/download/dotnet) (2.1, 3.1, or 5.0)
+* [.NET CLI tool](https://docs.microsoft.com/en-us/dotnet/core/tools/)
+
+These are all included if you have installed [.NET SDK](https://dotnet.microsoft.com/download/dotnet) or [Visual Studio](https://visualstudio.microsoft.com/downloads/).
+
+## Features
+
+* View syntax tree of C# files, including scratch files.
+* View properties of each node.
+* Highlight selected node in source code.
+
 <!-- Plugin description end -->
 
 ## Installation
