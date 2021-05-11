@@ -28,6 +28,7 @@ These are all included if you have installed [.NET SDK](https://dotnet.microsoft
 * View syntax tree of C# files, including scratch files.
 * View properties of each node.
 * Highlight selected node in source code.
+* Support light theme and dark theme.
 
 <!-- Plugin description end -->
 
