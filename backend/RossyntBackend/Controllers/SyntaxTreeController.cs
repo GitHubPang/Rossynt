@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using RossyntBackend.ApplicationLifetime;
 using RossyntBackend.Models;
 using RossyntBackend.Repositories;
@@ -36,7 +38,7 @@ namespace RossyntBackend.Controllers {
 
         [HttpPost(nameof(CompileFile))]
         [NotNull, ItemNotNull]
-        public async Task<IReadOnlyDictionary<string, object>> CompileFile([NotNull] [FromForm] CompileFileRequest request) {
+        public async Task<IActionResult> CompileFile([NotNull] [FromForm] CompileFileRequest request) {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             // Restart application lifetime countdown.
@@ -49,7 +51,17 @@ namespace RossyntBackend.Controllers {
             _projectRepository.SetTree(tree);
 
             // Render tree and return as response.
-            return RenderTree(tree.RootTreeNode);
+            //
+            // Serialize to JSON manually because JSON serialization in ASP.NET Core 3.1+ has a max depth of 32.
+            // https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-migrate-from-newtonsoft-how-to?pivots=dotnet-5-0#maximum-depth
+            //
+            // Use Newtonsoft.Json instead of System.Text.Json because
+            // the former has no max depth
+            // while the latter requires .NET Core 3.0+.
+            //
+            var renderedTree = RenderTree(tree.RootTreeNode);
+            var response = JsonConvert.SerializeObject(renderedTree);
+            return Content(response, MediaTypeNames.Application.Json);
         }
 
         [HttpPost(nameof(ResetActiveFile))]
