@@ -9,8 +9,8 @@ internal class AppProjectManagerListener : ProjectManagerListener {
     override fun projectOpened(project: Project) {
         super.projectOpened(project)
 
-        // Start Rossynt service.
+        // Start Rossynt service if needed.
         val rossyntService = project.service<RossyntService>()
-        rossyntService.startRossyntService(project)
+        rossyntService.startRossyntServiceIfNeeded(project)
     }
 }

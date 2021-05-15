@@ -54,8 +54,10 @@ internal class RossyntService : Disposable {
 
     override fun dispose() = Unit
 
-    fun startRossyntService(project: Project) {
-        require(this.project == null)
+    fun startRossyntServiceIfNeeded(project: Project) {
+        if (this.project != null) {
+            return
+        }
         this.project = project
 
         val messageBusConnection = project.messageBus.connect()
