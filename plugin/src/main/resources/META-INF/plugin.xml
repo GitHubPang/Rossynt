@@ -21,4 +21,9 @@
         <listener class="org.example.githubpang.rossynt.listeners.AppProjectManagerListener"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
+
+    <projectListeners>
+        <listener class="org.example.githubpang.rossynt.listeners.ProjectToolWindowManagerListener"
+                  topic="com.intellij.openapi.wm.ex.ToolWindowManagerListener"/>
+    </projectListeners>
 </idea-plugin>
