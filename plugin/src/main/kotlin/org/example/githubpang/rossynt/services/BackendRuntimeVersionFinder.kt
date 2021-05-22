@@ -23,7 +23,7 @@ internal class BackendRuntimeVersionFinder(dotNetPath: String) {
             }
         }
 
-        backendRuntimeVersion = highestBackendRuntimeVersion ?: throw IllegalStateException() //todo
+        backendRuntimeVersion = highestBackendRuntimeVersion ?: throw BackendException("Unable to find ASP.NET Core runtime.")
     }
 
     companion object {

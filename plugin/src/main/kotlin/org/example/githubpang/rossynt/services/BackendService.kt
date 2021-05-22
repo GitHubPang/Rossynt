@@ -67,6 +67,7 @@ internal class BackendService : IBackendService {
     private var deployPath: Path? = null
     private var backendProcess: Process? = null
     private var backendUrl: String? = null
+    private var backendExceptionMessage: String? = null
 
     // ******************************************************************************** //
 
@@ -139,6 +140,10 @@ internal class BackendService : IBackendService {
         } catch (e: Exception) {
             if (e !is CancellationException && !isDisposed.get()) {
                 LOGGER.error(e)
+
+                if (e is BackendException) {
+                    backendExceptionMessage = e.message//todo
+                }
             }
         }
     }
@@ -186,7 +191,7 @@ internal class BackendService : IBackendService {
             return dotNetPath
         }
 
-        throw IllegalStateException()//todo
+        throw BackendException("Unable to find .NET CLI tool.")
     }
 
     private fun deployFiles() {
