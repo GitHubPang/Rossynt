@@ -128,9 +128,11 @@ internal class BackendService : IBackendService {
             LOGGER.info("Started backend process, backendUrl = $backendUrl")
 
             // Publish message.
-            val messageBus = project.messageBus
-            val publisher = messageBus.syncPublisher(BackendServiceNotifier.TOPIC)
-            publisher.backendServiceBecameReady()
+            GlobalScope.launch(Dispatchers.Main) {
+                val messageBus = project.messageBus
+                val publisher = messageBus.syncPublisher(BackendServiceNotifier.TOPIC)
+                publisher.backendServiceBecameReady()
+            }
 
             // Loop until cancelled...
             while (true) {
