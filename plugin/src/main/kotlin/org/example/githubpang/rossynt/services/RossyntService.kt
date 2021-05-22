@@ -58,6 +58,9 @@ internal class RossyntService : Disposable {
         }
         this.project = project
 
+        // Initialize expected state.
+        initializeExpectedState(project)
+
         val messageBusConnection = project.messageBus.connect()
         messageBusConnection.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, object : FileEditorManagerListener {
             override fun selectionChanged(event: FileEditorManagerEvent) {
@@ -132,6 +135,12 @@ internal class RossyntService : Disposable {
                 refreshCurrentData()
             }
         }, this)
+    }
+
+    private fun initializeExpectedState(project: Project) {
+        val fileText = FileEditorManager.getInstance(project).selectedTextEditor?.document?.text
+        val filePath = FileEditorManager.getInstance(project).selectedEditor?.file?.path
+        expectedState = State(fileText, filePath, null)
     }
 
     fun setCurrentNodeId(nodeId: String?) {
