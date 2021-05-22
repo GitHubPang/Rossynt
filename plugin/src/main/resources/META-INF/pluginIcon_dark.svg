@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+    <g transform="translate(2 2) scale(6)">
+        <rect fill="#B1B1B1" width="5" height="5" x="1" y="1"/>
+        <line stroke="#B1B1B1" x1="3.5" y1="6" x2="3.5" y2="10"/>
+        <line stroke="#B1B1B1" x1="3.5" y1="9.5" x2="6" y2="9.5"/>
+        <path fill="#B1B1B1" d="M5.7,12 L6.7,12 L9.7,5 L8.7,5 Z"/>
+        <path fill="#B1B1B1" d="M8,12 L9,12 L12,5 L11,5 Z"/>
+    </g>
+</svg>
