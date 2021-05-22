@@ -30,6 +30,12 @@ These are all included if you have installed [.NET SDK](https://dotnet.microsoft
 * Highlight selected node in source code.
 * Support light theme and dark theme.
 
+## Settings
+
+* To configure the plugin, go to
+    * `Settings | Tools | Rossynt` for Windows and Linux
+    * `Preferences | Tools | Rossynt` for macOS
+
 <!-- Plugin description end -->
 
 ## Installation
