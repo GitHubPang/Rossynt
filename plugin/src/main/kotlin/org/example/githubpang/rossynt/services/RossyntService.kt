@@ -42,6 +42,7 @@ internal class RossyntService : Disposable {
 
     private var toolWindowIsVisible = false
     private var backendService: IBackendService? = null
+    private var backendExceptionMessage: String? = null
     private var isBackendServiceStarted = false
 
     private var expectedState: State = State()
@@ -97,7 +98,12 @@ internal class RossyntService : Disposable {
                 // Start backend service if needed.
                 if (backendService == null && toolWindowIsVisible) {
                     backendService = project.service<RestartableBackendService>()
-                    backendService?.startBackendService(project)
+                    backendService?.startBackendService(project, object : IBackendServiceDelegate {
+                        override fun onBackendExceptionMessageUpdated(backendExceptionMessage: String?) {
+                            this@RossyntService.backendExceptionMessage = backendExceptionMessage
+                            //todo
+                        }
+                    })
                 }
             }
         })

@@ -1,3 +1,6 @@
 package org.example.githubpang.rossynt.services
 
-internal class BackendException(message: String) : Exception(message)
+internal class BackendException : Exception {
+    constructor(message: String) : super(message)
+    constructor(message: String?, cause: Throwable?) : super(message, cause)
+}

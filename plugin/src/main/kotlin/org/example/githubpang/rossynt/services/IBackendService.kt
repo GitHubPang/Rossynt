@@ -5,7 +5,7 @@ import com.intellij.openapi.project.Project
 import org.example.githubpang.rossynt.trees.TreeNode
 
 internal interface IBackendService : Disposable {
-    fun startBackendService(project: Project)
+    fun startBackendService(project: Project, delegate: IBackendServiceDelegate?)
     suspend fun compileFile(fileText: String?, filePath: String?): TreeNode?
     suspend fun getNodeInfo(nodeId: String): Map<String, String>
 }

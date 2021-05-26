@@ -7,12 +7,15 @@ import org.example.githubpang.rossynt.trees.TreeNode
 
 @Service
 internal class RestartableBackendService : IBackendService {
+    private var delegate: IBackendServiceDelegate? = null
     private var backendService: BackendService? = null
+    private var backendExceptionMessage: String? = null
 
     // ******************************************************************************** //
 
-    override fun startBackendService(project: Project) {
+    override fun startBackendService(project: Project, delegate: IBackendServiceDelegate?) {
         recreateBackendService(project)
+        this.delegate = delegate
 
         project.messageBus.connect().subscribe(PluginSettingsNotifier.TOPIC, object : PluginSettingsNotifier {
             override fun pluginSettingsUpdated() {
@@ -22,6 +25,7 @@ internal class RestartableBackendService : IBackendService {
     }
 
     override fun dispose() {
+        delegate = null
         destroyBackendService()
     }
 
@@ -32,11 +36,26 @@ internal class RestartableBackendService : IBackendService {
         destroyBackendService()
 
         backendService = BackendService()
-        backendService?.startBackendService(project)
+        backendService?.startBackendService(project, object : IBackendServiceDelegate {
+            override fun onBackendExceptionMessageUpdated(backendExceptionMessage: String?) {
+                setBackendExceptionMessage(backendExceptionMessage)
+            }
+        })
     }
 
     private fun destroyBackendService() {
         backendService?.dispose()
         backendService = null
+        setBackendExceptionMessage(null)
+    }
+
+    private fun setBackendExceptionMessage(backendExceptionMessage: String?) {
+        if (this.backendExceptionMessage == backendExceptionMessage) {
+            return
+        }
+        this.backendExceptionMessage = backendExceptionMessage
+
+        // Inform delegate.
+        delegate?.onBackendExceptionMessageUpdated(backendExceptionMessage)
     }
 }

@@ -61,6 +61,7 @@ internal class BackendService : IBackendService {
     private var isReady = false
     private var isDisposed: AtomicBoolean = AtomicBoolean()
     private var project: Project? = null
+    private var delegate: IBackendServiceDelegate? = null
     private var backendJob: Job? = null
     private var dotNetPath: String? = null
     private var backendRuntimeVersion: BackendRuntimeVersion? = null
@@ -71,9 +72,10 @@ internal class BackendService : IBackendService {
 
     // ******************************************************************************** //
 
-    override fun startBackendService(project: Project) {
+    override fun startBackendService(project: Project, delegate: IBackendServiceDelegate?) {
         require(this.project == null)
         this.project = project
+        this.delegate = delegate
         backendJob = GlobalScope.launch(Dispatchers.IO) {
             runBackend()
         }
@@ -86,6 +88,7 @@ internal class BackendService : IBackendService {
 
         try {
             LOGGER.info("Backend service dispose begin.")
+            delegate = null
             runBlocking(Dispatchers.IO) {
                 backendJob?.cancelAndJoin()
                 backendJob = null
@@ -144,7 +147,15 @@ internal class BackendService : IBackendService {
                 LOGGER.error(e)
 
                 if (e is BackendException) {
-                    backendExceptionMessage = e.message//todo
+                    backendExceptionMessage = e.localizedMessage
+                    if (e.cause != null) {
+                        backendExceptionMessage += " - " + e.cause?.localizedMessage
+                    }
+
+                    // Inform delegate.
+                    GlobalScope.launch(Dispatchers.Main) {
+                        this@BackendService.delegate?.onBackendExceptionMessageUpdated(backendExceptionMessage)
+                    }
                 }
             }
         }

@@ -12,7 +12,11 @@ internal class BackendRuntimeVersionFinder(dotNetPath: String) {
     // ******************************************************************************** //
 
     init {
-        val processOutput = ExecUtil.execAndGetOutput(GeneralCommandLine(dotNetPath, "--list-runtimes"))
+        val processOutput = try {
+            ExecUtil.execAndGetOutput(GeneralCommandLine(dotNetPath, "--list-runtimes"))
+        } catch (e: Exception) {
+            throw BackendException("Execute command for .NET CLI tool failed.", e)
+        }
 
         var highestBackendRuntimeVersion: BackendRuntimeVersion? = null
         processOutput.stdoutLines.forEach { stdoutLine ->
