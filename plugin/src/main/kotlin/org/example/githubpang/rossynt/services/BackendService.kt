@@ -143,21 +143,33 @@ internal class BackendService : IBackendService {
                 pingBackend()   // Ping backend to keep it alive.
             }
         } catch (e: Exception) {
-            if (e !is CancellationException && !isDisposed.get()) {
-                LOGGER.error(e)
-
-                if (e is BackendException) {
-                    backendExceptionMessage = e.localizedMessage
-                    if (e.cause != null) {
-                        backendExceptionMessage += " - " + e.cause?.localizedMessage
-                    }
-
-                    // Inform delegate.
-                    GlobalScope.launch(Dispatchers.Main) {
-                        this@BackendService.delegate?.onBackendExceptionMessageUpdated(backendExceptionMessage)
-                    }
-                }
+            // Skip if already disposed.
+            if (isDisposed.get()) {
+                return
             }
+
+            // Skip if cancelled.
+            if (e is CancellationException) {
+                return
+            }
+
+            // Handle backend exception.
+            if (e is BackendException) {
+                backendExceptionMessage = e.localizedMessage
+                if (e.cause != null) {
+                    backendExceptionMessage += " - " + e.cause?.localizedMessage
+                }
+
+                // Inform delegate.
+                GlobalScope.launch(Dispatchers.Main) {
+                    this@BackendService.delegate?.onBackendExceptionMessageUpdated(backendExceptionMessage)
+                }
+
+                return
+            }
+
+            // Write log.
+            LOGGER.error(e)
         }
     }
 
