@@ -11,4 +11,5 @@ internal interface RossyntServiceNotifier {
 
     fun treeUpdated(rootTreeNode: TreeNode?)
     fun nodeInfoUpdated(nodeInfo: ImmutableMap<String, String>?)
+    fun backendExceptionMessageUpdated(backendExceptionMessage: String?)
 }

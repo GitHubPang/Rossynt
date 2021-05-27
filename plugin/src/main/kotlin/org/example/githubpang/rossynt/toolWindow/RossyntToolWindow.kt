@@ -11,16 +11,20 @@ import com.intellij.openapi.editor.markup.HighlighterLayer
 import com.intellij.openapi.editor.markup.HighlighterTargetArea
 import com.intellij.openapi.editor.markup.RangeHighlighter
 import com.intellij.openapi.fileEditor.FileEditorManager
+import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.ui.JBSplitter
 import com.intellij.ui.ScrollPaneFactory
+import com.intellij.ui.SimpleTextAttributes
 import com.intellij.ui.treeStructure.Tree
 import com.intellij.ui.treeStructure.actions.CollapseAllAction
+import com.intellij.util.ui.StatusText
 import com.intellij.util.ui.tree.TreeUtil
 import org.example.githubpang.rossynt.services.RossyntService
 import org.example.githubpang.rossynt.services.RossyntServiceNotifier
+import org.example.githubpang.rossynt.settings.PluginSettingsConfigurable
 import org.example.githubpang.rossynt.trees.TreeNode
 import java.awt.Component
 import java.awt.Font
@@ -117,6 +121,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
     private val rossyntService: RossyntService = project.service()
     private var rootTreeNode: TreeNode? = null
     private var selectedTreeNode: TreeNode? = null
+    private var backendExceptionMessage: String? = null
     private var nodeInfo: ImmutableList<Pair<String, String>> = ImmutableList.of()
     private var isHighlightSelectedTreeNode = false
 
@@ -186,10 +191,21 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
                 // Update UI.
                 uiUpdateTable()
             }
+
+            override fun backendExceptionMessageUpdated(backendExceptionMessage: String?) {
+                if (this@RossyntToolWindow.backendExceptionMessage == backendExceptionMessage) {
+                    return
+                }
+                this@RossyntToolWindow.backendExceptionMessage = backendExceptionMessage
+
+                // Update UI.
+                uiUpdateTreeEmptyText()
+            }
         })
 
         // Update UI.
         uiUpdateTree()
+        uiUpdateTreeEmptyText()
         uiUpdateTable()
     }
 
@@ -203,6 +219,19 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
             uiModel.reload(uiRoot)
         } else {
             uiModel.setRoot(null)
+        }
+    }
+
+    private fun uiUpdateTreeEmptyText() {
+        uiTree.emptyText.clear()
+        if (backendExceptionMessage != null) {
+            uiTree.emptyText.text = if (backendExceptionMessage != null) "⚠ Error occurred" else StatusText.getDefaultEmptyText()
+            uiTree.emptyText.appendSecondaryText("Settings", SimpleTextAttributes.LINK_PLAIN_ATTRIBUTES) {
+                ShowSettingsUtil.getInstance().showSettingsDialog(project, PluginSettingsConfigurable::class.java)
+            }
+        } else {
+            uiTree.emptyText.text = StatusText.getDefaultEmptyText()
+            //todo show another message if current file extension isn't .cs
         }
     }
 

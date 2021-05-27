@@ -100,8 +100,15 @@ internal class RossyntService : Disposable {
                     backendService = project.service<RestartableBackendService>()
                     backendService?.startBackendService(project, object : IBackendServiceDelegate {
                         override fun onBackendExceptionMessageUpdated(backendExceptionMessage: String?) {
+                            if (this@RossyntService.backendExceptionMessage == backendExceptionMessage) {
+                                return
+                            }
                             this@RossyntService.backendExceptionMessage = backendExceptionMessage
-                            //todo
+
+                            // Publish message.
+                            val messageBus = project.messageBus
+                            val publisher = messageBus.syncPublisher(RossyntServiceNotifier.TOPIC)
+                            publisher.backendExceptionMessageUpdated(this@RossyntService.backendExceptionMessage)
                         }
                     })
                 }
