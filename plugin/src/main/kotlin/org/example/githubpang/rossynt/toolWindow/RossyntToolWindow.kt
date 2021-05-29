@@ -22,8 +22,10 @@ import com.intellij.ui.treeStructure.Tree
 import com.intellij.ui.treeStructure.actions.CollapseAllAction
 import com.intellij.util.ui.StatusText
 import com.intellij.util.ui.tree.TreeUtil
+import org.example.githubpang.rossynt.services.IRossyntService
 import org.example.githubpang.rossynt.services.RossyntService
 import org.example.githubpang.rossynt.services.RossyntServiceNotifier
+import org.example.githubpang.rossynt.services.RossyntUtil
 import org.example.githubpang.rossynt.settings.PluginSettingsConfigurable
 import org.example.githubpang.rossynt.trees.TreeNode
 import java.awt.Component
@@ -119,6 +121,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
 
     // Data.
     private val rossyntService: RossyntService = project.service()
+    private var currentFilePath: String? = null
     private var rootTreeNode: TreeNode? = null
     private var selectedTreeNode: TreeNode? = null
     private var backendExceptionMessage: String? = null
@@ -138,6 +141,19 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
     // ******************************************************************************** //
 
     init {
+        rossyntService.setDelegate(object : IRossyntService {
+            override fun onCurrentFilePathUpdated(filePath: String?) {
+                if (currentFilePath == filePath) {
+                    return
+                }
+
+                currentFilePath = filePath
+
+                // Update UI.
+                uiUpdateTreeEmptyText()
+            }
+        })
+
         // Add tool window buttons.
         val collapseAction = CollapseAllAction(uiTree)
         collapseAction.templatePresentation.icon = AllIcons.Actions.Collapseall
@@ -223,15 +239,21 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
     }
 
     private fun uiUpdateTreeEmptyText() {
+        val defaultEmptyText = StatusText.getDefaultEmptyText()
+
         uiTree.emptyText.clear()
         if (backendExceptionMessage != null) {
-            uiTree.emptyText.text = if (backendExceptionMessage != null) "⚠ Error occurred" else StatusText.getDefaultEmptyText()
+            uiTree.emptyText.text = if (backendExceptionMessage != null) "⚠ Error occurred" else defaultEmptyText
             uiTree.emptyText.appendSecondaryText("Settings", SimpleTextAttributes.LINK_PLAIN_ATTRIBUTES) {
                 ShowSettingsUtil.getInstance().showSettingsDialog(project, PluginSettingsConfigurable::class.java)
             }
         } else {
-            uiTree.emptyText.text = StatusText.getDefaultEmptyText()
-            //todo show another message if current file extension isn't .cs
+            val currentFilePath = currentFilePath
+            if (currentFilePath != null && RossyntUtil.isCSFile(currentFilePath)) {
+                uiTree.emptyText.text = defaultEmptyText
+            } else {
+                uiTree.emptyText.text = "$defaultEmptyText - not a C# file"
+            }
         }
     }
 

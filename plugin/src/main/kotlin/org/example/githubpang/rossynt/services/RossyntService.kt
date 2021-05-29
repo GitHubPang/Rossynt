@@ -38,6 +38,7 @@ internal class RossyntService : Disposable {
 
     // ******************************************************************************** //
 
+    private var delegate: IRossyntService? = null
     private var project: Project? = null
 
     private var toolWindowIsVisible = false
@@ -51,7 +52,13 @@ internal class RossyntService : Disposable {
 
     // ******************************************************************************** //
 
-    override fun dispose() = Unit
+    override fun dispose() {
+        delegate = null
+    }
+
+    fun setDelegate(delegate: IRossyntService?) {
+        this.delegate = delegate
+    }
 
     fun startRossyntServiceIfNeeded(project: Project) {
         if (this.project != null) {
@@ -82,7 +89,7 @@ internal class RossyntService : Disposable {
 
                 // Update expected state.
                 val fileText = FileEditorManager.getInstance(project).selectedTextEditor?.document?.text
-                expectedState = State(fileText, filePath, null)
+                setExpectedState(State(fileText, filePath, null))
 
                 // Refresh current data.
                 refreshCurrentData()
@@ -142,7 +149,7 @@ internal class RossyntService : Disposable {
 
                 // Update expected state.
                 val fileText = event.document.text
-                expectedState = State(fileText, expectedState.filePath, null)
+                setExpectedState(State(fileText, expectedState.filePath, null))
 
                 // Refresh current data.
                 refreshCurrentData()
@@ -153,12 +160,12 @@ internal class RossyntService : Disposable {
     private fun initializeExpectedState(project: Project) {
         val fileText = FileEditorManager.getInstance(project).selectedTextEditor?.document?.text
         val filePath = FileEditorManager.getInstance(project).selectedEditor?.file?.path
-        expectedState = State(fileText, filePath, null)
+        setExpectedState(State(fileText, filePath, null))
     }
 
     fun setCurrentNodeId(nodeId: String?) {
         // Update expected state.
-        expectedState = State(expectedState.fileText, expectedState.filePath, nodeId)
+        setExpectedState(State(expectedState.fileText, expectedState.filePath, nodeId))
 
         // Refresh current data.
         refreshCurrentData()
@@ -221,6 +228,16 @@ internal class RossyntService : Disposable {
 
         // Everything is updated. Done.
         isRefreshingCurrentData = false
+    }
+
+    private fun setExpectedState(expectedState: State) {
+        val oldFilePath = this.expectedState.filePath
+        val newFilePath = expectedState.filePath
+        this.expectedState = expectedState
+
+        if (oldFilePath != newFilePath) {
+            delegate?.onCurrentFilePathUpdated(newFilePath)
+        }
     }
 
     private fun setCurrentData(newData: Data) {
