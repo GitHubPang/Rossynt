@@ -57,6 +57,7 @@ internal class RossyntService : Disposable {
     // ******************************************************************************** //
 
     override fun dispose() {
+        textEventThrottler.reset()
         delegate = null
     }
 
