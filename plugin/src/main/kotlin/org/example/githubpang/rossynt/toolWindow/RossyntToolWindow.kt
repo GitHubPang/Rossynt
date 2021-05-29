@@ -101,7 +101,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         }
     }
 
-    private inner class ToggleByWordDiffAction : ToggleAction("Highlight Node in Source", null, AllIcons.Actions.Highlighting), DumbAware {
+    private inner class ToggleHighlightNodeInSourceAction : ToggleAction("Highlight Node in Source", null, AllIcons.Actions.Highlighting), DumbAware {
         override fun isSelected(e: AnActionEvent): Boolean {
             return isHighlightSelectedTreeNode
         }
@@ -157,7 +157,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         // Add tool window buttons.
         val collapseAction = CollapseAllAction(uiTree)
         collapseAction.templatePresentation.icon = AllIcons.Actions.Collapseall
-        toolWindow.setTitleActions(listOf(ToggleByWordDiffAction(), collapseAction))
+        toolWindow.setTitleActions(listOf(ToggleHighlightNodeInSourceAction(), collapseAction))
 
         // Setup tree.
         if (uiTree.cellRenderer !is RossyntNodeRenderer) {
