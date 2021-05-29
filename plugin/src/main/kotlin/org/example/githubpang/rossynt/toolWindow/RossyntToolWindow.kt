@@ -2,7 +2,9 @@ package org.example.githubpang.rossynt.toolWindow
 
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableMap
+import com.intellij.CommonBundle
 import com.intellij.icons.AllIcons
+import com.intellij.ide.HelpTooltip
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.ToggleAction
 import com.intellij.openapi.components.service
@@ -14,12 +16,14 @@ import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.MessageType
 import com.intellij.openapi.wm.ToolWindow
+import com.intellij.ui.EditorNotificationPanel
 import com.intellij.ui.JBSplitter
 import com.intellij.ui.ScrollPaneFactory
-import com.intellij.ui.SimpleTextAttributes
 import com.intellij.ui.treeStructure.Tree
 import com.intellij.ui.treeStructure.actions.CollapseAllAction
+import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.StatusText
 import com.intellij.util.ui.tree.TreeUtil
 import org.example.githubpang.rossynt.services.IRossyntService
@@ -130,11 +134,12 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
 
     // UI.
     private val uiTree: Tree = Tree()
+    private val uiBanner = EditorNotificationPanel(MessageType.ERROR.popupBackground)
     private val uiTable: JTable = JTable(UiTableModel())
     private val uiSplitter: JBSplitter = JBSplitter()
     val rootComponent: JComponent
         get() {
-            return uiSplitter
+            return JBUI.Panels.simplePanel(uiSplitter).addToTop(uiBanner)
         }
     private val rangeHighlighters: MutableSet<RangeHighlighter> = mutableSetOf()
 
@@ -158,6 +163,12 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         val collapseAction = CollapseAllAction(uiTree)
         collapseAction.templatePresentation.icon = AllIcons.Actions.Collapseall
         toolWindow.setTitleActions(listOf(ToggleHighlightNodeInSourceAction(), collapseAction))
+
+        // Setup banner.
+        uiBanner.text = "Error occurred"
+        uiBanner.createActionLabel(CommonBundle.settingsTitle(), {
+            ShowSettingsUtil.getInstance().showSettingsDialog(project, PluginSettingsConfigurable::class.java)
+        }, true)
 
         // Setup tree.
         if (uiTree.cellRenderer !is RossyntNodeRenderer) {
@@ -215,11 +226,12 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
                 this@RossyntToolWindow.backendExceptionMessage = backendExceptionMessage
 
                 // Update UI.
-                uiUpdateTreeEmptyText()
+                uiUpdateBanner()
             }
         })
 
         // Update UI.
+        uiUpdateBanner()
         uiUpdateTree()
         uiUpdateTreeEmptyText()
         uiUpdateTable()
@@ -238,22 +250,26 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         }
     }
 
+    private fun uiUpdateBanner() {
+        val backendExceptionMessage = backendExceptionMessage
+        if (backendExceptionMessage != null) {
+            uiBanner.isVisible = true
+
+            HelpTooltip.dispose(uiBanner)
+            HelpTooltip().setDescription(backendExceptionMessage).installOn(uiBanner)
+        } else {
+            uiBanner.isVisible = false
+        }
+    }
+
     private fun uiUpdateTreeEmptyText() {
         val defaultEmptyText = StatusText.getDefaultEmptyText()
 
-        uiTree.emptyText.clear()
-        if (backendExceptionMessage != null) {
-            uiTree.emptyText.text = if (backendExceptionMessage != null) "⚠ Error occurred" else defaultEmptyText
-            uiTree.emptyText.appendSecondaryText("Settings", SimpleTextAttributes.LINK_PLAIN_ATTRIBUTES) {
-                ShowSettingsUtil.getInstance().showSettingsDialog(project, PluginSettingsConfigurable::class.java)
-            }
+        val currentFilePath = currentFilePath
+        if (currentFilePath != null && RossyntUtil.isCSFile(currentFilePath)) {
+            uiTree.emptyText.text = defaultEmptyText
         } else {
-            val currentFilePath = currentFilePath
-            if (currentFilePath != null && RossyntUtil.isCSFile(currentFilePath)) {
-                uiTree.emptyText.text = defaultEmptyText
-            } else {
-                uiTree.emptyText.text = "$defaultEmptyText - not a C# file"
-            }
+            uiTree.emptyText.text = "$defaultEmptyText - not a C# file"
         }
     }
 
