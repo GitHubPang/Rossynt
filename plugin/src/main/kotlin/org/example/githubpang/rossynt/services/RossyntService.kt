@@ -15,6 +15,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.example.githubpang.rossynt.RossyntToolWindowStateNotifier
+import org.example.githubpang.rossynt.events.ITextEventThrottlerCallback
+import org.example.githubpang.rossynt.events.TextEventThrottler
 import org.example.githubpang.rossynt.settings.PluginSettingsNotifier
 import org.example.githubpang.rossynt.trees.TreeNode
 import java.util.*
@@ -37,6 +39,8 @@ internal class RossyntService : Disposable {
     }
 
     // ******************************************************************************** //
+
+    private val textEventThrottler = TextEventThrottler()
 
     private var delegate: IRossyntService? = null
     private var project: Project? = null
@@ -73,6 +77,9 @@ internal class RossyntService : Disposable {
         messageBusConnection.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, object : FileEditorManagerListener {
             override fun selectionChanged(event: FileEditorManagerEvent) {
                 super.selectionChanged(event)
+
+                // Reset text event throttler.
+                textEventThrottler.reset()
 
                 // Get event file path.
                 val file = event.newFile
@@ -147,14 +154,18 @@ internal class RossyntService : Disposable {
                     return
                 }
 
+                textEventThrottler.queueEvent(event.document.text)
+            }
+        }, this)
+        textEventThrottler.setCallback(object : ITextEventThrottlerCallback {
+            override fun onTextEvent(text: String) {
                 // Update expected state.
-                val fileText = event.document.text
-                setExpectedState(State(fileText, expectedState.filePath, null))
+                setExpectedState(State(text, expectedState.filePath, null))
 
                 // Refresh current data.
                 refreshCurrentData()
             }
-        }, this)
+        })
     }
 
     private fun initializeExpectedState(project: Project) {
