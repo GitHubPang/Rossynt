@@ -141,7 +141,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         get() {
             return JBUI.Panels.simplePanel(uiSplitter).addToTop(uiBanner)
         }
-    private val rangeHighlighters: MutableSet<RangeHighlighter> = mutableSetOf()
+    private var myRangeHighlighter: RangeHighlighter? = null
 
     // ******************************************************************************** //
 
@@ -296,18 +296,15 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         // Add new highlight.
         val textRange = selectedTreeNode?.textRange
         if (isHighlightSelectedTreeNode && textRange != null) {
-            val rangeHighlighter = FileEditorManager.getInstance(project).selectedTextEditor?.markupModel?.addRangeHighlighter(
+            myRangeHighlighter = FileEditorManager.getInstance(project).selectedTextEditor?.markupModel?.addRangeHighlighter(
                 EditorColors.SEARCH_RESULT_ATTRIBUTES, textRange.startOffset, textRange.endOffset, HighlighterLayer.LAST + 1,
                 HighlighterTargetArea.EXACT_RANGE
             )
-            if (rangeHighlighter != null) {
-                rangeHighlighters.add(rangeHighlighter)
-            }
         }
     }
 
     private fun removeRangeHighlighters() {
-        rangeHighlighters.forEach { rangeHighlighter -> rangeHighlighter.dispose() }
-        rangeHighlighters.clear()
+        myRangeHighlighter?.dispose()
+        myRangeHighlighter = null
     }
 }
