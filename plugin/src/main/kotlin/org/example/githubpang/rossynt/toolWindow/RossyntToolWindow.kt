@@ -267,10 +267,10 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         val defaultEmptyText = StatusText.getDefaultEmptyText()
 
         val currentFilePath = currentFilePath
-        if (currentFilePath != null && RossyntUtil.isCSFile(currentFilePath)) {
-            uiTree.emptyText.text = defaultEmptyText
-        } else {
+        if (currentFilePath != null && !RossyntUtil.isCSFile(currentFilePath)) {
             uiTree.emptyText.text = "$defaultEmptyText - not a C# file"
+        } else {
+            uiTree.emptyText.text = defaultEmptyText
         }
     }
 
