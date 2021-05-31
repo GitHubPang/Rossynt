@@ -21,9 +21,7 @@ internal class TextEventThrottler {
     fun queueEvent(text: String) {
         lastText = text
 
-        if (job != null) {
-            return
-        }
+        job?.cancel()
         job = GlobalScope.launch(Dispatchers.IO) {
             try {
                 delay(1000)
@@ -37,8 +35,9 @@ internal class TextEventThrottler {
                 }
 
                 val lastText = lastText ?: return@innerLaunch
-
                 this@TextEventThrottler.lastText = null
+
+                job?.cancel()
                 job = null
 
                 callback?.onTextEvent(lastText)
