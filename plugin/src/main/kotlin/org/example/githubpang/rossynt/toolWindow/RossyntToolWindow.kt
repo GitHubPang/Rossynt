@@ -146,6 +146,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
     // ******************************************************************************** //
 
     init {
+        currentFilePath = rossyntService.getCurrentFilePath()
         rossyntService.setDelegate(object : IRossyntService {
             override fun onCurrentFilePathUpdated(filePath: String?) {
                 if (currentFilePath == filePath) {

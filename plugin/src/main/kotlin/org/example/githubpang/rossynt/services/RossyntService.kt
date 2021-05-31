@@ -65,6 +65,10 @@ internal class RossyntService : Disposable {
         this.delegate = delegate
     }
 
+    fun getCurrentFilePath(): String? {
+        return expectedState.filePath
+    }
+
     fun startRossyntServiceIfNeeded(project: Project) {
         if (this.project != null) {
             return
