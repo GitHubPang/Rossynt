@@ -6,7 +6,7 @@
 [![Version](https://img.shields.io/jetbrains/plugin/v/16902.svg)](https://plugins.jetbrains.com/plugin/16902)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/16902.svg)](https://plugins.jetbrains.com/plugin/16902)
 
-<img src="docs/screenshot01.png" width="460" /> <img src="docs/screenshot02.png" width="460" />
+<img src="docs/screenshot01.png" width="345" /> <img src="docs/screenshot02.png" width="345" />
 
 <!-- Plugin description -->
 Rossynt - **Ros**lyn **syn**tax **t**ree viewer for JetBrains Rider and all other IntelliJ IDEA-based IDEs.
