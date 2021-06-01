@@ -7,7 +7,7 @@
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/16902.svg)](https://plugins.jetbrains.com/plugin/16902)
 
 <!-- Plugin description -->
-Roslyn syntax tree viewer for JetBrains Rider and all other IntelliJ IDEA-based IDEs.
+Rossynt - **Ros**lyn **syn**tax **t**ree viewer for JetBrains Rider and all other IntelliJ IDEA-based IDEs.
 
 ## System Requirements
 
