@@ -45,6 +45,6 @@ These are all included if you have installed [.NET SDK](https://dotnet.microsoft
 
 
 ---
-Plugin based on the [IntelliJ Platform Plugin Template][template].
+<sub>Plugin based on the [IntelliJ Platform Plugin Template][template].</sub>
 
 [template]: https://github.com/JetBrains/intellij-platform-plugin-template
