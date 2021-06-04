@@ -18,6 +18,7 @@ import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.MessageType
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.ui.EditorNotificationPanel
@@ -169,7 +170,8 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
 
         // Setup banner.
         uiBanner.text = "Error occurred"
-        uiBanner.createActionLabel(CommonBundle.settingsAction(), {
+        val settingsAction = DialogWrapper.extractMnemonic(CommonBundle.settingsAction()).second
+        uiBanner.createActionLabel(settingsAction, {
             ShowSettingsUtil.getInstance().showSettingsDialog(project, PluginSettingsConfigurable::class.java)
         }, true)
 
