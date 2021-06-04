@@ -4,7 +4,9 @@ import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableMap
 import com.intellij.CommonBundle
 import com.intellij.icons.AllIcons
+import com.intellij.ide.DefaultTreeExpander
 import com.intellij.ide.HelpTooltip
+import com.intellij.ide.actions.CollapseAllAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.ToggleAction
 import com.intellij.openapi.components.service
@@ -22,7 +24,6 @@ import com.intellij.ui.EditorNotificationPanel
 import com.intellij.ui.JBSplitter
 import com.intellij.ui.ScrollPaneFactory
 import com.intellij.ui.treeStructure.Tree
-import com.intellij.ui.treeStructure.actions.CollapseAllAction
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.StatusText
 import com.intellij.util.ui.tree.TreeUtil
@@ -134,6 +135,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
 
     // UI.
     private val uiTree: Tree = Tree()
+    private val myTreeExpander = DefaultTreeExpander(uiTree)
     private val uiBanner = EditorNotificationPanel(MessageType.ERROR.popupBackground)
     private val uiTable: JTable = JTable(UiTableModel())
     private val uiSplitter: JBSplitter = JBSplitter()
@@ -161,13 +163,13 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         })
 
         // Add tool window buttons.
-        val collapseAction = CollapseAllAction(uiTree)
+        val collapseAction = CollapseAllAction { myTreeExpander }
         collapseAction.templatePresentation.icon = AllIcons.Actions.Collapseall
         toolWindow.setTitleActions(listOf(ToggleHighlightNodeInSourceAction(), collapseAction))
 
         // Setup banner.
         uiBanner.text = "Error occurred"
-        uiBanner.createActionLabel(CommonBundle.settingsTitle(), {
+        uiBanner.createActionLabel(CommonBundle.settingsAction(), {
             ShowSettingsUtil.getInstance().showSettingsDialog(project, PluginSettingsConfigurable::class.java)
         }, true)
 
