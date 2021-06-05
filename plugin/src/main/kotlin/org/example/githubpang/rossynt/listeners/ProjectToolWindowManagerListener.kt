@@ -23,10 +23,10 @@ internal class ProjectToolWindowManagerListener(private val project: Project) : 
         }
     }
 
-    override fun toolWindowShown(toolWindow: ToolWindow) {
-        super.toolWindowShown(toolWindow)
+    override fun toolWindowShown(id: String, toolWindow: ToolWindow) {
+        super.toolWindowShown(id, toolWindow)
 
-        if (toolWindow.id == RossyntToolWindow.TOOL_WINDOW_ID) {
+        if (id == RossyntToolWindow.TOOL_WINDOW_ID) {
             processRossyntToolWindowIsVisible(toolWindow)
         }
     }
