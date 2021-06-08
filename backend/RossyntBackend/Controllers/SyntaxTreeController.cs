@@ -6,6 +6,7 @@ using System.Net.Mime;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Text;
 using Newtonsoft.Json;
 using RossyntBackend.ApplicationLifetime;
 using RossyntBackend.Models;
@@ -94,6 +95,32 @@ namespace RossyntBackend.Controllers {
 
             // Prepare response.
             return treeNode.RawProperties();
+        }
+
+        [HttpPost(nameof(FindNode))]
+        [NotNull]
+        public IReadOnlyDictionary<string, string> FindNode([NotNull] [FromForm] FindNodeRequest request) {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+
+            // Restart application lifetime countdown.
+            _applicationLifetimeService.RestartCountdown();
+
+            // Get tree.
+            var tree = _projectRepository.GetTree();
+            if (tree == null) {
+                throw new InvalidOperationException("No tree in repository.");
+            }
+
+            // Find tree node.
+            var treeNode = tree.FindTreeNode(TextSpan.FromBounds(request.Start, request.End));
+
+            // Prepare response.
+            var result = new Dictionary<string, string>();
+            if (treeNode != null) {
+                result["nodeId"] = treeNode.NodeId;
+            }
+
+            return result;
         }
 
         [Pure]

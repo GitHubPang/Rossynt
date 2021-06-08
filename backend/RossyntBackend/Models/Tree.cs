@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Text;
 
 namespace RossyntBackend.Models {
     public sealed class Tree {
+        [NotNull] private readonly SyntaxNode _rootSyntaxNode;
         [NotNull] public TreeNode RootTreeNode { get; }
 
         /// <summary>
@@ -24,7 +27,7 @@ namespace RossyntBackend.Models {
         // ******************************************************************************** //
 
         private Tree([NotNull] SyntaxNode root) {
-            if (root == null) throw new ArgumentNullException(nameof(root));
+            _rootSyntaxNode = root ?? throw new ArgumentNullException(nameof(root));
 
             var rootTreeNode = AddTreeNode(new TreeNodeSyntaxOrToken(root, null));
             ProcessTreeNode(rootTreeNode);
@@ -61,6 +64,18 @@ namespace RossyntBackend.Models {
         private TTreeNode AddTreeNode<TTreeNode>([NotNull] TTreeNode treeNode) where TTreeNode : TreeNode {
             _treeNodes.Add(treeNode.NodeId, treeNode);
             return treeNode;
+        }
+
+        [CanBeNull]
+        public TreeNode FindTreeNode(TextSpan textSpan) {
+            // Skip if out of range.
+            if (!_rootSyntaxNode.FullSpan.Contains(textSpan)) {
+                return null;
+            }
+
+            // Find node.
+            var syntaxNode = _rootSyntaxNode.FindNode(textSpan, getInnermostNodeForTie: true);
+            return _treeNodes.Values.OfType<TreeNodeSyntaxOrToken>().FirstOrDefault(_ => _.SyntaxNodeOrToken.AsNode() == syntaxNode);
         }
     }
 }

@@ -20,6 +20,14 @@ NodeId={{nodeId}}
 
 ###
 
+POST http://localhost:5000/syntaxTree/findNode
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
+
+Start=14&End=17
+
+###
+
 POST http://localhost:5000/syntaxTree/resetActiveFile
 Content-Type: application/x-www-form-urlencoded
 Accept: application/json
