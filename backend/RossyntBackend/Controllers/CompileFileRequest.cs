@@ -2,10 +2,10 @@
 using JetBrains.Annotations;
 
 namespace RossyntBackend.Controllers {
+    // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
     public sealed class CompileFileRequest {
-        // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
         [Required] [NotNull] public string FileText { get; set; } = "";
         [Required] [NotNull] public string FilePath { get; set; } = "";
-        // ReSharper restore AutoPropertyCanBeMadeGetOnly.Global
     }
+    // ReSharper restore AutoPropertyCanBeMadeGetOnly.Global
 }

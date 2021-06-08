@@ -2,9 +2,9 @@
 using JetBrains.Annotations;
 
 namespace RossyntBackend.Controllers {
+    // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
     public sealed class GetNodeInfoRequest {
-        // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
         [Required] [NotNull] public string NodeId { get; set; } = "";
-        // ReSharper restore AutoPropertyCanBeMadeGetOnly.Global
     }
+    // ReSharper restore AutoPropertyCanBeMadeGetOnly.Global
 }
