@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap
 import com.intellij.CommonBundle
 import com.intellij.icons.AllIcons
 import com.intellij.ide.HelpTooltip
+import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.ToggleAction
 import com.intellij.openapi.components.service
@@ -122,6 +123,18 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         }
     }
 
+    private class SelectNodeAtCaretAction : AnAction("Select Node at Caret", null, AllIcons.General.Locate), DumbAware {
+        override fun actionPerformed(e: AnActionEvent) {
+//            myAutoScrollFromSourceHandler.scrollFromSource()
+        }
+
+//        override fun update(event: AnActionEvent) {
+//            val presentation = event.presentation
+//            presentation.setText(LangBundle.message("action.select.opened.file.text", getScrollToSourceShortcut()))
+//            presentation.isEnabledAndVisible = !isAutoscrollFromSource(myCurrentViewId)
+//        }
+    }
+
     // ******************************************************************************** //
 
     // Data.
@@ -164,7 +177,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         // Add tool window buttons.
         val collapseAction = CollapseAllAction(uiTree)
         collapseAction.templatePresentation.icon = AllIcons.Actions.Collapseall
-        toolWindow.setTitleActions(listOf(ToggleHighlightNodeInSourceAction(), collapseAction))
+        toolWindow.setTitleActions(listOf(ToggleHighlightNodeInSourceAction(), SelectNodeAtCaretAction(), collapseAction))
 
         // Setup banner.
         uiBanner.text = "Error occurred"
