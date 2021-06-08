@@ -31,6 +31,7 @@ internal class RestartableBackendService : IBackendService {
 
     override suspend fun compileFile(fileText: String?, filePath: String?): TreeNode? = backendService?.compileFile(fileText, filePath)
     override suspend fun getNodeInfo(nodeId: String): Map<String, String> = backendService?.getNodeInfo(nodeId) ?: HashMap()
+    override suspend fun findNode(start: Int, end: Int): String? = backendService?.findNode(start, end)
 
     private fun recreateBackendService(project: Project) {
         destroyBackendService()

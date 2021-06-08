@@ -8,4 +8,5 @@ internal interface IBackendService : Disposable {
     fun startBackendService(project: Project, delegate: IBackendServiceDelegate?)
     suspend fun compileFile(fileText: String?, filePath: String?): TreeNode?
     suspend fun getNodeInfo(nodeId: String): Map<String, String>
+    suspend fun findNode(start: Int, end: Int): String?
 }

@@ -298,6 +298,11 @@ internal class BackendService : IBackendService {
         return sendRequestToBackend("syntaxTree/getNodeInfo", parametersOf("NodeId", nodeId)) ?: HashMap()
     }
 
+    override suspend fun findNode(start: Int, end: Int): String? {
+        val response: Map<String, String> = sendRequestToBackend("syntaxTree/findNode", parametersOf("Start", start.toString()).plus(parametersOf("End", end.toString()))) ?: HashMap()
+        return response["nodeId"]
+    }
+
     private suspend fun pingBackend() {
         sendRequestToBackend<Unit>("syntaxTree/ping")
     }
