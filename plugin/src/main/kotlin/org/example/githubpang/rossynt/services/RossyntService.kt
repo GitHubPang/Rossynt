@@ -187,6 +187,28 @@ internal class RossyntService : Disposable {
         refreshCurrentData()
     }
 
+    fun findNodeAtCaret() {
+        val backendService = backendService ?: return
+        val project = project ?: return
+
+        if (!isBackendServiceStarted) {
+            return
+        }
+
+        val selection = FileEditorManager.getInstance(project).selectedTextEditor?.selectionModel ?: return
+        val selectionStart = selection.selectionStart
+        val selectionEnd = selection.selectionEnd
+        GlobalScope.launch(Dispatchers.IO) {
+            val nodeId = backendService.findNode(selectionStart, selectionEnd)
+            launch(Dispatchers.Main) innerLaunch@{
+                val newSelection = FileEditorManager.getInstance(project).selectedTextEditor?.selectionModel ?: return@innerLaunch
+                if (selectionStart == newSelection.selectionStart && selectionEnd == newSelection.selectionEnd) {
+                    delegate?.onFindNodeAtCaretResult(nodeId)
+                }
+            }
+        }
+    }
+
     private fun refreshCurrentData() {
         val backendService = backendService ?: return
 

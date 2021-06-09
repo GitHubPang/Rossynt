@@ -123,11 +123,12 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         }
     }
 
-    private class SelectNodeAtCaretAction : AnAction("Select Node at Caret", null, AllIcons.General.Locate), DumbAware {
+    private inner class SelectNodeAtCaretAction : AnAction("Select Node at Caret", null, AllIcons.General.Locate), DumbAware {
         override fun actionPerformed(e: AnActionEvent) {
-//            myAutoScrollFromSourceHandler.scrollFromSource()
+            this@RossyntToolWindow.rossyntService.findNodeAtCaret()
         }
 
+//todo
 //        override fun update(event: AnActionEvent) {
 //            val presentation = event.presentation
 //            presentation.setText(LangBundle.message("action.select.opened.file.text", getScrollToSourceShortcut()))
@@ -171,6 +172,14 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
 
                 // Update UI.
                 uiUpdateTreeEmptyText()
+            }
+
+            override fun onFindNodeAtCaretResult(nodeId: String?) {
+                if (nodeId == null) {
+                    return
+                }
+
+               //todo
             }
         })
 
