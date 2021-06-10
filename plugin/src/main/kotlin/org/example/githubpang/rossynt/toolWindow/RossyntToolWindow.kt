@@ -323,7 +323,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         val textRange = selectedTreeNode?.textRange
         if (isHighlightSelectedTreeNode && textRange != null) {
             myRangeHighlighter = FileEditorManager.getInstance(project).selectedTextEditor?.markupModel?.addRangeHighlighter(
-                EditorColors.SEARCH_RESULT_ATTRIBUTES, textRange.startOffset, textRange.endOffset, HighlighterLayer.LAST + 1,
+                EditorColors.SEARCH_RESULT_ATTRIBUTES, textRange.startOffset, textRange.endOffset, HighlighterLayer.SELECTION - 2,
                 HighlighterTargetArea.EXACT_RANGE
             )
         }
