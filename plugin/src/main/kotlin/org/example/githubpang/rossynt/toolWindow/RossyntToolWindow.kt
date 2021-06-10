@@ -42,6 +42,7 @@ import javax.swing.table.AbstractTableModel
 import javax.swing.table.DefaultTableCellRenderer
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
+import javax.swing.tree.TreePath
 import javax.swing.tree.TreeSelectionModel.SINGLE_TREE_SELECTION
 
 internal class RossyntToolWindow(private val project: Project, toolWindow: ToolWindow) {
@@ -179,7 +180,8 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
                     return
                 }
 
-               //todo
+                val uiNode = TreeUtil.findNode(uiTree.model.root as DefaultMutableTreeNode) { (it.userObject as TreeNode).nodeId == nodeId } ?: return
+                TreeUtil.selectPath(uiTree, TreePath(uiNode.path))
             }
         })
 
