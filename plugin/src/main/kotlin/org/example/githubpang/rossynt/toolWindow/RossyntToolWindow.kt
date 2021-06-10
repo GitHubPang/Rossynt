@@ -49,12 +49,12 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         const val TOOL_WINDOW_ID: String = "Rossynt"  // Must match with toolWindow id in "plugin.xml"
     }
 
+    // ******************************************************************************** //
+
     private enum class SpecialRow {
         RawType,
         SyntaxKind,
     }
-
-    // ******************************************************************************** //
 
     private inner class UiTableModel : AbstractTableModel() {
         override fun getRowCount(): Int = this@RossyntToolWindow.nodeInfo.size + when (this@RossyntToolWindow.selectedTreeNode) {
