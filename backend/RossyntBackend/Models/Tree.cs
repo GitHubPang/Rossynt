@@ -73,9 +73,35 @@ namespace RossyntBackend.Models {
                 return null;
             }
 
+            // Find trivia.
+            {
+                var syntaxTriviaStart = _rootSyntaxNode.FindTrivia(textSpan.Start);
+                var syntaxTriviaEnd = textSpan.End - 1 > textSpan.Start ? _rootSyntaxNode.FindTrivia(textSpan.End - 1) : syntaxTriviaStart;
+                if (syntaxTriviaStart == syntaxTriviaEnd) {
+                    var treeNode = _treeNodes.Values.OfType<TreeNodeTrivia>().FirstOrDefault(_ => _.SyntaxTrivia == syntaxTriviaStart);
+                    if (treeNode != null) {
+                        return treeNode;
+                    }
+                }
+            }
+
+            // Find token.
+            {
+                var syntaxTokenStart = _rootSyntaxNode.FindToken(textSpan.Start, true);
+                var syntaxTokenEnd = textSpan.End - 1 > textSpan.Start ? _rootSyntaxNode.FindToken(textSpan.End - 1, true) : syntaxTokenStart;
+                if (syntaxTokenStart == syntaxTokenEnd) {
+                    var treeNode = _treeNodes.Values.OfType<TreeNodeSyntaxOrToken>().FirstOrDefault(_ => _.SyntaxNodeOrToken.AsToken() == syntaxTokenStart);
+                    if (treeNode != null) {
+                        return treeNode;
+                    }
+                }
+            }
+
             // Find node.
-            var syntaxNode = _rootSyntaxNode.FindNode(textSpan, getInnermostNodeForTie: true);
-            return _treeNodes.Values.OfType<TreeNodeSyntaxOrToken>().FirstOrDefault(_ => _.SyntaxNodeOrToken.AsNode() == syntaxNode);
+            {
+                var syntaxNode = _rootSyntaxNode.FindNode(textSpan, getInnermostNodeForTie: true);
+                return _treeNodes.Values.OfType<TreeNodeSyntaxOrToken>().FirstOrDefault(_ => _.SyntaxNodeOrToken.AsNode() == syntaxNode);
+            }
         }
     }
 }
