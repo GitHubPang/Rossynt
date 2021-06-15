@@ -9,7 +9,7 @@
 <img src="docs/screenshot01.png" width="345" /> <img src="docs/screenshot02.png" width="345" />
 
 <!-- Plugin description -->
-Rossynt - **Ros**lyn **syn**tax **t**ree viewer for JetBrains Rider and all other IntelliJ IDEA-based IDEs.
+Rossynt - **Ros**lyn **syn**tax **t**ree viewer for C#. Works on JetBrains Rider and all other IntelliJ IDEA-based IDEs.
 
 ## System Requirements
 
