@@ -128,13 +128,6 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         override fun actionPerformed(e: AnActionEvent) {
             this@RossyntToolWindow.rossyntService.findNodeAtCaret()
         }
-
-//todo
-//        override fun update(event: AnActionEvent) {
-//            val presentation = event.presentation
-//            presentation.setText(LangBundle.message("action.select.opened.file.text", getScrollToSourceShortcut()))
-//            presentation.isEnabledAndVisible = !isAutoscrollFromSource(myCurrentViewId)
-//        }
     }
 
     // ******************************************************************************** //
