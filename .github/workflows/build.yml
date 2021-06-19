@@ -69,10 +69,12 @@ jobs:
 
       # Run detekt, ktlint and tests
       - name: Run Linters and Test
+        working-directory: plugin
         run: ./gradlew check
 
       # Run verifyPlugin Gradle task
       - name: Verify Plugin
+        working-directory: plugin
         run: ./gradlew verifyPlugin
 
   # Build plugin with buildPlugin Gradle task and provide the artifact for the next workflow jobs
@@ -117,6 +119,7 @@ jobs:
       - name: Export Properties
         id: properties
         shell: bash
+        working-directory: plugin
         run: |
           PROPERTIES="$(./gradlew properties --console=plain -q)"
           VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
@@ -134,6 +137,7 @@ jobs:
 
       # Build artifact using buildPlugin Gradle task
       - name: Build Plugin
+        working-directory: plugin
         run: ./gradlew buildPlugin
 
       # Upload plugin artifact to make it available in the next jobs
@@ -141,7 +145,7 @@ jobs:
         uses: actions/upload-artifact@v2.2.3
         with:
           name: plugin-artifact
-          path: ./build/distributions/${{ steps.properties.outputs.artifact }}
+          path: ./plugin/build/distributions/${{ steps.properties.outputs.artifact }}
 
   # Verify built plugin using IntelliJ Plugin Verifier tool
   # Requires build job to be passed
@@ -180,6 +184,7 @@ jobs:
       - name: Export Properties
         id: properties
         shell: bash
+        working-directory: plugin
         run: |
           PROPERTIES="$(./gradlew properties --console=plain -q)"
           IDE_VERSIONS="$(echo "$PROPERTIES" | grep "^pluginVerifierIdeVersions:" | base64)"
@@ -196,6 +201,7 @@ jobs:
 
       # Run IntelliJ Plugin Verifier action using GitHub Action
       - name: Verify Plugin
+        working-directory: plugin
         run: ./gradlew runPluginVerifier -Pplugin.verifier.home.dir=${{ steps.properties.outputs.pluginVerifierHomeDir }}
 
   # Prepare a draft release for GitHub Releases page for the manual verification
