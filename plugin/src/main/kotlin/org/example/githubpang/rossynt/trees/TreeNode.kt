@@ -45,8 +45,9 @@ internal data class TreeNode(
     fun childTreeNodes(): ImmutableList<TreeNode> {
         return if (childTreeNodes != null) {
             ImmutableList.copyOf(childTreeNodes)
-        } else
+        } else {
             ImmutableList.of()
+        }
     }
 
     override fun navigate(requestFocus: Boolean): Unit = Unit
@@ -55,7 +56,7 @@ internal data class TreeNode(
     override fun getName(): String? = null
     override fun getPresentation(): ItemPresentation = PresentationData(
         syntaxKind,
-        shortString, //todo what about line breaks? white spaces? null characters?
+        shortString, // todo what about line breaks? white spaces? null characters?
         when (treeNodeCategory) {
             TreeNodeCategory.SyntaxNode -> PluginIcons.TreeNodeCategorySyntaxNode
             TreeNodeCategory.SyntaxToken -> PluginIcons.TreeNodeCategorySyntaxToken
