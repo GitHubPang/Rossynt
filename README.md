@@ -48,6 +48,6 @@ These are all included if you have installed [.NET SDK](https://dotnet.microsoft
 
 
 ---
-<sub>Plugin based on the [IntelliJ Platform Plugin Template][template].</sub>
+<sub>Plugin based on the [IntelliJ Platform Plugin Template][template]. Commits are cherry-picked from that repository from time to time, which explains why GitHub shows some authors as contributors even though they don't commit to this repository directly.</sub>
 
 [template]: https://github.com/JetBrains/intellij-platform-plugin-template
