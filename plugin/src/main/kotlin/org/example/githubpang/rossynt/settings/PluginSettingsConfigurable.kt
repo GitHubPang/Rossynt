@@ -32,6 +32,6 @@ internal class PluginSettingsConfigurable : Configurable {
     }
 
     override fun getDisplayName(): String {
-        return "Rossynt";
+        return "Rossynt"
     }
 }
