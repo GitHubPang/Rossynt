@@ -131,6 +131,9 @@ internal class RossyntService : Disposable {
                         }
                     })
                 }
+
+                // Refresh current data.
+                refreshCurrentData()
             }
         })
         messageBusConnection.subscribe(BackendServiceNotifier.TOPIC, object : BackendServiceNotifier {
@@ -213,6 +216,9 @@ internal class RossyntService : Disposable {
         val backendService = backendService ?: return
 
         if (!isBackendServiceStarted) {
+            return
+        }
+        if (!toolWindowIsVisible) {
             return
         }
 
