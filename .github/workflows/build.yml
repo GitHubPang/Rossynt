@@ -45,6 +45,10 @@ jobs:
         #  # BuildKit config file
         #  config: # optional
 
+      # Check out current repository
+      - name: Fetch Sources
+        uses: actions/checkout@v2.3.4
+
       - name: Run Publish Script
         working-directory: backend
         run: ./publish.sh
