@@ -1,8 +1,6 @@
 # Rossynt
 
-<!--
-![Build](https://github.com/GitHubPang/Rossynt/workflows/Build/badge.svg)
--->
+[![Build](https://github.com/GitHubPang/Rossynt/actions/workflows/build.yml/badge.svg)](https://github.com/GitHubPang/Rossynt/actions/workflows/build.yml)
 [![Version](https://img.shields.io/jetbrains/plugin/v/16902.svg)](https://plugins.jetbrains.com/plugin/16902)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/16902.svg)](https://plugins.jetbrains.com/plugin/16902)
 
