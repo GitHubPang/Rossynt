@@ -190,7 +190,7 @@ jobs:
           # Artifact name
           name: backend-artifact # optional
           # Destination path
-          #path: # optional
+          path: plugin/src/main/resources/raw/RossyntBackend # optional
 
       # Build artifact using buildPlugin Gradle task
       - name: Build Plugin
