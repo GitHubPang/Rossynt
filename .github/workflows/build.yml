@@ -122,11 +122,8 @@ jobs:
         working-directory: plugin
         run: |
           PROPERTIES="$(./gradlew properties --console=plain -q)"
-          echo "PROPERTIES: $PROPERTIES"
           VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
-          echo "VERSION: $VERSION"
           NAME="$(echo "$PROPERTIES" | grep "^pluginName:" | cut -f2- -d ' ')"
-          echo "NAME: $NAME"
           CHANGELOG="$(./gradlew getChangelog --no-header --console=plain -q)"
           CHANGELOG="${CHANGELOG//'%'/'%25'}"
           CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
