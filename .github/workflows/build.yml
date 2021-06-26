@@ -21,6 +21,46 @@ on:
 
 jobs:
 
+  buildBackend:
+    name: Build Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker Setup Buildx
+        uses: docker/setup-buildx-action@v1.3.0
+        #with:
+        #  # Buildx version. (eg. v0.3.0)
+        #  version: # optional
+        #  # Sets the builder driver to be used
+        #  driver: # optional, default is docker-container
+        #  # List of additional driver-specific options. (eg. image=moby/buildkit:master)
+        #  driver-opts: # optional
+        #  # Flags for buildkitd daemon
+        #  buildkitd-flags: # optional, default is --allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host
+        #  # Sets up docker build command as an alias to docker buildx
+        #  install: # optional, default is false
+        #  # Switch to this builder instance
+        #  use: # optional, default is true
+        #  # Optional address for docker socket or context from `docker context ls`
+        #  endpoint: # optional
+        #  # BuildKit config file
+        #  config: # optional
+
+      - name: Run Publish Script
+        working-directory: backend
+        run: ./publish.sh
+
+      - name: Upload Backend Artifact
+        uses: actions/upload-artifact@v2.2.4
+        with:
+          # Artifact name
+          name: backend-artifact # optional, default is artifact
+          # A file, directory or wildcard pattern that describes what to upload
+          path: plugin/src/main/resources/raw/RossyntBackend
+          # The desired behavior if no files are found using the provided path.
+          if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
+          # Duration after which artifact will expire in days. 0 means using default retention.
+          #retention-days: # optional
+
   # Run Gradle Wrapper Validation Action to verify the wrapper's checksum
   gradleValidation:
     name: Gradle Wrapper
@@ -86,7 +126,7 @@ jobs:
   # Requires test job to be passed
   build:
     name: Build
-    needs: test
+    needs: [ buildBackend, test ]
     runs-on: ubuntu-latest
     outputs:
       name: ${{ steps.properties.outputs.name }}
@@ -139,6 +179,14 @@ jobs:
           echo "::set-output name=name::$NAME"
           echo "::set-output name=changelog::$CHANGELOG"
           echo "::set-output name=artifact::$ARTIFACT"
+
+      - name: Download Backend Artifact
+        uses: actions/download-artifact@v2.0.10
+        with:
+          # Artifact name
+          name: backend-artifact # optional
+          # Destination path
+          #path: # optional
 
       # Build artifact using buildPlugin Gradle task
       - name: Build Plugin
