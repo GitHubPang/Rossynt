@@ -72,6 +72,11 @@ jobs:
 #        working-directory: plugin
 #        run: ./gradlew check
 
+      # Run unit test
+      - name: Run Unit Test
+        working-directory: plugin
+        run: ./gradlew test
+
       # Run verifyPlugin Gradle task
       - name: Verify Plugin
         working-directory: plugin
