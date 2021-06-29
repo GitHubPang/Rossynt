@@ -8,6 +8,10 @@ max_line_length = off
 insert_final_newline = true
 trim_trailing_whitespace = true
 
+# Disable attribute formatting.
+resharper_csharp_keep_existing_attribute_arrangement = true
+resharper_csharp_max_attribute_length_for_same_line = 999
+
 # Disable inspection for duplicate annotation in hierarchy.
 resharper_annotation_redundancy_in_hierarchy_highlighting = none
 
