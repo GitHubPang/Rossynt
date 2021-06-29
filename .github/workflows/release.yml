@@ -31,6 +31,7 @@ jobs:
       - name: Publish Plugin
         env:
           PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+        working-directory: plugin
         run: ./gradlew publishPlugin
 
   # Patch changelog, commit and push to the current repository
@@ -55,6 +56,7 @@ jobs:
 
       # Update Unreleased section with the current version
       - name: Patch Changelog
+        working-directory: plugin
         run: ./gradlew patchChangelog
 
       # Commit patched Changelog
