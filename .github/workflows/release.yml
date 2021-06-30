@@ -30,7 +30,7 @@ jobs:
       # Publish the plugin to the Marketplace
       - name: Publish Plugin
         env:
-          PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+          PUBLISH_TOKEN: ${{ secrets.PUBLISH_BROKEN }}
         working-directory: plugin
         run: ./gradlew publishPlugin
 
