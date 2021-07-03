@@ -17,27 +17,19 @@ jobs:
       - name: What is this 1
         shell: bash
         run: |
-          echo ${{ github.event.release.tag_name }}
-          pwd
-          ls -la
-          curl --help
           echo aa-------------------------------------aa
           curl -s https://api.github.com/repos/GitHubPang/Rossynt/releases/tags/${{ github.event.release.tag_name }}
-          echo bb-------------------------------------bb
-          curl -s https://api.github.com/repos/GitHubPang/Rossynt/releases/tags/${{ github.event.release.tag_name }} \
-            | tr '\r\n' ' '
-          echo cc-------------------------------------cc
-          curl -s https://api.github.com/repos/GitHubPang/Rossynt/releases/tags/${{ github.event.release.tag_name }} \
-            | tr '\r\n' ' ' \
-            | jq '.assets'
-          echo dd-------------------------------------dd
-          curl -s https://api.github.com/repos/GitHubPang/Rossynt/releases/tags/${{ github.event.release.tag_name }} \
-            | tr '\r\n' ' ' \
-            | jq '.assets[0]'
           echo ee-------------------------------------ee
           curl -s https://api.github.com/repos/GitHubPang/Rossynt/releases/tags/${{ github.event.release.tag_name }} \
             | tr '\r\n' ' ' \
             | jq '.assets[0].browser_download_url'
+          echo ee-------------------------------------ee
+          curl -s https://api.github.com/repos/GitHubPang/Rossynt/releases/tags/${{ github.event.release.tag_name }} \
+            | tr '\r\n' ' ' \
+            | jq '.assets[0].browser_download_url' \
+            | xargs -I '{}' curl -OL {}
+          pwd
+          ls -la
 
 #  # Patch changelog, commit and push to the current repository
 #  changelog:
