@@ -29,15 +29,15 @@ jobs:
           echo cc-------------------------------------cc
           curl -s https://api.github.com/repos/GitHubPang/Rossynt/releases/tags/${{ github.event.release.tag_name }} \
             | tr '\r\n' ' ' \
-            | jq '.[] | .assets'
+            | jq '.assets'
           echo dd-------------------------------------dd
           curl -s https://api.github.com/repos/GitHubPang/Rossynt/releases/tags/${{ github.event.release.tag_name }} \
             | tr '\r\n' ' ' \
-            | jq '.[] | .assets[0]'
+            | jq '.assets[0]'
           echo ee-------------------------------------ee
           curl -s https://api.github.com/repos/GitHubPang/Rossynt/releases/tags/${{ github.event.release.tag_name }} \
             | tr '\r\n' ' ' \
-            | jq '.[] | .assets[0].browser_download_url'
+            | jq '.assets[0].browser_download_url'
 
 #  # Patch changelog, commit and push to the current repository
 #  changelog:
