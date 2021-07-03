@@ -3,7 +3,6 @@
 # Rossynt Changelog
 
 ## [Unreleased]
-## [202.2.1]
 ### Fixed
 - Do not refresh data when tool window is hidden, thus improving performance.
 
