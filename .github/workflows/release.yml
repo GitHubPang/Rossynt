@@ -27,7 +27,7 @@ jobs:
           PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
         # https://plugins.jetbrains.com/docs/marketplace/plugin-upload.html#post
         run: |
-          curl -i --header "Authorization: Bearer ${{ secrets.PUBLISH_TOKEN }}" -F pluginId=org.example.githubpang.rossynt -F file=*.zip https://plugins.jetbrains.com/plugin/uploadPlugin
+          curl -i --header "Authorization: Bearer ${{ secrets.PUBLISH_TOKEN }}" -F xmlId=org.example.githubpang.rossynt -F file=@`ls *.zip` https://plugins.jetbrains.com/plugin/uploadPlugin
 
 #  # Patch changelog, commit and push to the current repository
 #  changelog:
