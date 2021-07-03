@@ -21,94 +21,94 @@ on:
 
 jobs:
 
-#  buildBackend:
-#    name: Build Backend
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Docker Setup Buildx
-#        uses: docker/setup-buildx-action@v1.3.0
-#
-#      # Check out current repository
-#      - name: Fetch Sources
-#        uses: actions/checkout@v2.3.4
-#
-#      - name: Run Publish Script
-#        working-directory: backend
-#        run: ./publish.sh
-#
-#      - name: Upload Backend Artifact
-#        uses: actions/upload-artifact@v2.2.4
-#        with:
-#          name: backend-artifact
-#          path: plugin/src/main/resources/raw/RossyntBackend
-#          if-no-files-found: error
-#
-#  # Run Gradle Wrapper Validation Action to verify the wrapper's checksum
-#  gradleValidation:
-#    name: Gradle Wrapper
-#    runs-on: ubuntu-latest
-#    steps:
-#
-#      # Check out current repository
-#      - name: Fetch Sources
-#        uses: actions/checkout@v2.3.4
-#
-#      # Validate wrapper
-#      - name: Gradle Wrapper Validation
-#        uses: gradle/wrapper-validation-action@v1.0.4
-#
-#  # Run verifyPlugin and test Gradle tasks
-#  test:
-#    name: Test
-#    needs: gradleValidation
-#    runs-on: ubuntu-latest
-#    steps:
-#
-#      # Setup Java 1.8 environment for the next steps
-#      - name: Setup Java
-#        uses: actions/setup-java@v2
-#        with:
-#          distribution: zulu
-#          java-version: 8
-#
-#      # Check out current repository
-#      - name: Fetch Sources
-#        uses: actions/checkout@v2.3.4
-#
-#      # Cache Gradle dependencies
-#      - name: Setup Gradle Dependencies Cache
-#        uses: actions/cache@v2.1.6
-#        with:
-#          path: ~/.gradle/caches
-#          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
-#
-#      # Cache Gradle Wrapper
-#      - name: Setup Gradle Wrapper Cache
-#        uses: actions/cache@v2.1.6
-#        with:
-#          path: ~/.gradle/wrapper
-#          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-#
-##      # Run detekt, ktlint and tests
-##      - name: Run Linters and Test
-##        working-directory: plugin
-##        run: ./gradlew check
-#
-#      # Run unit test
-#      - name: Run Unit Test
+  buildBackend:
+    name: Build Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker Setup Buildx
+        uses: docker/setup-buildx-action@v1.3.0
+
+      # Check out current repository
+      - name: Fetch Sources
+        uses: actions/checkout@v2.3.4
+
+      - name: Run Publish Script
+        working-directory: backend
+        run: ./publish.sh
+
+      - name: Upload Backend Artifact
+        uses: actions/upload-artifact@v2.2.4
+        with:
+          name: backend-artifact
+          path: plugin/src/main/resources/raw/RossyntBackend
+          if-no-files-found: error
+
+  # Run Gradle Wrapper Validation Action to verify the wrapper's checksum
+  gradleValidation:
+    name: Gradle Wrapper
+    runs-on: ubuntu-latest
+    steps:
+
+      # Check out current repository
+      - name: Fetch Sources
+        uses: actions/checkout@v2.3.4
+
+      # Validate wrapper
+      - name: Gradle Wrapper Validation
+        uses: gradle/wrapper-validation-action@v1.0.4
+
+  # Run verifyPlugin and test Gradle tasks
+  test:
+    name: Test
+    needs: gradleValidation
+    runs-on: ubuntu-latest
+    steps:
+
+      # Setup Java 1.8 environment for the next steps
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: zulu
+          java-version: 8
+
+      # Check out current repository
+      - name: Fetch Sources
+        uses: actions/checkout@v2.3.4
+
+      # Cache Gradle dependencies
+      - name: Setup Gradle Dependencies Cache
+        uses: actions/cache@v2.1.6
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
+
+      # Cache Gradle Wrapper
+      - name: Setup Gradle Wrapper Cache
+        uses: actions/cache@v2.1.6
+        with:
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+
+#      # Run detekt, ktlint and tests
+#      - name: Run Linters and Test
 #        working-directory: plugin
-#        run: ./gradlew test
-#
-#      # Run verifyPlugin Gradle task
-#      - name: Verify Plugin
-#        working-directory: plugin
-#        run: ./gradlew verifyPlugin
+#        run: ./gradlew check
+
+      # Run unit test
+      - name: Run Unit Test
+        working-directory: plugin
+        run: ./gradlew test
+
+      # Run verifyPlugin Gradle task
+      - name: Verify Plugin
+        working-directory: plugin
+        run: ./gradlew verifyPlugin
 
   # Build plugin with buildPlugin Gradle task and provide the artifact for the next workflow jobs
   # Requires test job to be passed
   build:
     name: Build
-#    needs: [ buildBackend, test ]
+    needs: [ buildBackend, test ]
     runs-on: ubuntu-latest
     outputs:
       name: ${{ steps.properties.outputs.name }}
@@ -162,11 +162,11 @@ jobs:
           echo "::set-output name=changelog::$CHANGELOG"
           echo "::set-output name=artifact::$ARTIFACT"
 
-#      - name: Download Backend Artifact
-#        uses: actions/download-artifact@v2.0.10
-#        with:
-#          name: backend-artifact
-#          path: plugin/src/main/resources/raw/RossyntBackend
+      - name: Download Backend Artifact
+        uses: actions/download-artifact@v2.0.10
+        with:
+          name: backend-artifact
+          path: plugin/src/main/resources/raw/RossyntBackend
 
       # Build artifact using buildPlugin Gradle task
       - name: Build Plugin
@@ -180,69 +180,69 @@ jobs:
           name: plugin-artifact
           path: ./plugin/build/distributions/${{ steps.properties.outputs.artifact }}
 
-#  # Verify built plugin using IntelliJ Plugin Verifier tool
-#  # Requires build job to be passed
-#  verify:
-#    name: Verify
-#    needs: build
-#    runs-on: ubuntu-latest
-#    steps:
-#
-#      # Setup Java 1.8 environment for the next steps
-#      - name: Setup Java
-#        uses: actions/setup-java@v2
-#        with:
-#          distribution: zulu
-#          java-version: 8
-#
-#      # Check out current repository
-#      - name: Fetch Sources
-#        uses: actions/checkout@v2.3.4
-#
-#      # Cache Gradle Dependencies
-#      - name: Setup Gradle Dependencies Cache
-#        uses: actions/cache@v2.1.6
-#        with:
-#          path: ~/.gradle/caches
-#          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
-#
-#      # Cache Gradle Wrapper
-#      - name: Setup Gradle Wrapper Cache
-#        uses: actions/cache@v2.1.6
-#        with:
-#          path: ~/.gradle/wrapper
-#          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-#
-#      # Set environment variables
-#      - name: Export Properties
-#        id: properties
-#        shell: bash
-#        working-directory: plugin
-#        run: |
-#          PROPERTIES="$(./gradlew properties --console=plain -q)"
-#          IDE_VERSIONS="$(echo "$PROPERTIES" | grep "^pluginVerifierIdeVersions:" | base64)"
-#
-#          echo "::set-output name=ideVersions::$IDE_VERSIONS"
-#          echo "::set-output name=pluginVerifierHomeDir::~/.pluginVerifier"
-#
-#      # Cache Plugin Verifier IDEs
-#      - name: Setup Plugin Verifier IDEs Cache
-#        uses: actions/cache@v2.1.6
-#        with:
-#          path: ${{ steps.properties.outputs.pluginVerifierHomeDir }}/ides
-#          key: ${{ runner.os }}-plugin-verifier-${{ steps.properties.outputs.ideVersions }}
-#
-#      # Run IntelliJ Plugin Verifier action using GitHub Action
-#      - name: Verify Plugin
-#        working-directory: plugin
-#        run: ./gradlew runPluginVerifier -Pplugin.verifier.home.dir=${{ steps.properties.outputs.pluginVerifierHomeDir }}
+  # Verify built plugin using IntelliJ Plugin Verifier tool
+  # Requires build job to be passed
+  verify:
+    name: Verify
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+
+      # Setup Java 1.8 environment for the next steps
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: zulu
+          java-version: 8
+
+      # Check out current repository
+      - name: Fetch Sources
+        uses: actions/checkout@v2.3.4
+
+      # Cache Gradle Dependencies
+      - name: Setup Gradle Dependencies Cache
+        uses: actions/cache@v2.1.6
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts', 'gradle.properties') }}
+
+      # Cache Gradle Wrapper
+      - name: Setup Gradle Wrapper Cache
+        uses: actions/cache@v2.1.6
+        with:
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+
+      # Set environment variables
+      - name: Export Properties
+        id: properties
+        shell: bash
+        working-directory: plugin
+        run: |
+          PROPERTIES="$(./gradlew properties --console=plain -q)"
+          IDE_VERSIONS="$(echo "$PROPERTIES" | grep "^pluginVerifierIdeVersions:" | base64)"
+
+          echo "::set-output name=ideVersions::$IDE_VERSIONS"
+          echo "::set-output name=pluginVerifierHomeDir::~/.pluginVerifier"
+
+      # Cache Plugin Verifier IDEs
+      - name: Setup Plugin Verifier IDEs Cache
+        uses: actions/cache@v2.1.6
+        with:
+          path: ${{ steps.properties.outputs.pluginVerifierHomeDir }}/ides
+          key: ${{ runner.os }}-plugin-verifier-${{ steps.properties.outputs.ideVersions }}
+
+      # Run IntelliJ Plugin Verifier action using GitHub Action
+      - name: Verify Plugin
+        working-directory: plugin
+        run: ./gradlew runPluginVerifier -Pplugin.verifier.home.dir=${{ steps.properties.outputs.pluginVerifierHomeDir }}
 
   # Prepare a draft release for GitHub Releases page for the manual verification
   # If accepted and published, release workflow would be triggered
   releaseDraft:
     name: Release Draft
     if: github.event_name != 'pull_request'
-    needs: [build]
+    needs: [build, verify]
     runs-on: ubuntu-latest
     steps:
 
