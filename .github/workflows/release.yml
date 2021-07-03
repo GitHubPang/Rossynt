@@ -21,6 +21,7 @@ jobs:
             | tr '\r\n' ' ' \
             | jq '.assets[0].browser_download_url' \
             | xargs -I '{}' curl -OL {}
+          ls -la
 
       - name: Upload Plugin to Marketplace
         env:
