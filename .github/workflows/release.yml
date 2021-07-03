@@ -14,22 +14,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: What is this 1
+      - name: Download Release Asset
         shell: bash
         run: |
-          echo aa-------------------------------------aa
-          curl -s https://api.github.com/repos/GitHubPang/Rossynt/releases/tags/${{ github.event.release.tag_name }}
-          echo ee-------------------------------------ee
-          curl -s https://api.github.com/repos/GitHubPang/Rossynt/releases/tags/${{ github.event.release.tag_name }} \
-            | tr '\r\n' ' ' \
-            | jq '.assets[0].browser_download_url'
-          echo ee-------------------------------------ee
           curl -s https://api.github.com/repos/GitHubPang/Rossynt/releases/tags/${{ github.event.release.tag_name }} \
             | tr '\r\n' ' ' \
             | jq '.assets[0].browser_download_url' \
             | xargs -I '{}' curl -OL {}
-          pwd
-          ls -la
+
+      - name: Upload Plugin to Marketplace
+        env:
+          PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+        # https://plugins.jetbrains.com/docs/marketplace/plugin-upload.html#post
+        run: |
+          curl -i --header "Authorization: Bearer ${{ secrets.PUBLISH_TOKEN }}" -F pluginId=org.example.githubpang.rossynt -F file=*.zip https://plugins.jetbrains.com/plugin/uploadPlugin
 
 #  # Patch changelog, commit and push to the current repository
 #  changelog:
