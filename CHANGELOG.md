@@ -3,6 +3,9 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Added
+- Compile file even if it's empty or whitespace only.
+
 ## [202.2.1] - 2021-07-05
 ### Fixed
 - Do not refresh data when tool window is hidden, thus improving performance.
