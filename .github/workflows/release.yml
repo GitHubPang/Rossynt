@@ -21,7 +21,4 @@ jobs:
 
       - name: Testing
         run: |
-          pwd
-          ls -la
-          date --help
-          date --iso-8601
+          ./patch-changelog.sh
