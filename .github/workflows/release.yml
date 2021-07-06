@@ -3,45 +3,15 @@
 
 name: Release
 on:
-  release:
-    types: [prereleased, released]
+  workflow_dispatch
 
 jobs:
-
-  # Prepare and publish the plugin to the Marketplace repository
-  release:
-    name: Publish Plugin
-    runs-on: ubuntu-latest
-    steps:
-
-      - name: Download Release Asset
-        shell: bash
-        run: |
-          curl -s https://api.github.com/repos/GitHubPang/Rossynt/releases/tags/${{ github.event.release.tag_name }} \
-            | tr '\r\n' ' ' \
-            | jq '.assets[0].browser_download_url' \
-            | xargs -I '{}' curl -OL {}
-
-      - name: Upload Plugin to Marketplace
-        env:
-          PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
-        # https://plugins.jetbrains.com/docs/marketplace/plugin-upload.html#post
-        run: |
-          curl -i --header "Authorization: Bearer ${{ secrets.PUBLISH_TOKEN }}" -F xmlId=org.example.githubpang.rossynt -F file=@`ls *.zip` https://plugins.jetbrains.com/plugin/uploadPlugin
 
   # Patch changelog, commit and push to the current repository
   changelog:
     name: Update Changelog
-    needs: release
     runs-on: ubuntu-latest
     steps:
-
-      # Setup Java 1.8 environment for the next steps
-      - name: Setup Java
-        uses: actions/setup-java@v2
-        with:
-          distribution: zulu
-          java-version: 8
 
       # Check out current repository
       - name: Fetch Sources
@@ -49,21 +19,9 @@ jobs:
         with:
           ref: ${{ github.event.release.tag_name }}
 
-      # Update Unreleased section with the current version
-      - name: Patch Changelog
-        working-directory: plugin
-        run: ./gradlew patchChangelog
-
-      # Commit patched Changelog
-      - name: Commit files
+      - name: Testing
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git commit -m "Update changelog" -a
-
-      # Push changes
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          branch: master
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pwd
+          ls -la
+          date --help
+          date --iso-8601
