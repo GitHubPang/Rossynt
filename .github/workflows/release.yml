@@ -36,13 +36,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      # Setup Java 1.8 environment for the next steps
-      - name: Setup Java
-        uses: actions/setup-java@v2
-        with:
-          distribution: zulu
-          java-version: 8
-
       # Check out current repository
       - name: Fetch Sources
         uses: actions/checkout@v2.3.4
@@ -52,7 +45,7 @@ jobs:
       # Update Unreleased section with the current version
       - name: Patch Changelog
         working-directory: plugin
-        run: ./gradlew patchChangelog
+        run: ./patch-changelog.sh
 
       # Commit patched Changelog
       - name: Commit files
