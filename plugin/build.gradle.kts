@@ -106,6 +106,21 @@ tasks {
 
     runPluginVerifier {
         ideVersions.set(properties("pluginVerifierIdeVersions").split(',').map(String::trim).filter(String::isNotEmpty))
+
+        // Plugin verifier is failing:
+        // https://github.com/GitHubPang/Rossynt/runs/3014560462?check_suite_focus=true
+        //
+        // This is because it now requires Java 11:
+        // > Plugin Verifier versions starting with 1.260 require Java 11, before that Java 8 was enough.
+        // https://github.com/JetBrains/intellij-plugin-verifier/tree/2d98f041c814fd703675408efd33918c384169f6#options
+        //
+        // While our plugin is still using Java 8:
+        // https://github.com/GitHubPang/Rossynt/blob/eb626a9d5ad474657373d2e9cd42b1a766b3ee15/plugin/build.gradle.kts#L73-L83
+        //
+        // So for now, let's use an older version of the verifier
+        // until we upgrade to Java 11.
+        //
+        verifierVersion.set("1.256")
     }
 
     publishPlugin {
