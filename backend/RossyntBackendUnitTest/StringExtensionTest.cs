@@ -6,7 +6,7 @@ using RossyntBackend.Utils;
 
 namespace RossyntBackendUnitTest {
     public class StringExtensionTest {
-        private readonly Fixture _fixture = new Fixture();
+        [NotNull] private readonly Fixture _fixture = new Fixture();
 
         // ******************************************************************************** //
 
