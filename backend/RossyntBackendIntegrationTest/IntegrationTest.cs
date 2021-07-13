@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -17,42 +18,43 @@ namespace RossyntBackendIntegrationTest {
         // ******************************************************************************** //
 
         [Test]
-        public async Task TestEmptyFile() {
-            using (var webApplicationFactory = new WebApplicationFactory<Startup>()) {
-                var httpClient = webApplicationFactory.CreateClient();
-                var parameters = new Dictionary<string, string> {
-                    ["FilePath"] = _fixture.Create<string>(),
-                    ["FileText"] = "",
-                };
-                var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/compileFile", new FormUrlEncodedContent(parameters));
-                Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
-                var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
-                var root = JObject.Parse(responseBody);
-                AssertNode(root, "SyntaxNode", "CompilationUnitSyntax", "CompilationUnit", "", "", false, 1);
-                AssertNode(root["Child"]?[0], "SyntaxToken", "SyntaxToken", "EndOfFileToken", "", "", false, 0);
-            }
-        }
+        public Task TestEmptyFile() => RunWithHttpClient(async httpClient => {
+            var parameters = new Dictionary<string, string> {
+                ["FilePath"] = _fixture.Create<string>(),
+                ["FileText"] = "",
+            };
+            var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/compileFile", new FormUrlEncodedContent(parameters));
+            Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
+            var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+            var root = JObject.Parse(responseBody);
+            AssertNode(root, "SyntaxNode", "CompilationUnitSyntax", "CompilationUnit", "", "", false, 1);
+            AssertNode(root["Child"]?[0], "SyntaxToken", "SyntaxToken", "EndOfFileToken", "", "", false, 0);
+        });
 
         [Test]
-        public async Task TestBasic() {
+        public Task TestSimpleFile() => RunWithHttpClient(async httpClient => {
+            var parameters = new Dictionary<string, string> {
+                ["FilePath"] = _fixture.Create<string>(),
+                ["FileText"] = "using\r\n",
+            };
+            var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/compileFile", new FormUrlEncodedContent(parameters));
+            Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
+            var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+            var root = JObject.Parse(responseBody);
+            AssertNode(root, "SyntaxNode", "CompilationUnitSyntax", "CompilationUnit", "using\r\n", "0,7", false, 2);
+            AssertNode(root["Child"]?[0], "SyntaxNode", "UsingDirectiveSyntax", "UsingDirective", "using\r\n", "0,7", false, 3);
+            AssertNode(root["Child"]?[0]?["Child"]?[0], "SyntaxToken", "SyntaxToken", "UsingKeyword", "using", "0,5", false, 1);
+            AssertNode(root["Child"]?[0]?["Child"]?[0]?["Child"]?[0], "TrailingTrivia", "SyntaxTrivia", "EndOfLineTrivia", "\r\n", "5,2", false, 0);
+            AssertNode(root["Child"]?[0]?["Child"]?[1], "SyntaxNode", "IdentifierNameSyntax", "IdentifierName", "", "", true, 1);
+            AssertNode(root["Child"]?[0]?["Child"]?[1]?["Child"]?[0], "SyntaxToken", "SyntaxToken", "IdentifierToken", "", "", true, 0);
+            AssertNode(root["Child"]?[0]?["Child"]?[2], "SyntaxToken", "SyntaxToken", "SemicolonToken", "", "", true, 0);
+            AssertNode(root["Child"]?[1], "SyntaxToken", "SyntaxToken", "EndOfFileToken", "", "", false, 0);
+        });
+
+        private static async Task RunWithHttpClient([NotNull] Func<HttpClient, Task> func) {
             using (var webApplicationFactory = new WebApplicationFactory<Startup>()) {
                 var httpClient = webApplicationFactory.CreateClient();
-                var parameters = new Dictionary<string, string> {
-                    ["FilePath"] = _fixture.Create<string>(),
-                    ["FileText"] = "using\r\n",
-                };
-                var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/compileFile", new FormUrlEncodedContent(parameters));
-                Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
-                var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
-                var root = JObject.Parse(responseBody);
-                AssertNode(root, "SyntaxNode", "CompilationUnitSyntax", "CompilationUnit", "using\r\n", "0,7", false, 2);
-                AssertNode(root["Child"]?[0], "SyntaxNode", "UsingDirectiveSyntax", "UsingDirective", "using\r\n", "0,7", false, 3);
-                AssertNode(root["Child"]?[0]?["Child"]?[0], "SyntaxToken", "SyntaxToken", "UsingKeyword", "using", "0,5", false, 1);
-                AssertNode(root["Child"]?[0]?["Child"]?[0]?["Child"]?[0], "TrailingTrivia", "SyntaxTrivia", "EndOfLineTrivia", "\r\n", "5,2", false, 0);
-                AssertNode(root["Child"]?[0]?["Child"]?[1], "SyntaxNode", "IdentifierNameSyntax", "IdentifierName", "", "", true, 1);
-                AssertNode(root["Child"]?[0]?["Child"]?[1]?["Child"]?[0], "SyntaxToken", "SyntaxToken", "IdentifierToken", "", "", true, 0);
-                AssertNode(root["Child"]?[0]?["Child"]?[2], "SyntaxToken", "SyntaxToken", "SemicolonToken", "", "", true, 0);
-                AssertNode(root["Child"]?[1], "SyntaxToken", "SyntaxToken", "EndOfFileToken", "", "", false, 0);
+                await func(httpClient);
             }
         }
 
