@@ -17,6 +17,23 @@ namespace RossyntBackendIntegrationTest {
         // ******************************************************************************** //
 
         [Test]
+        public async Task TestEmptyFile() {
+            using (var webApplicationFactory = new WebApplicationFactory<Startup>()) {
+                var httpClient = webApplicationFactory.CreateClient();
+                var parameters = new Dictionary<string, string> {
+                    ["FilePath"] = _fixture.Create<string>(),
+                    ["FileText"] = "",
+                };
+                var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/compileFile", new FormUrlEncodedContent(parameters));
+                Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
+                var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+                var root = JObject.Parse(responseBody);
+                AssertNode(root, "SyntaxNode", "CompilationUnitSyntax", "CompilationUnit", "", "", false, 1);
+                AssertNode(root["Child"]?[0], "SyntaxToken", "SyntaxToken", "EndOfFileToken", "", "", false, 0);
+            }
+        }
+
+        [Test]
         public async Task TestBasic() {
             using (var webApplicationFactory = new WebApplicationFactory<Startup>()) {
                 var httpClient = webApplicationFactory.CreateClient();
