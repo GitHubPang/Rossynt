@@ -12,12 +12,14 @@ COPY --from=mcr.microsoft.com/dotnet/core/aspnet:2.1 /usr/share/dotnet /usr/shar
 WORKDIR /source
 COPY *.sln .
 COPY RossyntBackendUnitTest/*.csproj ./RossyntBackendUnitTest/
+COPY RossyntBackendIntegrationTest/*.csproj ./RossyntBackendIntegrationTest/
 COPY RossyntBackend/*.csproj ./RossyntBackend/
 RUN dotnet restore
 
 # Copy everything else.
 WORKDIR /source
 COPY RossyntBackendUnitTest/. ./RossyntBackendUnitTest/
+COPY RossyntBackendIntegrationTest/. ./RossyntBackendIntegrationTest/
 COPY RossyntBackend/. ./RossyntBackend/
 
 # Run unit test.
@@ -25,6 +27,12 @@ WORKDIR /source/RossyntBackendUnitTest
 RUN dotnet test -c release --framework net5.0 -o /app-unit-test/net5.0
 RUN dotnet test -c release --framework netcoreapp3.1 -o /app-unit-test/netcoreapp3.1
 RUN dotnet test -c release --framework netcoreapp2.1 -o /app-unit-test/netcoreapp2.1
+
+# Run integration test.
+WORKDIR /source/RossyntBackendIntegrationTest
+RUN dotnet test -c release --framework net5.0 -o /app-integration-test/net5.0
+RUN dotnet test -c release --framework netcoreapp3.1 -o /app-integration-test/netcoreapp3.1
+RUN dotnet test -c release --framework netcoreapp2.1 -o /app-integration-test/netcoreapp2.1
 
 # Build app.
 WORKDIR /source/RossyntBackend

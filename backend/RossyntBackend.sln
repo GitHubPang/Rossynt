@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RossyntBackend", "RossyntBa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RossyntBackendUnitTest", "RossyntBackendUnitTest\RossyntBackendUnitTest.csproj", "{FE280CBB-367F-4D31-A193-747C3F230B73}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RossyntBackendIntegrationTest", "RossyntBackendIntegrationTest\RossyntBackendIntegrationTest.csproj", "{0AEA3A72-8D78-47A0-90A3-E81190324E25}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{FE280CBB-367F-4D31-A193-747C3F230B73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE280CBB-367F-4D31-A193-747C3F230B73}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE280CBB-367F-4D31-A193-747C3F230B73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AEA3A72-8D78-47A0-90A3-E81190324E25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AEA3A72-8D78-47A0-90A3-E81190324E25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AEA3A72-8D78-47A0-90A3-E81190324E25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AEA3A72-8D78-47A0-90A3-E81190324E25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
