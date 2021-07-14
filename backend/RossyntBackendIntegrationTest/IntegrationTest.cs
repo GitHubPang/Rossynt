@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -71,6 +72,17 @@ namespace RossyntBackendIntegrationTest {
             Assert.AreEqual("using", nodeInfo["UsingKeyword"]);
         });
 
+        [Test]
+        public Task TestResetActiveFile() => RunWithHttpClient(async httpClient => {
+            var root = await CompileFile(httpClient, "using");
+            var nodeId = root["Id"]?.Value<string>();
+            Assert.NotNull(nodeId);
+            var nodeInfo = await GetNodeInfo(httpClient, nodeId);
+            Assert.IsTrue(nodeInfo.Count > 0);
+            await ResetActiveFile(httpClient);
+            Assert.CatchAsync<Exception>(() => GetNodeInfo(httpClient, nodeId));
+        });
+
         private static async Task RunWithHttpClient([NotNull] Func<HttpClient, Task> func) {
             if (func == null) throw new ArgumentNullException(nameof(func));
             using (var webApplicationFactory = new WebApplicationFactory<Startup>()) {
@@ -84,10 +96,9 @@ namespace RossyntBackendIntegrationTest {
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (fileText == null) throw new ArgumentNullException(nameof(fileText));
 
-            var parameters = new Dictionary<string, string> {
-                ["FilePath"] = _fixture.Create<string>(),
-                ["FileText"] = fileText,
-            };
+            var parameters = ImmutableDictionary<string, string>.Empty;
+            parameters = parameters.Add("FilePath", _fixture.Create<string>());
+            parameters = parameters.Add("FileText", fileText);
             var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/compileFile", new FormUrlEncodedContent(parameters));
             Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
             var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
@@ -95,19 +106,26 @@ namespace RossyntBackendIntegrationTest {
         }
 
         [ItemNotNull]
-        private async Task<IDictionary<string, string>> GetNodeInfo([NotNull] HttpClient httpClient, [NotNull] string nodeId) {
+        private static async Task<IDictionary<string, string>> GetNodeInfo([NotNull] HttpClient httpClient, [NotNull] string nodeId) {
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (nodeId == null) throw new ArgumentNullException(nameof(nodeId));
 
-            var parameters = new Dictionary<string, string> {
-                ["NodeId"] = nodeId,
-            };
+            var parameters = ImmutableDictionary<string, string>.Empty;
+            parameters = parameters.Add("NodeId", nodeId);
             var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/getNodeInfo", new FormUrlEncodedContent(parameters));
             Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
             var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
             var dictionary = JsonConvert.DeserializeObject<IDictionary<string, string>>(responseBody);
             Assert.NotNull(dictionary);
             return dictionary;
+        }
+
+        private static async Task ResetActiveFile([NotNull] HttpClient httpClient) {
+            if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
+
+            var parameters = ImmutableDictionary<string, string>.Empty;
+            var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/resetActiveFile", new FormUrlEncodedContent(parameters));
+            Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
         }
 
         private static void AssertNode([CanBeNull] JToken node, [NotNull] string cat, [NotNull] string type, [NotNull] string kind, [NotNull] string str, [NotNull] string span, bool isMissing, int childCount) {
