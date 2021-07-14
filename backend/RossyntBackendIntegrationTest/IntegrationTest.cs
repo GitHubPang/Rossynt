@@ -20,14 +20,14 @@ namespace RossyntBackendIntegrationTest {
         // ******************************************************************************** //
 
         [Test]
-        public Task TestEmptyFile() => RunWithHttpClient(async httpClient => {
+        public Task CompileFile_EmptyFile() => RunWithHttpClient(async httpClient => {
             var root = await CompileFile(httpClient, "");
             AssertNode(root, "SyntaxNode", "CompilationUnitSyntax", "CompilationUnit", "", "", false, 1);
             AssertNode(root["Child"]?[0], "SyntaxToken", "SyntaxToken", "EndOfFileToken", "", "", false, 0);
         });
 
         [Test]
-        public Task TestSimpleFile() => RunWithHttpClient(async httpClient => {
+        public Task CompileFile() => RunWithHttpClient(async httpClient => {
             var root = await CompileFile(httpClient, "using\r\n");
             AssertNode(root, "SyntaxNode", "CompilationUnitSyntax", "CompilationUnit", "using\r\n", "0,7", false, 2);
             AssertNode(root["Child"]?[0], "SyntaxNode", "UsingDirectiveSyntax", "UsingDirective", "using\r\n", "0,7", false, 3);
@@ -40,10 +40,10 @@ namespace RossyntBackendIntegrationTest {
         });
 
         [Test]
-        public Task TestGetNodeInfo() => RunWithHttpClient(async httpClient => {
+        public Task GetNodeInfo() => RunWithHttpClient(async httpClient => {
             var root = await CompileFile(httpClient, "using");
             var nodeId = root["Child"]?[0]?["Id"]?.Value<string>();
-            Assert.NotNull(nodeId);
+            Assert.IsNotNull(nodeId);
             var nodeInfo = await GetNodeInfo(httpClient, nodeId);
             Assert.AreEqual(24, nodeInfo.Count);
             Assert.AreEqual("", nodeInfo["Alias"]);
@@ -73,14 +73,26 @@ namespace RossyntBackendIntegrationTest {
         });
 
         [Test]
-        public Task TestResetActiveFile() => RunWithHttpClient(async httpClient => {
+        public Task ResetActiveFile() => RunWithHttpClient(async httpClient => {
             var root = await CompileFile(httpClient, "using");
             var nodeId = root["Id"]?.Value<string>();
-            Assert.NotNull(nodeId);
+            Assert.IsNotNull(nodeId);
             var nodeInfo = await GetNodeInfo(httpClient, nodeId);
             Assert.IsTrue(nodeInfo.Count > 0);
             await ResetActiveFile(httpClient);
             Assert.CatchAsync<Exception>(() => GetNodeInfo(httpClient, nodeId));
+        });
+
+        [Test]
+        public Task FindNode() => RunWithHttpClient(async httpClient => {
+            var root = await CompileFile(httpClient, "int dummy;");
+            var nodeId = await FindNode(httpClient, 6, 6);
+            var node = root["Child"]?[0]; // GlobalStatement
+            node = node?["Child"]?[0]; // LocalDeclarationStatement
+            node = node?["Child"]?[0]; // VariableDeclaration
+            node = node?["Child"]?[1]; // VariableDeclarator
+            node = node?["Child"]?[0]; // IdentifierToken
+            Assert.AreEqual(nodeId, node?["Id"]?.Value<string>());
         });
 
         private static async Task RunWithHttpClient([NotNull] Func<HttpClient, Task> func) {
@@ -116,7 +128,7 @@ namespace RossyntBackendIntegrationTest {
             Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
             var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
             var dictionary = JsonConvert.DeserializeObject<IDictionary<string, string>>(responseBody);
-            Assert.NotNull(dictionary);
+            Assert.IsNotNull(dictionary);
             return dictionary;
         }
 
@@ -128,6 +140,25 @@ namespace RossyntBackendIntegrationTest {
             Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
         }
 
+        [ItemNotNull]
+        private static async Task<string> FindNode([NotNull] HttpClient httpClient, int start, int end) {
+            if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
+
+            var parameters = ImmutableDictionary<string, string>.Empty;
+            parameters = parameters.Add("Start", start.ToString());
+            parameters = parameters.Add("End", end.ToString());
+            var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/findNode", new FormUrlEncodedContent(parameters));
+            Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
+            var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+            var dictionary = JsonConvert.DeserializeObject<IDictionary<string, string>>(responseBody);
+            Assert.IsNotNull(dictionary);
+            Assert.AreEqual(1, dictionary.Count);
+            Assert.IsTrue(dictionary.ContainsKey("nodeId"));
+            var nodeId = dictionary["nodeId"];
+            Assert.IsNotNull(nodeId);
+            return nodeId;
+        }
+
         private static void AssertNode([CanBeNull] JToken node, [NotNull] string cat, [NotNull] string type, [NotNull] string kind, [NotNull] string str, [NotNull] string span, bool isMissing, int childCount) {
             if (cat == null) throw new ArgumentNullException(nameof(cat));
             if (type == null) throw new ArgumentNullException(nameof(type));
@@ -135,7 +166,7 @@ namespace RossyntBackendIntegrationTest {
             if (str == null) throw new ArgumentNullException(nameof(str));
             if (span == null) throw new ArgumentNullException(nameof(span));
 
-            Assert.NotNull(node);
+            Assert.IsNotNull(node);
             Assert.AreEqual(cat, node["Cat"]?.Value<string>());
             Assert.AreEqual(type, node["Type"]?.Value<string>());
             Assert.AreEqual(kind, node["Kind"]?.Value<string>());
