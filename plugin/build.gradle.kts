@@ -68,6 +68,8 @@ detekt {
     }
 }
 
+// Configure UI tests plugin
+// Read more: https://github.com/JetBrains/intellij-ui-test-robot
 tasks {
     // Set the compatibility versions to 1.8
     withType<JavaCompile> {
@@ -121,6 +123,17 @@ tasks {
         // until we upgrade to Java 11.
         //
         verifierVersion.set("1.256")
+    }
+
+    downloadRobotServerPlugin {
+        version.set("0.11.4")
+    }
+
+    runIdeForUiTests {
+        systemProperty("robot-server.port", "8082")
+        systemProperty("ide.mac.message.dialogs.as.sheets", "false")
+        systemProperty("jb.privacy.policy.text", "<!--999.999-->")
+        systemProperty("jb.consents.confirmation.enabled", "false")
     }
 
     publishPlugin {
