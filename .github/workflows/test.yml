@@ -4,7 +4,10 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        runs-on: [ ubuntu-latest, windows-latest, macos-latest ]
+    runs-on: ${{ matrix.runs-on }}
     steps:
       - name: Setup .NET Core SDK '2.1.x'
         uses: actions/setup-dotnet@v1.8.1
