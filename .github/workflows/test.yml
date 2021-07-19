@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Setup .NET Core SDK '2.1.x'
