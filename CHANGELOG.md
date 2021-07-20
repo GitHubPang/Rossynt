@@ -3,6 +3,7 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+## [202.3.0] - 2021-07-20
 ### Added
 - Compile file even if it's empty or whitespace only.
 
