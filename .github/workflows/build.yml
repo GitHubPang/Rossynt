@@ -21,8 +21,37 @@ on:
 
 jobs:
 
+  testBackend:
+    strategy:
+      matrix:
+        runs-on: [ ubuntu-latest, windows-latest, macos-latest ]
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - name: Setup .NET Core SDK '2.1.x'
+        uses: actions/setup-dotnet@v1.8.1
+        with:
+          dotnet-version: '2.1.x'
+
+      - name: Setup .NET Core SDK '3.1.x'
+        uses: actions/setup-dotnet@v1.8.1
+        with:
+          dotnet-version: '3.1.x'
+
+      - name: Setup .NET Core SDK '5.0.x'
+        uses: actions/setup-dotnet@v1.8.1
+        with:
+          dotnet-version: '5.0.x'
+
+      - name: Fetch Sources
+        uses: actions/checkout@v2.3.4
+
+      - name: Run Tests
+        working-directory: backend
+        run: dotnet test
+
   buildBackend:
     name: Build Backend
+    needs: testBackend
     runs-on: ubuntu-latest
     steps:
       - name: Docker Setup Buildx
