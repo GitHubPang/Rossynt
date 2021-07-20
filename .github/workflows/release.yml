@@ -44,7 +44,6 @@ jobs:
 
       # Update Unreleased section with the current version
       - name: Patch Changelog
-        working-directory: plugin
         run: ./patch-changelog.sh
 
       # Commit patched Changelog
