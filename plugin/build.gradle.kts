@@ -10,9 +10,9 @@ plugins {
     // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "1.5.20"
     // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
-    id("org.jetbrains.intellij") version "1.0"
+    id("org.jetbrains.intellij") version "1.1.2"
     // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
-    id("org.jetbrains.changelog") version "1.1.2"
+    id("org.jetbrains.changelog") version "1.2.0"
     // detekt linter - read more: https://detekt.github.io/detekt/gradle.html
     id("io.gitlab.arturbosch.detekt") version "1.17.1"
     // ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
@@ -50,9 +50,9 @@ intellij {
 // Configure gradle-changelog-plugin plugin.
 // Read more: https://github.com/JetBrains/gradle-changelog-plugin
 changelog {
-    version = properties("pluginVersion")
-    groups = emptyList()
-    path = File(projectDir, "../CHANGELOG.md").absolutePath
+    version.set(properties("pluginVersion"))
+    groups.set(emptyList())
+    path.set(File(projectDir, "../CHANGELOG.md").absolutePath)
 }
 
 // Configure detekt plugin.
@@ -71,17 +71,22 @@ detekt {
 // Configure UI tests plugin
 // Read more: https://github.com/JetBrains/intellij-ui-test-robot
 tasks {
-    // Set the compatibility versions to 1.8
-    withType<JavaCompile> {
-        sourceCompatibility = "1.8"
-        targetCompatibility = "1.8"
-    }
-    withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "1.8"
+    // Set the JVM compatibility versions
+    properties("javaVersion").let {
+        withType<JavaCompile> {
+            sourceCompatibility = it
+            targetCompatibility = it
+        }
+        withType<KotlinCompile> {
+            kotlinOptions.jvmTarget = it
+        }
+        withType<Detekt> {
+            jvmTarget = it
+        }
     }
 
-    withType<Detekt> {
-        jvmTarget = "1.8"
+    wrapper {
+        gradleVersion = properties("gradleVersion")
     }
 
     patchPluginXml {
@@ -123,10 +128,6 @@ tasks {
         // until we upgrade to Java 11.
         //
         verifierVersion.set("1.256")
-    }
-
-    downloadRobotServerPlugin {
-        version.set("0.11.4")
     }
 
     runIdeForUiTests {
