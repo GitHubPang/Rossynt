@@ -29,9 +29,9 @@ repositories {
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.17.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.5.0-native-mt")
-    implementation("io.ktor:ktor-client-core:1.5.4")
-    implementation("io.ktor:ktor-client-cio:1.5.4")
-    implementation("io.ktor:ktor-client-gson:1.5.4")
+    implementation("io.ktor:ktor-client-core:1.6.0")
+    implementation("io.ktor:ktor-client-cio:1.6.0")
+    implementation("io.ktor:ktor-client-gson:1.6.0")
 }
 
 // Configure gradle-intellij-plugin plugin.
