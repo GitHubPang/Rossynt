@@ -69,7 +69,6 @@ The most significant parts of the current configuration are:
 - Support for Kotlin and Java implementation.
 - Integration with the [gradle-changelog-plugin][gh:gradle-changelog-plugin], which automatically patches the change notes and description based on the `CHANGELOG.md` and `README.md` files.
 - Integration with the [gradle-intellij-plugin][gh:gradle-intellij-plugin] for smoother development.
-- Code linting with [detekt][detekt].
 - [Plugin publishing][docs:publishing] using the token.
 
 The project-specific configuration file [gradle.properties][file:gradle.properties] contains:
@@ -88,18 +87,7 @@ The project-specific configuration file [gradle.properties][file:gradle.properti
 
 The properties listed define the plugin itself or configure the [gradle-intellij-plugin][gh:gradle-intellij-plugin] – check its documentation for more details.
 
-### Dependency on the Kotlin standard library
-
-Since Kotlin 1.4, a dependency on a standard library (`stdlib`) is added automatically.
-In most cases, it is not necessary to distribute this library with a plugin.
- 
-The [gradle.properties][file:gradle.properties] file explicitly alters the default behaviour of the Kotlin Gradle plugin by specifying this opt-out property:
-
-```
-kotlin.stdlib.default.dependency = false
-```
-
-For more details, please see: [Dependency on the standard library][kotlin-docs-dependency-on-stdlib] in Kotlin documentation.
+For more details regarding Kotlin integration, please see: [Kotlin for Plugin Developers][kotlin-for-plugin-developers] section in the IntelliJ Platform Plugin SDK documentation.
 
 
 ## Plugin template structure
@@ -114,7 +102,6 @@ A generated IntelliJ Platform Plugin Template repository contains the following 
 ├── README.md               README
 ├── build/                  Output build directory
 ├── build.gradle.kts        Gradle configuration
-├── detekt-config.yml       Detekt configuration
 ├── gradle
 │   └── wrapper/            Gradle Wrapper
 ├── gradle.properties       Gradle configuration properties
@@ -186,7 +173,7 @@ Within the default project structure, there is a `.run` directory provided conta
 | Configuration name | Description                                                                                                                                                            |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Run Plugin         | Runs [`:runIde`][gh:gradle-intellij-plugin-running-dsl] Gradle IntelliJ Plugin task. Use the *Debug* icon for plugin debugging.                                        |
-| Run Tests          | Runs [`:check`][gradle-lifecycle-tasks] Gradle task that invokes `:test` and `detekt`/`ktlint` code inspections.                                                       |
+| Run Tests          | Runs [`:test`][gradle-lifecycle-tasks] Gradle task.                                                                                                                    |
 | Run Verifications  | Runs [`:runPluginVerifier`][gh:gradle-intellij-plugin-verifier-dsl] Gradle IntelliJ Plugin task to check the plugin compatibility against the specified IntelliJ IDEs. |
 
 
@@ -229,9 +216,14 @@ Keeping the project in good shape and having all the dependencies up-to-date req
 
 Dependabot is a bot provided by GitHub for checking the build configuration files and reviewing any outdated or insecure dependencies of yours – in case if any update is available, it creates a new pull request providing [the proper change][gh:dependabot-pr].
 
-> **Note:** Dependabot doesn't yet support checking of the Gradle Wrapper. Check the [Gradle Releases][gradle-releases] page and update it with:
+> **Note:** Dependabot doesn't yet support checking of the Gradle Wrapper.
+> Check the [Gradle Releases][gradle-releases] page and update your `gradle.properties` file with:
+> ```properties
+> gradleVersion = 7.1.1
+> ```
+> and run
 > ```bash
-> ./gradlew wrapper --gradle-version 6.8
+> ./gradlew wrapper
 > ```
 
 ### Changelog maintenance
@@ -279,16 +271,8 @@ You can still replace it or add next to it the `/src/main/java` to start working
 
 ### How to disable tests or build job using the `[skip ci]` commit message?
 
-You can disable specific tests using the [`if`][github-actions-if] condition, like:
-
-```yaml
-jobs:
-  test:
-    name: Test
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
-    steps:
-      ...
-```
+Since the February 2021, GitHub Actions [support the skip CI feature][github-actions-skip-ci].
+If the message contains one of the following strings: `[skip ci]`, `[ci skip]`, `[no ci]`, `[skip actions]`, or `[actions skip]` – workflows will not be triggered.
 
 
 ## Useful links
@@ -346,10 +330,9 @@ jobs:
 [jb:ui-guidelines]: https://jetbrains.github.io/ui
 
 [keep-a-changelog]: https://keepachangelog.com
-[detekt]: https://detekt.github.io/detekt
-[github-actions-if]: https://docs.github.com/en/free-pro-team@latest/actions/reference/context-and-expression-syntax-for-github-actions#example-expression-in-an-if-conditional
+[github-actions-skip-ci]: https://github.blog/changelog/2021-02-08-github-actions-skip-pull-request-and-push-workflows-with-skip-ci/
 [gradle]: https://gradle.org
 [gradle-releases]: https://gradle.org/releases
 [gradle-kotlin-dsl]: https://docs.gradle.org/current/userguide/kotlin_dsl.html
 [gradle-lifecycle-tasks]: https://docs.gradle.org/current/userguide/java_plugin.html#lifecycle_tasks
-[kotlin-docs-dependency-on-stdlib]: https://kotlinlang.org/docs/reference/using-gradle.html#dependency-on-the-standard-library
+[kotlin-for-plugin-developers]: https://plugins.jetbrains.com/docs/intellij/kotlin.html#adding-kotlin-support
