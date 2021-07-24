@@ -22,6 +22,7 @@ on:
 jobs:
 
   testBackend:
+    name: Test Backend
     strategy:
       matrix:
         runs-on: [ ubuntu-latest, windows-latest, macos-latest ]

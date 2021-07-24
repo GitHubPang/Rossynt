@@ -44,6 +44,9 @@ These are all included if you have installed [.NET SDK](https://dotnet.microsoft
   Download the [latest release](https://github.com/GitHubPang/Rossynt/releases/latest) and install it manually using
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
+## Other Docs
+
+[Changelog](CHANGELOG.md)
 
 ---
 <sub>Plugin based on the [IntelliJ Platform Plugin Template][template]. Commits are cherry-picked from that repository from time to time, which explains why GitHub shows some authors as contributors even though they don't commit to this repository directly.</sub>
