@@ -121,6 +121,8 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
 
             // Update highlight.
             updateRangeHighlighters()
+
+            //todo scroll to selected?
         }
     }
 
