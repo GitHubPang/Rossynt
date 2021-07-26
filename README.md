@@ -35,10 +35,10 @@ These are all included if you have installed [.NET SDK](https://dotnet.microsoft
 ## Installation
 
 - Using IDE built-in plugin system:
-  
+
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "Rossynt"</kbd> >
   <kbd>Install Plugin</kbd>
-  
+
 - Manually:
 
   Download the [latest release](https://github.com/GitHubPang/Rossynt/releases/latest) and install it manually using

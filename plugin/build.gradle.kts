@@ -1,4 +1,3 @@
-import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -8,15 +7,11 @@ plugins {
     // Java support
     id("java")
     // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.5.10"
+    id("org.jetbrains.kotlin.jvm") version "1.5.21"
     // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
-    id("org.jetbrains.intellij") version "1.0"
+    id("org.jetbrains.intellij") version "1.1.4"
     // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
-    id("org.jetbrains.changelog") version "1.1.2"
-    // detekt linter - read more: https://detekt.github.io/detekt/gradle.html
-    id("io.gitlab.arturbosch.detekt") version "1.17.1"
-    // ktlint linter - read more: https://github.com/JLLeitschuh/ktlint-gradle
-    id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
+    id("org.jetbrains.changelog") version "1.2.1"
 }
 
 group = properties("pluginGroup")
@@ -27,11 +22,11 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.17.1")
+    // https://kotlinlang.org/docs/releases.html#release-details
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.5.0-native-mt")
-    implementation("io.ktor:ktor-client-core:1.5.4")
-    implementation("io.ktor:ktor-client-cio:1.5.4")
-    implementation("io.ktor:ktor-client-gson:1.5.4")
+    implementation("io.ktor:ktor-client-core:1.6.0")
+    implementation("io.ktor:ktor-client-cio:1.6.0")
+    implementation("io.ktor:ktor-client-gson:1.6.0")
 }
 
 // Configure gradle-intellij-plugin plugin.
@@ -50,36 +45,27 @@ intellij {
 // Configure gradle-changelog-plugin plugin.
 // Read more: https://github.com/JetBrains/gradle-changelog-plugin
 changelog {
-    version = properties("pluginVersion")
-    groups = emptyList()
-    path = File(projectDir, "../CHANGELOG.md").absolutePath
+    version.set(properties("pluginVersion"))
+    groups.set(emptyList())
+    path.set(File(projectDir, "../CHANGELOG.md").absolutePath)
 }
 
-// Configure detekt plugin.
-// Read more: https://detekt.github.io/detekt/kotlindsl.html
-detekt {
-    config = files("./detekt-config.yml")
-    buildUponDefaultConfig = true
-
-    reports {
-        html.enabled = false
-        xml.enabled = false
-        txt.enabled = false
-    }
-}
-
+// Configure UI tests plugin
+// Read more: https://github.com/JetBrains/intellij-ui-test-robot
 tasks {
-    // Set the compatibility versions to 1.8
-    withType<JavaCompile> {
-        sourceCompatibility = "1.8"
-        targetCompatibility = "1.8"
-    }
-    withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "1.8"
+    // Set the JVM compatibility versions
+    properties("javaVersion").let {
+        withType<JavaCompile> {
+            sourceCompatibility = it
+            targetCompatibility = it
+        }
+        withType<KotlinCompile> {
+            kotlinOptions.jvmTarget = it
+        }
     }
 
-    withType<Detekt> {
-        jvmTarget = "1.8"
+    wrapper {
+        gradleVersion = properties("gradleVersion")
     }
 
     patchPluginXml {
@@ -106,21 +92,13 @@ tasks {
 
     runPluginVerifier {
         ideVersions.set(properties("pluginVerifierIdeVersions").split(',').map(String::trim).filter(String::isNotEmpty))
+    }
 
-        // Plugin verifier is failing:
-        // https://github.com/GitHubPang/Rossynt/runs/3014560462?check_suite_focus=true
-        //
-        // This is because it now requires Java 11:
-        // > Plugin Verifier versions starting with 1.260 require Java 11, before that Java 8 was enough.
-        // https://github.com/JetBrains/intellij-plugin-verifier/tree/2d98f041c814fd703675408efd33918c384169f6#options
-        //
-        // While our plugin is still using Java 8:
-        // https://github.com/GitHubPang/Rossynt/blob/eb626a9d5ad474657373d2e9cd42b1a766b3ee15/plugin/build.gradle.kts#L73-L83
-        //
-        // So for now, let's use an older version of the verifier
-        // until we upgrade to Java 11.
-        //
-        verifierVersion.set("1.256")
+    runIdeForUiTests {
+        systemProperty("robot-server.port", "8082")
+        systemProperty("ide.mac.message.dialogs.as.sheets", "false")
+        systemProperty("jb.privacy.policy.text", "<!--999.999-->")
+        systemProperty("jb.consents.confirmation.enabled", "false")
     }
 
     publishPlugin {

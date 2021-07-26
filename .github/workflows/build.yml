@@ -94,12 +94,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      # Setup Java 1.8 environment for the next steps
+      # Setup Java 11 environment for the next steps
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
           distribution: zulu
-          java-version: 8
+          java-version: 11
 
       # Check out current repository
       - name: Fetch Sources
@@ -119,13 +119,8 @@ jobs:
           path: ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
 
-#      # Run detekt, ktlint and tests
-#      - name: Run Linters and Test
-#        working-directory: plugin
-#        run: ./gradlew check
-
-      # Run unit test
-      - name: Run Unit Test
+      # Run tests
+      - name: Run Tests
         working-directory: plugin
         run: ./gradlew test
 
@@ -147,12 +142,12 @@ jobs:
       artifact: ${{ steps.properties.outputs.artifact }}
     steps:
 
-      # Setup Java 1.8 environment for the next steps
+      # Setup Java 11 environment for the next steps
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
           distribution: zulu
-          java-version: 8
+          java-version: 11
 
       # Check out current repository
       - name: Fetch Sources
@@ -218,12 +213,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      # Setup Java 1.8 environment for the next steps
+      # Setup Java 11 environment for the next steps
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
           distribution: zulu
-          java-version: 8
+          java-version: 11
 
       # Check out current repository
       - name: Fetch Sources
