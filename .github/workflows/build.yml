@@ -89,13 +89,8 @@ jobs:
           path: ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
 
-#      # Run detekt, ktlint and tests
-#      - name: Run Linters and Test
-#        working-directory: plugin
-#        run: ./gradlew check
-
-      # Run unit test
-      - name: Run Unit Test
+      # Run tests
+      - name: Run Tests
         working-directory: plugin
         run: ./gradlew test
 
