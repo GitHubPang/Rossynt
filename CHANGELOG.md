@@ -3,6 +3,9 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Changed
+- Support IntelliJ Platform 2021.2.
+
 ## [202.3.0] - 2021-07-20
 ### Added
 - Compile file even if it's empty or whitespace only.
