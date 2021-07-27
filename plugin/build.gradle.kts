@@ -26,7 +26,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.5.0-native-mt")
     implementation("io.ktor:ktor-client-core:1.6.0")
     implementation("io.ktor:ktor-client-cio:1.6.0")
-    implementation("io.ktor:ktor-client-gson:1.6.0")
+    implementation("io.ktor:ktor-client-gson:1.6.1")
 }
 
 // Configure gradle-intellij-plugin plugin.
