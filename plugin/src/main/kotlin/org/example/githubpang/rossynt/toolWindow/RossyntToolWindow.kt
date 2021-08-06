@@ -39,6 +39,7 @@ import java.awt.Component
 import java.awt.Font
 import javax.swing.JComponent
 import javax.swing.JTable
+import javax.swing.JTree
 import javax.swing.table.AbstractTableModel
 import javax.swing.table.DefaultTableCellRenderer
 import javax.swing.tree.DefaultMutableTreeNode
@@ -106,6 +107,13 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
             }
 
             return component
+        }
+    }
+
+    private class RossyntTreeExpander(tree: JTree) : DefaultTreeExpander(tree) {
+        override fun collapseAll(tree: JTree, keepSelectionLevel: Int) {
+            super.collapseAll(tree, 2)
+            TreeUtil.expand(tree, 1)
         }
     }
 
@@ -182,7 +190,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         })
 
         // Add tool window buttons.
-        val collapseAction = CollapseAllAction { DefaultTreeExpander(uiTree) }
+        val collapseAction = CollapseAllAction { RossyntTreeExpander(uiTree) }
         toolWindow.setTitleActions(listOf(ToggleHighlightNodeInSourceAction(), SelectNodeAtCaretAction(), collapseAction))
 
         // Setup banner.
