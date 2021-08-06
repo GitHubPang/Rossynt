@@ -4,7 +4,9 @@ import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableMap
 import com.intellij.CommonBundle
 import com.intellij.icons.AllIcons
+import com.intellij.ide.DefaultTreeExpander
 import com.intellij.ide.HelpTooltip
+import com.intellij.ide.actions.CollapseAllAction
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.ToggleAction
@@ -24,7 +26,6 @@ import com.intellij.ui.EditorNotificationPanel
 import com.intellij.ui.JBSplitter
 import com.intellij.ui.ScrollPaneFactory
 import com.intellij.ui.treeStructure.Tree
-import com.intellij.ui.treeStructure.actions.CollapseAllAction
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.StatusText
 import com.intellij.util.ui.tree.TreeUtil
@@ -181,8 +182,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         })
 
         // Add tool window buttons.
-        val collapseAction = CollapseAllAction(uiTree)
-        collapseAction.templatePresentation.icon = AllIcons.Actions.Collapseall
+        val collapseAction = CollapseAllAction { DefaultTreeExpander(uiTree) }
         toolWindow.setTitleActions(listOf(ToggleHighlightNodeInSourceAction(), SelectNodeAtCaretAction(), collapseAction))
 
         // Setup banner.
