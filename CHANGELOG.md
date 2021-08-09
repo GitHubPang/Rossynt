@@ -3,6 +3,12 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Added
+- Added shortcut key for the Collapse All action for the tree view.
+
+### Changed
+- After Collapse All in tree view, automatically expand the root node.
+
 ## [203.0.0] - 2021-07-27
 ### Changed
 - Support IntelliJ Platform 2021.2.
