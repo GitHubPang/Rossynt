@@ -9,6 +9,9 @@
 ### Changed
 - After Collapse All in tree view, automatically expand the root node.
 
+### Fixed
+- Fixed incorrect default location of dotnet executable on Windows as installed by Rider. (ca91f6f5c1f57612775fc3141b65d37850146c53)
+
 ## [203.0.0] - 2021-07-27
 ### Changed
 - Support IntelliJ Platform 2021.2.
