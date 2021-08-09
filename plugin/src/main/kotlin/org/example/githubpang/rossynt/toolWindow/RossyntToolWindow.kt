@@ -4,9 +4,9 @@ import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableMap
 import com.intellij.CommonBundle
 import com.intellij.icons.AllIcons
+import com.intellij.ide.CommonActionsManager
 import com.intellij.ide.DefaultTreeExpander
 import com.intellij.ide.HelpTooltip
-import com.intellij.ide.actions.CollapseAllAction
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.ToggleAction
@@ -190,7 +190,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         })
 
         // Add tool window buttons.
-        val collapseAction = CollapseAllAction { RossyntTreeExpander(uiTree) }
+        val collapseAction = CommonActionsManager.getInstance().createCollapseAllAction(RossyntTreeExpander(uiTree), uiTree)
         toolWindow.setTitleActions(listOf(ToggleHighlightNodeInSourceAction(), SelectNodeAtCaretAction(), collapseAction))
 
         // Setup banner.
