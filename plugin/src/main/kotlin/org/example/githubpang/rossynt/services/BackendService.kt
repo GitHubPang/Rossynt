@@ -51,6 +51,7 @@ internal class BackendService : IBackendService {
             arrayOf(
                 "/home/user/share/dotnet/dotnet", // Default location of dotnet executable on Linux.
                 "/usr/local/share/dotnet/dotnet", // Default location of dotnet executable on macOS.
+                File(System.getProperty("user.home"), ".dotnet/dotnet").absolutePath, // Default location of dotnet executable on macOS as installed by Rider.
             )
         }
     }
