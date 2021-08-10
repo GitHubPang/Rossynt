@@ -4,14 +4,17 @@
 
 ## [Unreleased]
 ### Added
-- Added shortcut key for the Collapse All action for the tree view. (a464721a83ddea68b7e3b54753a9f1e4e24cf98f)
 - Added recognizing default location of dotnet executable on macOS as installed by Rider. (362c0e20edb42e8a802d1e48293eb3af405a4b46)
-
-### Changed
-- After Collapse All in tree view, automatically expand the root node. (eb8d2fde416f30a76e251ae2a4e8608378660345)
 
 ### Fixed
 - Fixed incorrect default location of dotnet executable on Windows as installed by Rider. (ca91f6f5c1f57612775fc3141b65d37850146c53)
+
+## [Unreleased]
+### Added
+- Added shortcut key for the Collapse All action for the tree view. (a464721a83ddea68b7e3b54753a9f1e4e24cf98f)
+
+### Changed
+- After Collapse All in tree view, automatically expand the root node. (eb8d2fde416f30a76e251ae2a4e8608378660345)
 
 ## [203.0.0] - 2021-07-27
 ### Changed
