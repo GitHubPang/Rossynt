@@ -3,6 +3,12 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Added
+- Added recognizing default location of dotnet executable on macOS as installed by Rider. (362c0e20edb42e8a802d1e48293eb3af405a4b46)
+
+### Fixed
+- Fixed incorrect default location of dotnet executable on Windows as installed by Rider. (ca91f6f5c1f57612775fc3141b65d37850146c53)
+
 ## [203.1.0] - 2021-08-11
 ### Added
 - Added shortcut key for the Collapse All action for the tree view. (a464721a83ddea68b7e3b54753a9f1e4e24cf98f)

@@ -45,12 +45,13 @@ internal class BackendService : IBackendService {
         private val DEFAULT_DOT_NET_PATHS = if (SystemInfoRt.isWindows) {
             arrayOf(
                 "C:\\program files\\dotnet\\dotnet.exe", // Default location of dotnet executable on Windows.
-                "C:\\Users\\User\\.dotnet\\dotnet.exe", // Default location of dotnet executable on Windows as installed by Rider.
+                File(System.getProperty("user.home"), ".dotnet\\dotnet.exe").absolutePath, // Default location of dotnet executable on Windows as installed by Rider.
             )
         } else {
             arrayOf(
                 "/home/user/share/dotnet/dotnet", // Default location of dotnet executable on Linux.
                 "/usr/local/share/dotnet/dotnet", // Default location of dotnet executable on macOS.
+                File(System.getProperty("user.home"), ".dotnet/dotnet").absolutePath, // Default location of dotnet executable on macOS as installed by Rider.
             )
         }
     }
