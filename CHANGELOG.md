@@ -3,6 +3,7 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+## [203.1.0] - 2021-08-11
 ### Added
 - Added shortcut key for the Collapse All action for the tree view. (a464721a83ddea68b7e3b54753a9f1e4e24cf98f)
 
