@@ -26,7 +26,7 @@ The output will be in `plugin/src/main/resources/raw/RossyntBackend`.
 
 #### System Requirements
 
-_TBA_
+* Java SDK
 
 #### Steps
 
