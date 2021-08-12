@@ -27,6 +27,7 @@ namespace RossyntBackend {
 #if NET5_0 || NETCOREAPP3_1
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
+            app.UseMiddleware<ApplicationLifetimeMiddleware>();
             app.UseRouting();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
             Configure(app);
@@ -34,6 +35,7 @@ namespace RossyntBackend {
 #elif NETCOREAPP2_1
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
+            app.UseMiddleware<ApplicationLifetimeMiddleware>();
             app.UseMvc(routes => routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}"));
             Configure(app);
         }

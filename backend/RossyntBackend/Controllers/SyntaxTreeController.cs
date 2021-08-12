@@ -8,7 +8,6 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Text;
 using Newtonsoft.Json;
-using RossyntBackend.ApplicationLifetime;
 using RossyntBackend.Models;
 using RossyntBackend.Repositories;
 using RossyntBackend.Utils;
@@ -22,28 +21,22 @@ namespace RossyntBackend.Controllers {
         // ******************************************************************************** //
 
         [NotNull] private readonly IProjectRepository _projectRepository;
-        [NotNull] private readonly IApplicationLifetimeService _applicationLifetimeService;
 
         // ******************************************************************************** //
 
-        public SyntaxTreeController([NotNull] IProjectRepository projectRepository, [NotNull] IApplicationLifetimeService applicationLifetimeService) {
+        public SyntaxTreeController([NotNull] IProjectRepository projectRepository) {
             _projectRepository = projectRepository ?? throw new ArgumentNullException(nameof(projectRepository));
-            _applicationLifetimeService = applicationLifetimeService ?? throw new ArgumentNullException(nameof(applicationLifetimeService));
         }
 
         [HttpPost(nameof(Ping))]
         public void Ping() {
-            // Restart application lifetime countdown.
-            _applicationLifetimeService.RestartCountdown();
+            // Nothing to do.
         }
 
         [HttpPost(nameof(CompileFile))]
         [NotNull, ItemNotNull]
         public async Task<IActionResult> CompileFile([NotNull] [FromForm] CompileFileRequest request) {
             if (request == null) throw new ArgumentNullException(nameof(request));
-
-            // Restart application lifetime countdown.
-            _applicationLifetimeService.RestartCountdown();
 
             // Compile tree.
             var tree = await Tree.CompileFile(request.FileText, request.FilePath, HttpContext.RequestAborted);
@@ -67,9 +60,6 @@ namespace RossyntBackend.Controllers {
 
         [HttpPost(nameof(ResetActiveFile))]
         public void ResetActiveFile() {
-            // Restart application lifetime countdown.
-            _applicationLifetimeService.RestartCountdown();
-
             // Clear in repository.
             _projectRepository.RemoveTree();
         }
@@ -78,9 +68,6 @@ namespace RossyntBackend.Controllers {
         [NotNull]
         public IReadOnlyDictionary<string, string> GetNodeInfo([NotNull] [FromForm] GetNodeInfoRequest request) {
             if (request == null) throw new ArgumentNullException(nameof(request));
-
-            // Restart application lifetime countdown.
-            _applicationLifetimeService.RestartCountdown();
 
             // Get tree.
             var tree = _projectRepository.GetTree();
@@ -101,9 +88,6 @@ namespace RossyntBackend.Controllers {
         [NotNull]
         public IReadOnlyDictionary<string, string> FindNode([NotNull] [FromForm] FindNodeRequest request) {
             if (request == null) throw new ArgumentNullException(nameof(request));
-
-            // Restart application lifetime countdown.
-            _applicationLifetimeService.RestartCountdown();
 
             // Get tree.
             var tree = _projectRepository.GetTree();
