@@ -154,7 +154,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
     private var isHighlightSelectedTreeNode = false
 
     // UI.
-    private val uiTree: Tree = Tree()
+    private val uiTree: Tree = Tree()//todo add TreeSpeedSearch - https://plugins.jetbrains.com/docs/intellij/lists-and-trees.html#listspeedsearch-and-treespeedsearch
     private val uiBanner = EditorNotificationPanel(MessageType.ERROR.popupBackground)
     private val uiTable: JTable = JTable(UiTableModel())
     private val uiSplitter: JBSplitter = JBSplitter()
