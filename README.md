@@ -9,7 +9,9 @@
 <!-- Plugin description -->
 Rossynt - **Ros**lyn **syn**tax **t**ree viewer for C#. Works on JetBrains Rider and all other IntelliJ IDEA-based IDEs.
 
-[Changelog](CHANGELOG.md) | [Build](docs/build.md)
+[Changelog](CHANGELOG.md)
+| [Architecture](docs/architecture.md)
+| [Build](docs/build.md)
 
 ## System Requirements
 
