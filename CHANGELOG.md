@@ -3,6 +3,7 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+## [203.2.0] - 2021-08-18
 ### Added
 - Added recognizing default location of dotnet executable on macOS as installed by Rider. (362c0e20edb42e8a802d1e48293eb3af405a4b46)
 
