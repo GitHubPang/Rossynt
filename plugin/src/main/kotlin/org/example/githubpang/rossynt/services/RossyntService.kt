@@ -316,7 +316,7 @@ internal class RossyntService : Disposable {
         }
     }
 
-    companion object {
+    private companion object {
         private fun convertLineSeparators(text: String?, newSeparator: String): String? = when (text) {
             null -> null
             else -> StringUtil.convertLineSeparators(text, newSeparator)
