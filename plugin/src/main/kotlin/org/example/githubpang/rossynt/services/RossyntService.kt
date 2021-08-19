@@ -12,7 +12,6 @@ import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent
 import com.intellij.openapi.fileEditor.FileEditorManagerListener
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.text.StringUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -241,7 +240,7 @@ internal class RossyntService : Disposable {
 
             val fetchingState = expectedState
             GlobalScope.launch(Dispatchers.IO) {
-                val rootTreeNode = backendService.compileFile(convertLineSeparators(fetchingState.fileText, fetchingState.lineSeparator), fetchingState.filePath)
+                val rootTreeNode = backendService.compileFile(RossyntUtil.convertLineSeparators(fetchingState.fileText, fetchingState.lineSeparator), fetchingState.filePath)
                 launch(Dispatchers.Main) {
                     if (fetchingState.uniqueId == expectedState.uniqueId) {
                         setCurrentData(Data(fetchingState.fileText, fetchingState.lineSeparator, fetchingState.filePath, rootTreeNode, null, null))
@@ -313,13 +312,6 @@ internal class RossyntService : Disposable {
             val messageBus = project.messageBus
             val publisher = messageBus.syncPublisher(RossyntServiceNotifier.TOPIC)
             publisher.nodeInfoUpdated(currentData.nodeInfo)
-        }
-    }
-
-    private companion object {
-        private fun convertLineSeparators(text: String?, newSeparator: String): String? = when (text) {
-            null -> null
-            else -> StringUtil.convertLineSeparators(text, newSeparator)
         }
     }
 }
