@@ -9,4 +9,9 @@ internal object LineSeparatorUtil {
         null -> null
         else -> StringUtil.convertLineSeparators(text, newSeparator)
     }
+
+    @Contract(pure = true)
+    fun convertOffset(offset: Int, text: String?, oldSeparator: String, newSeparator: String): Int {
+        return text?.substring(0, offset)?.replace(oldSeparator, newSeparator)?.length ?: offset
+    }
 }

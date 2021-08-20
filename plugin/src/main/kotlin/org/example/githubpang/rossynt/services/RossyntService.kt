@@ -12,6 +12,8 @@ import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent
 import com.intellij.openapi.fileEditor.FileEditorManagerListener
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.TextRange
+import com.intellij.util.LineSeparator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -199,24 +201,34 @@ internal class RossyntService : Disposable {
 
     fun findNodeAtCaret() {
         val backendService = backendService ?: return
-        val project = project ?: return
 
         if (!isBackendServiceStarted) {
             return
         }
 
-        val selection = FileEditorManager.getInstance(project).selectedTextEditor?.selectionModel ?: return
-        val selectionStart = selection.selectionStart
-        val selectionEnd = selection.selectionEnd
+        val selection = getSelection() ?: return
         GlobalScope.launch(Dispatchers.IO) {
-            val nodeId = backendService.findNode(selectionStart, selectionEnd)
+            val nodeId = backendService.findNode(selection.startOffset, selection.endOffset)
             launch(Dispatchers.Main) innerLaunch@{
-                val newSelection = FileEditorManager.getInstance(project).selectedTextEditor?.selectionModel ?: return@innerLaunch
-                if (selectionStart == newSelection.selectionStart && selectionEnd == newSelection.selectionEnd) {
+                val newSelection = getSelection() ?: return@innerLaunch
+                if (selection == newSelection) {
                     delegate?.onFindNodeAtCaretResult(nodeId)
                 }
             }
         }
+    }
+
+    private fun getSelection(): TextRange? {
+        val project = project ?: return null
+
+        val fileText = FileEditorManager.getInstance(project).selectedTextEditor?.document?.text
+        val file = FileEditorManager.getInstance(project).selectedEditor?.file
+        val lineSeparator = FileDocumentManager.getInstance().getLineSeparator(file, project)
+        val selection = FileEditorManager.getInstance(project).selectedTextEditor?.selectionModel ?: return null
+        val selectionStart = LineSeparatorUtil.convertOffset(selection.selectionStart, fileText, LineSeparator.LF.separatorString, lineSeparator)
+        val selectionEnd = LineSeparatorUtil.convertOffset(selection.selectionEnd, fileText, LineSeparator.LF.separatorString, lineSeparator)
+
+        return TextRange(selectionStart, selectionEnd)
     }
 
     private fun refreshCurrentData() {
