@@ -220,18 +220,20 @@ internal class RossyntService : Disposable {
 
     private fun getSelection(): TextRange? {
         val project = project ?: return null
+        val selection = FileEditorManager.getInstance(project).selectedTextEditor?.selectionModel ?: return null
+        val selectionStart = convertToPhysicalOffset(selection.selectionStart) ?: return null
+        val selectionEnd = convertToPhysicalOffset(selection.selectionEnd) ?: return null
 
+        return TextRange(selectionStart, selectionEnd)
+    }
+
+    private fun convertToPhysicalOffset(virtualOffset: Int): Int? {
         if (isRefreshingCurrentData) {
             return null
         }
 
-        val fileText = currentData.fileText
-        val fileTextLength = fileText?.length ?: 0
-        val selection = FileEditorManager.getInstance(project).selectedTextEditor?.selectionModel ?: return null
-        val selectionStart = LineSeparatorUtil.convertOffset(selection.selectionStart.coerceAtMost(fileTextLength), fileText, LineSeparator.LF.separatorString, currentData.lineSeparator)
-        val selectionEnd = LineSeparatorUtil.convertOffset(selection.selectionEnd.coerceAtMost(fileTextLength), fileText, LineSeparator.LF.separatorString, currentData.lineSeparator)
-
-        return TextRange(selectionStart, selectionEnd)
+        val fileText = currentData.fileText ?: return null
+        return LineSeparatorUtil.convertOffset(virtualOffset.coerceAtMost(fileText.length), fileText, LineSeparator.LF.separatorString, currentData.lineSeparator)
     }
 
     private fun refreshCurrentData() {
