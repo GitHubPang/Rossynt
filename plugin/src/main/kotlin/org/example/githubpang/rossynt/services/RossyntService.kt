@@ -221,12 +221,15 @@ internal class RossyntService : Disposable {
     private fun getSelection(): TextRange? {
         val project = project ?: return null
 
-        val fileText = FileEditorManager.getInstance(project).selectedTextEditor?.document?.text
-        val file = FileEditorManager.getInstance(project).selectedEditor?.file
-        val lineSeparator = FileDocumentManager.getInstance().getLineSeparator(file, project)
+        if (isRefreshingCurrentData) {
+            return null
+        }
+
+        val fileText = currentData.fileText
+        val fileTextLength = fileText?.length ?: 0
         val selection = FileEditorManager.getInstance(project).selectedTextEditor?.selectionModel ?: return null
-        val selectionStart = LineSeparatorUtil.convertOffset(selection.selectionStart, fileText, LineSeparator.LF.separatorString, lineSeparator)
-        val selectionEnd = LineSeparatorUtil.convertOffset(selection.selectionEnd, fileText, LineSeparator.LF.separatorString, lineSeparator)
+        val selectionStart = LineSeparatorUtil.convertOffset(selection.selectionStart.coerceAtMost(fileTextLength), fileText, LineSeparator.LF.separatorString, currentData.lineSeparator)
+        val selectionEnd = LineSeparatorUtil.convertOffset(selection.selectionEnd.coerceAtMost(fileTextLength), fileText, LineSeparator.LF.separatorString, currentData.lineSeparator)
 
         return TextRange(selectionStart, selectionEnd)
     }
