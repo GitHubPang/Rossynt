@@ -227,11 +227,12 @@ internal class RossyntService : Disposable {
         return TextRange(selectionStart, selectionEnd)
     }
 
-    private fun convertToPhysicalOffset(virtualOffset: Int): Int? {
-        if (isRefreshingCurrentData) {
-            return null
-        }
+    fun convertToVirtualOffset(physicalOffset: Int): Int? {
+        val fileText = LineSeparatorUtil.convertLineSeparators(currentData.fileText, currentData.lineSeparator) ?: return null
+        return LineSeparatorUtil.convertOffset(physicalOffset.coerceAtMost(fileText.length), fileText, currentData.lineSeparator, LineSeparator.LF.separatorString)
+    }
 
+    private fun convertToPhysicalOffset(virtualOffset: Int): Int? {
         val fileText = currentData.fileText ?: return null
         return LineSeparatorUtil.convertOffset(virtualOffset.coerceAtMost(fileText.length), fileText, LineSeparator.LF.separatorString, currentData.lineSeparator)
     }
