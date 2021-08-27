@@ -4,7 +4,7 @@
 
 ## [Unreleased]
 ### Changed
-- Take [line separator](https://www.jetbrains.com/help/idea/configuring-line-endings-and-line-separators.html)
+- Take [line separator](https://www.jetbrains.com/help/idea/configuring-line-endings-and-line-separators.html#line_ending)
   of the source file into account. In other words, those `EndOfLineTrivia` nodes would have a `Span.Length` of
   2 instead of 1 when the line separator is `CRLF` (`\r\n`).
 
