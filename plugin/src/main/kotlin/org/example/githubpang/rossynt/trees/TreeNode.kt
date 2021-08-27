@@ -76,4 +76,8 @@ internal data class TreeNode(
 
         return childTreeNodes != null && childTreeNodes.any { it.isError() }
     }
+
+//    override fun toString(): String {
+//        return super.toString()//todo modify text copied to clipboard when user press Ctrl+C on tree node. Modify here or what?
+//    }
 }
