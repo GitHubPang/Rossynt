@@ -3,6 +3,11 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Changed
+- Take [line separator](https://www.jetbrains.com/help/idea/configuring-line-endings-and-line-separators.html)
+  of the source file into account. In other words, those `EndOfLineTrivia` nodes would have a `Span.Length` of
+  2 instead of 1 when the line separator is `CRLF` (`\r\n`).
+
 ## [203.2.0] - 2021-08-18
 ### Added
 - Added recognizing default location of dotnet executable on macOS as installed by Rider. (362c0e20edb42e8a802d1e48293eb3af405a4b46)
