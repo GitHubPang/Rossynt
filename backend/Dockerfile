@@ -1,12 +1,11 @@
 ﻿# Reference: https://github.com/dotnet/dotnet-docker/blob/main/samples/aspnetapp/Dockerfile
 
 # https://hub.docker.com/_/microsoft-dotnet
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
-
-# Add old ASP.NET Core runtimes, for unit test.
+# Old ASP.NET Core runtimes are for unit test.
 # https://stackoverflow.com/a/65485962
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.1 AS build
 COPY --from=mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim /usr/share/dotnet /usr/share/dotnet
-COPY --from=mcr.microsoft.com/dotnet/core/aspnet:2.1 /usr/share/dotnet /usr/share/dotnet
+COPY --from=mcr.microsoft.com/dotnet/sdk:5.0 /usr/share/dotnet /usr/share/dotnet
 
 # Copy csproj and restore as distinct layers.
 WORKDIR /source
