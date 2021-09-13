@@ -45,13 +45,13 @@ namespace RossyntBackendIntegrationTest {
             var nodeId = root["Child"]?[0]?["Id"]?.Value<string>();
             Assert.IsNotNull(nodeId);
             var nodeInfo = await GetNodeInfo(httpClient, nodeId);
-            Assert.AreEqual(24, nodeInfo.Count);
             Assert.AreEqual("", nodeInfo["Alias"]);
             Assert.AreEqual("False", nodeInfo["ContainsAnnotations"]);
             Assert.AreEqual("True", nodeInfo["ContainsDiagnostics"]);
             Assert.AreEqual("False", nodeInfo["ContainsDirectives"]);
             Assert.AreEqual("False", nodeInfo["ContainsSkippedText"]);
             Assert.AreEqual("[0..5)", nodeInfo["FullSpan"]);
+            Assert.AreEqual("", nodeInfo["GlobalKeyword"]);
             Assert.AreEqual("False", nodeInfo["HasLeadingTrivia"]);
             Assert.AreEqual("False", nodeInfo["HasStructuredTrivia"]);
             Assert.AreEqual("False", nodeInfo["HasTrailingTrivia"]);
@@ -70,6 +70,7 @@ namespace RossyntBackendIntegrationTest {
             Assert.AreEqual("", nodeInfo["StaticKeyword"]);
             Assert.AreEqual("using", nodeInfo["SyntaxTree"]);
             Assert.AreEqual("using", nodeInfo["UsingKeyword"]);
+            Assert.AreEqual(25, nodeInfo.Count);
         });
 
         [Test]
