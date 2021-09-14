@@ -98,6 +98,7 @@ namespace RossyntBackendIntegrationTest {
 
         private static async Task RunWithHttpClient([NotNull] Func<HttpClient, Task> func) {
             if (func == null) throw new ArgumentNullException(nameof(func));
+
             using (var webApplicationFactory = new WebApplicationFactory<Startup>()) {
                 var httpClient = webApplicationFactory.CreateClient();
                 await func(httpClient);
