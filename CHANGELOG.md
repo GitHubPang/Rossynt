@@ -3,6 +3,9 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Changed
+- Updated Roslyn from 3.10.0 to 3.11.0, which leads to new stuff such as the [`UsingDirectiveSyntax.GlobalKeyword`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntax.usingdirectivesyntax.globalkeyword) property. (53ecb15ddd7d148526f61a969548e1bb8ef95e0f)
+
 ## [203.3.0] - 2021-09-07
 ### Changed
 - Take [line separator](https://www.jetbrains.com/help/idea/configuring-line-endings-and-line-separators.html#line_ending) of the source file into account. In other words, those `EndOfLineTrivia` nodes would have a `Span.Length` of 2 instead of 1 when the line separator is `CRLF` (`\r\n`).
