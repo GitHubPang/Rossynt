@@ -249,12 +249,12 @@ jobs:
             --jq '.[] | select(.draft == true) | .id' \
             | xargs -I '{}' gh api -X DELETE repos/{owner}/{repo}/releases/{}
 
-      # Create new release draft - which is not publicly visible and requires manual acceptance
-      - name: Create Release Draft
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release create rossynt-${{ needs.build.outputs.version }} \
-            --draft \
-            --title "rossynt-${{ needs.build.outputs.version }}" \
-            --notes "${{ needs.build.outputs.changelog }}"
+#      # Create new release draft - which is not publicly visible and requires manual acceptance
+#      - name: Create Release Draft
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        run: |
+#          gh release create rossynt-${{ needs.build.outputs.version }} \
+#            --draft \
+#            --title "rossynt-${{ needs.build.outputs.version }}" \
+#            --notes "${{ needs.build.outputs.changelog }}"
