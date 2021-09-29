@@ -191,6 +191,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+      # Check out current repository
+      - name: Fetch Sources
+        uses: actions/checkout@v2.3.4
+
       # Download plugin artifact provided by the previous job
       - name: Download Artifact
         uses: actions/download-artifact@v2
