@@ -125,6 +125,7 @@ jobs:
       - name: Export Properties
         id: properties
         shell: bash
+        working-directory: plugin
         run: |
           PROPERTIES="$(./gradlew properties --console=plain -q)"
           IDE_VERSIONS="$(echo "$PROPERTIES" | grep "^pluginVerifierIdeVersions:" | base64)"
