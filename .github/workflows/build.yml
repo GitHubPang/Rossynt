@@ -204,10 +204,12 @@ jobs:
           CHANGELOG="${CHANGELOG//'%'/'%25'}"
           CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
           CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
+          ARTIFACT="${NAME}-${VERSION}.zip"
 
           echo "::set-output name=version::$VERSION"
           echo "::set-output name=name::$NAME"
           echo "::set-output name=changelog::$CHANGELOG"
+          echo "::set-output name=artifact::$ARTIFACT"
 
       - name: Download Backend Artifact
         uses: actions/download-artifact@v2.0.10
@@ -220,12 +222,12 @@ jobs:
         working-directory: plugin
         run: ./gradlew buildPlugin
 
-      # Store built plugin as an artifact for downloading
-      - name: Upload artifacts
+      # Upload plugin artifact to make it available in the next jobs
+      - name: Upload artifact
         uses: actions/upload-artifact@v2.2.4
         with:
-          name: "${{ steps.properties.outputs.name }} - ${{ steps.properties.outputs.version }}"
-          path: ./plugin/build/distributions/*
+          name: plugin-artifact
+          path: ./plugin/build/distributions/${{ steps.properties.outputs.artifact }}
 
   # Prepare a draft release for GitHub Releases page for the manual verification
   # If accepted and published, release workflow would be triggered
@@ -258,3 +260,21 @@ jobs:
             --draft \
             --title "rossynt-${{ needs.build.outputs.version }}" \
             --notes "${{ needs.build.outputs.changelog }}"
+
+      # Download plugin artifact provided by the previous job
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: plugin-artifact
+
+      # Upload artifact as a release asset
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.createDraft.outputs.upload_url }}
+          asset_path: ./${{ needs.build.outputs.artifact }}
+          asset_name: ${{ needs.build.outputs.artifact }}
+          asset_content_type: application/zip
