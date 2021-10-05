@@ -1,4 +1,5 @@
 .gradle
 .idea
+.qodana
 build
 /src/main/resources/raw/RossyntBackend/
