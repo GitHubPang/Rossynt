@@ -23,10 +23,10 @@ repositories {
 }
 dependencies {
     // https://kotlinlang.org/docs/releases.html#release-details
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.5.0-native-mt")
-    implementation("io.ktor:ktor-client-core:1.6.0")
-    implementation("io.ktor:ktor-client-cio:1.6.0")
-    implementation("io.ktor:ktor-client-gson:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.5.1-native-mt")
+    implementation("io.ktor:ktor-client-core:1.6.2")
+    implementation("io.ktor:ktor-client-cio:1.6.2")
+    implementation("io.ktor:ktor-client-gson:1.6.2")
 }
 
 // Configure gradle-intellij-plugin plugin.
