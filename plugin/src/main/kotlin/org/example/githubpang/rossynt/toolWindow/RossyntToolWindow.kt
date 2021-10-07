@@ -215,7 +215,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
             // Update UI.
             uiUpdateTable()
         }
-        TreeSpeedSearch(uiTree)
+        TreeSpeedSearch(uiTree, { it.lastPathComponent.toString() }, true)
 
         // Setup table.
         uiTable.tableHeader = null
