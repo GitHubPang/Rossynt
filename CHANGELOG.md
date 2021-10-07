@@ -3,6 +3,11 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Added
+- Added speed search for tree. (65d2de8ebd481af14218fd452940ab2daf2a0ede, 5e5129c98f52213a799277d1de0425ff30434c70)
+- Added speed search for table. (d47336e26cd8c6a6d9f017ed0786de6d0ca9cfa6)
+- Make tree nodes copy-paste friendly. (5e5129c98f52213a799277d1de0425ff30434c70)
+
 ## [203.3.1] - 2021-09-20
 ### Changed
 - Updated Roslyn from 3.10.0 to 3.11.0, which leads to new stuff such as the [`UsingDirectiveSyntax.GlobalKeyword`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntax.usingdirectivesyntax.globalkeyword) property. (53ecb15ddd7d148526f61a969548e1bb8ef95e0f)
