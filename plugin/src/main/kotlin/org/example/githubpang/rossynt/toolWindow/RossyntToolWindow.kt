@@ -25,6 +25,7 @@ import com.intellij.openapi.wm.ToolWindow
 import com.intellij.ui.EditorNotificationPanel
 import com.intellij.ui.JBSplitter
 import com.intellij.ui.ScrollPaneFactory
+import com.intellij.ui.TreeSpeedSearch
 import com.intellij.ui.treeStructure.Tree
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.StatusText
@@ -154,7 +155,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
     private var isHighlightSelectedTreeNode = false
 
     // UI.
-    private val uiTree: Tree = Tree()//todo add TreeSpeedSearch - https://plugins.jetbrains.com/docs/intellij/lists-and-trees.html#listspeedsearch-and-treespeedsearch
+    private val uiTree: Tree = Tree()
     private val uiBanner = EditorNotificationPanel(MessageType.ERROR.popupBackground)
     private val uiTable: JTable = JTable(UiTableModel())
     private val uiSplitter: JBSplitter = JBSplitter()
@@ -217,6 +218,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
             // Update UI.
             uiUpdateTable()
         }
+        TreeSpeedSearch(uiTree)
 
         // Setup table.
         uiTable.tableHeader = null
