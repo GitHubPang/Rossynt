@@ -22,7 +22,10 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.MessageType
 import com.intellij.openapi.wm.ToolWindow
-import com.intellij.ui.*
+import com.intellij.ui.EditorNotificationPanel
+import com.intellij.ui.JBSplitter
+import com.intellij.ui.ScrollPaneFactory
+import com.intellij.ui.TreeSpeedSearch
 import com.intellij.ui.treeStructure.Tree
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.StatusText
@@ -220,7 +223,6 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         // Setup table.
         uiTable.tableHeader = null
         uiTable.setDefaultRenderer(Object::class.java, UiTableCellRenderer())
-        TableSpeedSearch(uiTable)
 
         // Setup splitter.
         uiSplitter.orientation = true
