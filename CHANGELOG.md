@@ -5,7 +5,6 @@
 ## [Unreleased]
 ### Added
 - Added speed search for tree - 65d2de8ebd481af14218fd452940ab2daf2a0ede, 5e5129c98f52213a799277d1de0425ff30434c70
-- Added speed search for table - d47336e26cd8c6a6d9f017ed0786de6d0ca9cfa6
 - Make tree nodes copy-paste friendly - 5e5129c98f52213a799277d1de0425ff30434c70
 
 ## [203.3.1] - 2021-09-20
