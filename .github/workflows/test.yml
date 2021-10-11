@@ -3,26 +3,33 @@ on:
   workflow_dispatch:
 
 jobs:
-  # Run verifyPlugin and test Gradle tasks
-  test:
-    name: Test
+  # Patch changelog, commit and push to the current repository
+  changelog:
+    name: Update Changelog
+    needs: release
     runs-on: ubuntu-latest
     steps:
 
       # Check out current repository
       - name: Fetch Sources
         uses: actions/checkout@v2.3.4
-
-      # Setup Java 11 environment for the next steps
-      - name: Setup Java
-        uses: actions/setup-java@v2
         with:
-          distribution: zulu
-          java-version: 11
-          cache: gradle
+          ref: ${{ github.event.release.tag_name }}
 
-      # Run Qodana inspections
-      - name: Qodana - Code Inspection
-        uses: JetBrains/qodana-action@v2.1-eap
+      # Update Unreleased section with the current version
+      - name: Patch Changelog
+        run: echo '<!-- testing GitHub Action -->' >> CHANGELOG.md
+
+      # Commit patched Changelog
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "Update changelog." -a
+
+      # Push changes
+      - name: Push changes
+        uses: ad-m/github-push-action@master
         with:
-          project-dir: ${{ github.workspace }}/plugin
+          branch: test
+          github_token: ${{ secrets.GITHUB_TOKEN }}
