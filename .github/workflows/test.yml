@@ -24,3 +24,6 @@ jobs:
       # Run Qodana inspections
       - name: Qodana - Code Inspection
         uses: JetBrains/qodana-action@v2.1-eap
+        with:
+          project-dir: ${{ github.workspace }}/plugin
+          results-dir: ${{ github.workspace }}/plugin/qodana
