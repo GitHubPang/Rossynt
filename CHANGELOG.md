@@ -3,6 +3,8 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+
+## [203.4.0] - 2021-10-20
 ### Added
 - Added speed search for tree - 65d2de8ebd481af14218fd452940ab2daf2a0ede, 5e5129c98f52213a799277d1de0425ff30434c70
 
