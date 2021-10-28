@@ -3,6 +3,8 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Added
+- Support IntelliJ Platform 2021.3 - 422f80a6b77d54f482494b40135f19b060da5893
 
 ## [203.4.0] - 2021-10-20
 ### Added
