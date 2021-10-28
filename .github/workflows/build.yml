@@ -170,13 +170,14 @@ jobs:
         uses: JetBrains/qodana-action@v2.1-eap
 
       # Collect Qodana Result
-      - uses: actions/upload-artifact@v2
+      - name: Collect Qodana Result
+        uses: actions/upload-artifact@v2
         with:
           name: qodana-result
           path: ${{ github.workspace }}/qodana
 
       # Store already-built plugin as an artifact for downloading
-      - name: Upload artifacts
+      - name: Upload artifact
         uses: actions/upload-artifact@v2.2.4
         with:
           name: plugin-artifact
