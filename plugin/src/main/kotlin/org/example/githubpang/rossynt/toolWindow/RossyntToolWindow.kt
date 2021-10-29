@@ -131,8 +131,6 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
 
             // Update highlight.
             updateRangeHighlighters()
-
-            //todo scroll to selected?
         }
     }
 
@@ -217,6 +215,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
 
             // Update UI.
             uiUpdateTable()
+            //todo scroll selected node into view when double click, like Structure view in IDEA/Rider. Or even better, add a Navigate with Single Click button, then react to single click
         }
         TreeSpeedSearch(uiTree, { it.lastPathComponent.toString() }, true)
 
