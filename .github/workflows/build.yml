@@ -220,4 +220,7 @@ jobs:
             ./${{ needs.build.outputs.artifact }} \
             --draft \
             --title "rossynt-${{ needs.build.outputs.version }}" \
-            --notes "${{ needs.build.outputs.changelog }}"
+            --notes "$(cat << 'EOM'
+          ${{ needs.build.outputs.changelog }}
+          EOM
+          )"
