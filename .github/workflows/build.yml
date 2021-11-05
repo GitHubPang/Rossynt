@@ -45,7 +45,7 @@ jobs:
           dotnet-version: '5.0.x'
 
       - name: Fetch Sources
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.4.0
 
       - name: Run Tests
         working-directory: backend
@@ -61,7 +61,7 @@ jobs:
 
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.4.0
 
       - name: Run Publish Script
         working-directory: backend
@@ -89,7 +89,7 @@ jobs:
 
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.4.0
 
       # Validate wrapper
       - name: Gradle Wrapper Validation
@@ -194,7 +194,7 @@ jobs:
 
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.4.0
 
       # Download plugin artifact provided by the previous job
       - name: Download Artifact
