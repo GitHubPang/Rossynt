@@ -10,7 +10,7 @@
         <PackageReference Include="AutoFixture" Version="4.17.0" />
         <PackageReference Include="JetBrains.Annotations" Version="2021.3.0" PrivateAssets="All" />
         <PackageReference Include="NUnit" Version="3.13.2" />
-        <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
+        <PackageReference Include="NUnit3TestAdapter" Version="4.1.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     </ItemGroup>
 
