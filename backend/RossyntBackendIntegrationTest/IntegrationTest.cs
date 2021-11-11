@@ -40,6 +40,14 @@ namespace RossyntBackendIntegrationTest {
         });
 
         [Test]
+        public Task CompileFileCSharp10() => RunWithHttpClient(async httpClient => {
+            var root = await CompileFile(httpClient, "global using System;");
+            AssertNode(root, "SyntaxNode", "CompilationUnitSyntax", "CompilationUnit", "global using System;", "0,20", false, 2);
+            AssertNode(root["Child"]?[0], "SyntaxNode", "UsingDirectiveSyntax", "UsingDirective", "global using System;", "0,20", false, 4);
+            AssertNode(root["Child"]?[0]?["Child"]?[0], "SyntaxToken", "SyntaxToken", "GlobalKeyword", "global", "0,6", false, 1);
+        });
+
+        [Test]
         public Task GetNodeInfo() => RunWithHttpClient(async httpClient => {
             var root = await CompileFile(httpClient, "using");
             var nodeId = root["Child"]?[0]?["Id"]?.Value<string>();
