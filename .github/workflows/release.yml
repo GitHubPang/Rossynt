@@ -53,5 +53,5 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -m "Update changelog." -a
+          git commit -m "Update changelog - ${{ github.event.release.tag_name }}." -a
           git push origin HEAD:master
