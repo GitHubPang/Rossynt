@@ -23,6 +23,7 @@ import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.MessageType
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.ui.*
+import com.intellij.ui.table.JBTable
 import com.intellij.ui.treeStructure.Tree
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.StatusText
@@ -152,7 +153,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
     // UI.
     private val uiTree: Tree = Tree()
     private val uiBanner = EditorNotificationPanel(MessageType.ERROR.popupBackground)
-    private val uiTable: JTable = JTable(UiTableModel())
+    private val uiTable: JBTable = JBTable(UiTableModel())
     private val uiSplitter: JBSplitter = JBSplitter()
     val rootComponent: JComponent
         get() {
