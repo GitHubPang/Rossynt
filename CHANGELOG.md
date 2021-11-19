@@ -3,6 +3,9 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Added
+- Added speed search for table - 2742f7da233a97535d3caa8702e3febce33a5709
+
 ## [213.6.0] - 2021-11-16
 ### Changed
 - Updated [`Microsoft.CodeAnalysis.CSharp`](https://www.nuget.org/packages/Microsoft.CodeAnalysis.CSharp) (Roslyn) from 3.11.0 to 4.0.1. Now it recognizes more C# 10 stuff, such as [`FileScopedNamespaceDeclarationSyntax`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntax.filescopednamespacedeclarationsyntax), which is for [file-scoped namespace declaration](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-10#file-scoped-namespace-declaration) - 2d792457bba46a480c5bdda7d4f6da9134f14792
