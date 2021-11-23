@@ -3,6 +3,7 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+## [213.7.0] - 2021-11-23
 ### Added
 - Added speed search for table - 2742f7da233a97535d3caa8702e3febce33a5709
 
