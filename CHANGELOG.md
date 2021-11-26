@@ -3,6 +3,9 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Changed
+- Improve table look and feel - da1f6d7985c37e72a587fc6e7fdc3765ef4697c3
+
 ## [213.7.0] - 2021-11-23
 ### Added
 - Added speed search for table - 2742f7da233a97535d3caa8702e3febce33a5709
