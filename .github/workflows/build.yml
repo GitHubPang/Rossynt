@@ -29,20 +29,13 @@ jobs:
         runs-on: [ ubuntu-latest, windows-latest, macos-latest ]
     runs-on: ${{ matrix.runs-on }}
     steps:
-      - name: Setup .NET Core SDK '2.1.x'
+      - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v1.9.0
         with:
-          dotnet-version: '2.1.x'
-
-      - name: Setup .NET Core SDK '3.1.x'
-        uses: actions/setup-dotnet@v1.9.0
-        with:
-          dotnet-version: '3.1.x'
-
-      - name: Setup .NET Core SDK '5.0.x'
-        uses: actions/setup-dotnet@v1.9.0
-        with:
-          dotnet-version: '5.0.x'
+          dotnet-version: |
+            2.1.x
+            3.1.x
+            5.0.x
 
       - name: Fetch Sources
         uses: actions/checkout@v2.4.0
