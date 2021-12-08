@@ -6,6 +6,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RossyntBackendUnitTest", "R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RossyntBackendIntegrationTest", "RossyntBackendIntegrationTest\RossyntBackendIntegrationTest.csproj", "{0AEA3A72-8D78-47A0-90A3-E81190324E25}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{3C2AFB4B-C4A2-4FB8-82BD-7C6F9D35553E}"
+ProjectSection(SolutionItems) = preProject
+	.dockerignore = .dockerignore
+	.editorconfig = .editorconfig
+	.gitignore = .gitignore
+	Dockerfile = Dockerfile
+	publish.sh = publish.sh
+	test-requests.http = test-requests.http
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
