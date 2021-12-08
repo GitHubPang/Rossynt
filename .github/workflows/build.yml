@@ -61,7 +61,7 @@ jobs:
         run: ./publish.sh
 
       - name: Upload Backend Artifact
-        uses: actions/upload-artifact@v2.2.4
+        uses: actions/upload-artifact@v2.3.0
         with:
           name: backend-artifact
           path: plugin/src/main/resources/raw/RossyntBackend
@@ -133,7 +133,7 @@ jobs:
       # Collect Tests Result of failed tests
       - name: Collect Tests Result
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v2.3.0
         with:
           name: tests-result
           path: ${{ github.workspace }}/plugin/build/reports/tests
@@ -153,7 +153,7 @@ jobs:
       # Collect Plugin Verifier Result
       - name: Collect Plugin Verifier Result
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v2.3.0
         with:
           name: pluginVerifier-result
           path: ${{ github.workspace }}/plugin/build/reports/pluginVerifier
@@ -164,14 +164,14 @@ jobs:
 
       # Collect Qodana Result
       - name: Collect Qodana Result
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v2.3.0
         with:
           name: qodana-result
           path: ${{ github.workspace }}/qodana
 
       # Store already-built plugin as an artifact for downloading
       - name: Upload artifact
-        uses: actions/upload-artifact@v2.2.4
+        uses: actions/upload-artifact@v2.3.0
         with:
           name: plugin-artifact
           path: ./plugin/build/distributions/${{ steps.properties.outputs.artifact }}
