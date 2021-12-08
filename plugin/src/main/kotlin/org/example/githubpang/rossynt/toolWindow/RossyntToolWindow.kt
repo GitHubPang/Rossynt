@@ -27,6 +27,7 @@ import com.intellij.ui.table.JBTable
 import com.intellij.ui.treeStructure.Tree
 import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.StatusText
+import com.intellij.util.ui.UIUtil
 import com.intellij.util.ui.tree.TreeUtil
 import org.example.githubpang.rossynt.services.IRossyntService
 import org.example.githubpang.rossynt.services.RossyntService
@@ -37,6 +38,7 @@ import org.example.githubpang.rossynt.trees.TreeNode
 import java.awt.Component
 import java.awt.Font
 import javax.swing.JComponent
+import javax.swing.JLabel
 import javax.swing.JTable
 import javax.swing.JTree
 import javax.swing.table.AbstractTableModel
@@ -49,6 +51,7 @@ import javax.swing.tree.TreeSelectionModel.SINGLE_TREE_SELECTION
 internal class RossyntToolWindow(private val project: Project, toolWindow: ToolWindow) {
     companion object {
         const val TOOL_WINDOW_ID: String = "Rossynt"  // Must match with toolWindow id in "plugin.xml"
+        val ERROR_ICON = UIUtil.getBalloonErrorIcon()
     }
 
     // ******************************************************************************** //
@@ -105,7 +108,31 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
                 component.font = component.font.deriveFont(Font.BOLD)
             }
 
+            val label = component as JLabel
+            label.icon = if (isError(table, value, row, column)) {
+                ERROR_ICON
+            } else {
+                null
+            }
+
             return component
+        }
+
+        private fun isError(table: JTable?, value: Any?, row: Int, column: Int): Boolean {
+            if (column == 1) {
+                val row0Value = table?.model?.getValueAt(row, 0)
+
+                // The following conditions need to be in sync with
+                // org.example.githubpang.rossynt.trees.TreeNode.isError
+                if (row0Value == "IsMissing" && value == "True") {
+                    return true
+                }
+                if (row0Value == "Kind" && value == "SkippedTokensTrivia") {
+                    return true
+                }
+            }
+
+            return false
         }
     }
 

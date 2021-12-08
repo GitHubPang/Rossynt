@@ -70,6 +70,8 @@ internal data class TreeNode(
      * @see <a href="https://docs.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/work-with-syntax#errors">Microsoft Docs | Use the .NET Compiler Platform SDK syntax model | Errors</a>
      */
     private fun isError(): Boolean {
+        // The following conditions need to be in sync with
+        // org.example.githubpang.rossynt.toolWindow.RossyntToolWindow.UiTableCellRenderer.isError
         if (isMissing || syntaxKind == "SkippedTokensTrivia") {
             return true
         }
