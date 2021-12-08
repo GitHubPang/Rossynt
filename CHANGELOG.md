@@ -3,6 +3,9 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Added
+- Show error icon in table - ccb9703a6d9f30d89ccd097a92822c0e0383c409
+
 ## [213.7.1] - 2021-12-03
 ### Changed
 - Improve table look and feel - da1f6d7985c37e72a587fc6e7fdc3765ef4697c3
