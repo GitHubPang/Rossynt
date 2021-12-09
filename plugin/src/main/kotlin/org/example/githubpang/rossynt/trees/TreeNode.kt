@@ -74,7 +74,7 @@ internal data class TreeNode(
     private fun isError(): Boolean {
         // The following conditions need to be in sync with
         // org.example.githubpang.rossynt.toolWindow.RossyntToolWindow.UiTableCellRenderer.isError
-        if (isMissing || syntaxKind == "SkippedTokensTrivia") {
+        if (isMissing || SyntaxUtil.isSyntaxKindError(syntaxKind)) {
             return true
         }
 

@@ -34,6 +34,7 @@ import org.example.githubpang.rossynt.services.RossyntService
 import org.example.githubpang.rossynt.services.RossyntServiceNotifier
 import org.example.githubpang.rossynt.services.RossyntUtil
 import org.example.githubpang.rossynt.settings.PluginSettingsConfigurable
+import org.example.githubpang.rossynt.trees.SyntaxUtil
 import org.example.githubpang.rossynt.trees.TreeNode
 import java.awt.Component
 import java.awt.Font
@@ -127,7 +128,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
                 if (key == "IsMissing" && value == "True") {
                     return true
                 }
-                if (key == "Kind" && value == "SkippedTokensTrivia") {
+                if (key == "Kind" && value is String && SyntaxUtil.isSyntaxKindError(value)) {
                     return true
                 }
             }
