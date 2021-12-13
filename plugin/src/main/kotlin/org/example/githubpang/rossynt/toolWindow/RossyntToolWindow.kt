@@ -34,6 +34,7 @@ import org.example.githubpang.rossynt.services.RossyntService
 import org.example.githubpang.rossynt.services.RossyntServiceNotifier
 import org.example.githubpang.rossynt.services.RossyntUtil
 import org.example.githubpang.rossynt.settings.PluginSettingsConfigurable
+import org.example.githubpang.rossynt.trees.SyntaxUtil
 import org.example.githubpang.rossynt.trees.TreeNode
 import java.awt.Component
 import java.awt.Font
@@ -120,14 +121,14 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
 
         private fun isError(table: JTable?, value: Any?, row: Int, column: Int): Boolean {
             if (column == 1) {
-                val row0Value = table?.model?.getValueAt(row, 0)
+                val key = table?.model?.getValueAt(row, 0)
 
                 // The following conditions need to be in sync with
                 // org.example.githubpang.rossynt.trees.TreeNode.isError
-                if (row0Value == "IsMissing" && value == "True") {
+                if (key == "IsMissing" && value == "True") {
                     return true
                 }
-                if (row0Value == "Kind" && value == "SkippedTokensTrivia") {
+                if (key == "Kind" && value is String && SyntaxUtil.isSyntaxKindError(value)) {
                     return true
                 }
             }

@@ -9,6 +9,7 @@ import com.intellij.openapi.editor.colors.CodeInsightColors
 import com.intellij.openapi.util.TextRange
 import icons.PluginIcons
 import org.apache.commons.lang3.StringUtils
+import org.jetbrains.annotations.Contract
 
 internal data class TreeNode(
     @SerializedName("Id") val nodeId: String,
@@ -69,10 +70,11 @@ internal data class TreeNode(
     /**
      * @see <a href="https://docs.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/work-with-syntax#errors">Microsoft Docs | Use the .NET Compiler Platform SDK syntax model | Errors</a>
      */
+    @Contract(pure = true)
     private fun isError(): Boolean {
         // The following conditions need to be in sync with
         // org.example.githubpang.rossynt.toolWindow.RossyntToolWindow.UiTableCellRenderer.isError
-        if (isMissing || syntaxKind == "SkippedTokensTrivia") {
+        if (isMissing || SyntaxUtil.isSyntaxKindError(syntaxKind)) {
             return true
         }
 
