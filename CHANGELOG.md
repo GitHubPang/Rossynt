@@ -3,6 +3,9 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Added
+- Recognize a few more syntax kinds as error: `BadDirectiveTrivia`, `UnknownAccessorDeclaration`, `IncompleteMember` - 40e352100d4e1437adaedba290b079add3d8ff3f
+
 ## [213.8.0] - 2021-12-13
 ### Added
 - Show error icon in table - ccb9703a6d9f30d89ccd097a92822c0e0383c409
