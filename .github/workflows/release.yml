@@ -42,7 +42,7 @@ jobs:
         with:
           ref: ${{ github.event.release.tag_name }}
 
-      # Update Unreleased section with the current version
+      # Update Unreleased section with the current release note
       - name: Patch Changelog
         run: ./patch-changelog.sh
 
