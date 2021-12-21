@@ -54,7 +54,7 @@ namespace RossyntBackend.Models {
 
         [Pure]
         private object RawObject() {
-            return SyntaxNodeOrToken.IsNode ? (object) (SyntaxNodeOrToken.AsNode() ?? throw new InvalidOperationException($"{nameof(SyntaxNodeOrToken.AsNode)}() is null.")) : SyntaxNodeOrToken.AsToken();
+            return SyntaxNodeOrToken.IsNode ? (object)(SyntaxNodeOrToken.AsNode() ?? throw new InvalidOperationException($"{nameof(SyntaxNodeOrToken.AsNode)}() is null.")) : SyntaxNodeOrToken.AsToken();
         }
     }
 }
