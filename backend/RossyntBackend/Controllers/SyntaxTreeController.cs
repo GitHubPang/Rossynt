@@ -70,10 +70,7 @@ namespace RossyntBackend.Controllers {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             // Get tree.
-            var tree = _projectRepository.GetTree();
-            if (tree == null) {
-                throw new InvalidOperationException("No tree in repository.");
-            }
+            var tree = _projectRepository.GetTree() ?? throw new InvalidOperationException("No tree in repository.");
 
             // Get tree node.
             if (!tree.TreeNodes.TryGetValue(request.NodeId, out var treeNode)) {
@@ -89,10 +86,7 @@ namespace RossyntBackend.Controllers {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             // Get tree.
-            var tree = _projectRepository.GetTree();
-            if (tree == null) {
-                throw new InvalidOperationException("No tree in repository.");
-            }
+            var tree = _projectRepository.GetTree() ?? throw new InvalidOperationException("No tree in repository.");
 
             // Find tree node.
             var treeNode = tree.FindTreeNode(TextSpan.FromBounds(request.Start, request.End));
