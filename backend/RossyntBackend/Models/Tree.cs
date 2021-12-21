@@ -35,6 +35,9 @@ namespace RossyntBackend.Models {
         }
 
         public static async Task<Tree> CompileFile(string fileText, string filePath, CancellationToken cancellationToken) {
+            if (fileText == null) throw new ArgumentNullException(nameof(fileText));
+            if (filePath == null) throw new ArgumentNullException(nameof(filePath));
+
             var syntaxTree = CSharpSyntaxTree.ParseText(fileText, path: filePath, cancellationToken: cancellationToken);
             var root = await syntaxTree.GetRootAsync(cancellationToken);
             return new Tree(root);
@@ -60,6 +63,8 @@ namespace RossyntBackend.Models {
         }
 
         private TTreeNode AddTreeNode<TTreeNode>(TTreeNode treeNode) where TTreeNode : TreeNode {
+            if (treeNode == null) throw new ArgumentNullException(nameof(treeNode));
+
             _treeNodes.Add(treeNode.NodeId, treeNode);
             return treeNode;
         }
