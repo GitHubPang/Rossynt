@@ -7,6 +7,8 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 using RossyntBackend.Utils;
 
+#nullable enable
+
 namespace RossyntBackend.Models {
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public sealed class TreeNodeTrivia : TreeNode {
@@ -15,7 +17,7 @@ namespace RossyntBackend.Models {
 
         // ******************************************************************************** //
 
-        public TreeNodeTrivia(bool isLeading, SyntaxTrivia syntaxTrivia, [CanBeNull] TreeNode parentTreeNode) : base(parentTreeNode) {
+        public TreeNodeTrivia(bool isLeading, SyntaxTrivia syntaxTrivia, TreeNode? parentTreeNode) : base(parentTreeNode) {
             _treeNodeCategory = isLeading ? Models.TreeNodeCategory.LeadingTrivia : Models.TreeNodeCategory.TrailingTrivia;
             SyntaxTrivia = syntaxTrivia;
         }
@@ -27,11 +29,9 @@ namespace RossyntBackend.Models {
         public override TreeNodeCategory TreeNodeCategory() => _treeNodeCategory;
 
         [Pure]
-        [NotNull]
         public override string RawString() => SyntaxTrivia.ToString();
 
         [Pure]
-        [NotNull]
         public override Type RawType() => SyntaxTrivia.GetType();
 
         [Pure]
@@ -41,7 +41,6 @@ namespace RossyntBackend.Models {
         public override bool IsMissing() => false;
 
         [Pure]
-        [NotNull]
         public override IReadOnlyDictionary<string, string> RawProperties() => ObjectUtil.GetObjectProperties(SyntaxTrivia);
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

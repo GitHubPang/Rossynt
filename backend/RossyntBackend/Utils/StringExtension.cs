@@ -1,6 +1,8 @@
 ﻿using System;
 using JetBrains.Annotations;
 
+#nullable enable
+
 namespace RossyntBackend.Utils {
     public static class StringExtension {
         /// <summary>
@@ -16,15 +18,14 @@ namespace RossyntBackend.Utils {
         /// This method assumes that the input string is a valid UTF-16 string.
         /// </remarks>
         [Pure]
-        [NotNull]
-        public static string SurrogateSafeLeft([NotNull] this string inputString, int maxLength) {
+        public static string SurrogateSafeLeft(this string inputString, int maxLength) {
             if (inputString == null) throw new ArgumentNullException(nameof(inputString));
             if (maxLength < 0) throw new ArgumentOutOfRangeException(nameof(maxLength), "Length cannot be less than zero.");
             if (maxLength > inputString.Length) throw new ArgumentOutOfRangeException(nameof(maxLength), "Length cannot be more than the length of the string.");
 
             for (var length = maxLength; length > 0; length--) {
                 if (!char.IsHighSurrogate(inputString[length - 1])) {
-                    return inputString.Substring(0, length);
+                    return inputString[..length];
                 }
             }
 

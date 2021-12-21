@@ -5,23 +5,24 @@ using JetBrains.Annotations;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 
+#nullable enable
+
 namespace RossyntBackend.Models {
     public abstract class TreeNode {
-        [NotNull] public string NodeId { get; } = Guid.NewGuid().ToString("D");
+        public string NodeId { get; } = Guid.NewGuid().ToString("D");
 
         // ReSharper disable once MemberCanBePrivate.Global UnusedAutoPropertyAccessor.Global
-        [CanBeNull] public TreeNode ParentTreeNode { get; }
+        public TreeNode? ParentTreeNode { get; }
 
-        [NotNull] private readonly List<TreeNode> _childTreeNodes = new List<TreeNode>();
+        private readonly List<TreeNode> _childTreeNodes = new List<TreeNode>();
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        [NotNull]
         // ReSharper disable once ReturnTypeCanBeEnumerable.Global
         public IReadOnlyCollection<TreeNode> ChildTreeNodes => _childTreeNodes;
 
         // ******************************************************************************** //
 
-        protected TreeNode([CanBeNull] TreeNode parentTreeNode) {
+        protected TreeNode(TreeNode? parentTreeNode) {
             ParentTreeNode = parentTreeNode;
 
             // Add as parent's child.
@@ -35,11 +36,9 @@ namespace RossyntBackend.Models {
         public abstract TreeNodeCategory TreeNodeCategory();
 
         [Pure]
-        [NotNull]
         public abstract string RawString();
 
         [Pure]
-        [NotNull]
         public abstract Type RawType();
 
         [Pure]
@@ -49,7 +48,6 @@ namespace RossyntBackend.Models {
         public abstract bool IsMissing();
 
         [Pure]
-        [NotNull]
         public abstract IReadOnlyDictionary<string, string> RawProperties();
     }
 }

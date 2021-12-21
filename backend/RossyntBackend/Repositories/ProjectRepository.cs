@@ -2,22 +2,23 @@
 using JetBrains.Annotations;
 using RossyntBackend.Models;
 
+#nullable enable
+
 namespace RossyntBackend.Repositories {
     public sealed class ProjectRepository : IProjectRepository {
-        [NotNull] private readonly object _lock = new object();
-        [CanBeNull] private Tree _tree;
+        private readonly object _lock = new object();
+        private Tree? _tree;
 
         // ******************************************************************************** //
 
-        public void SetTree([NotNull] Tree tree) {
+        public void SetTree(Tree tree) {
             lock (_lock) {
                 _tree = tree ?? throw new ArgumentNullException(nameof(tree));
             }
         }
 
         [Pure]
-        [CanBeNull]
-        public Tree GetTree() {
+        public Tree? GetTree() {
             lock (_lock) {
                 return _tree;
             }

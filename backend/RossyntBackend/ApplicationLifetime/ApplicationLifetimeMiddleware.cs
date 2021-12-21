@@ -3,21 +3,23 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 
+#nullable enable
+
 namespace RossyntBackend.ApplicationLifetime {
     [UsedImplicitly]
     public sealed class ApplicationLifetimeMiddleware {
-        [NotNull] private readonly RequestDelegate _next;
-        [NotNull] private readonly IApplicationLifetimeService _applicationLifetimeService;
+        private readonly RequestDelegate _next;
+        private readonly IApplicationLifetimeService _applicationLifetimeService;
 
         // ******************************************************************************** //
 
-        public ApplicationLifetimeMiddleware([NotNull] RequestDelegate next, [NotNull] IApplicationLifetimeService applicationLifetimeService) {
+        public ApplicationLifetimeMiddleware(RequestDelegate next, IApplicationLifetimeService applicationLifetimeService) {
             _next = next ?? throw new ArgumentNullException(nameof(next));
             _applicationLifetimeService = applicationLifetimeService ?? throw new ArgumentNullException(nameof(applicationLifetimeService));
         }
 
         [UsedImplicitly]
-        public async Task InvokeAsync([NotNull] HttpContext context) {
+        public async Task InvokeAsync(HttpContext context) {
             if (context == null) throw new ArgumentNullException(nameof(context));
 
             // Call the next delegate/middleware in the pipeline
