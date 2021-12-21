@@ -186,8 +186,8 @@ namespace RossyntBackendIntegrationTest {
             Assert.AreEqual(kind, node["Kind"]?.Value<string>());
             Assert.AreEqual(str.Length > 0 ? str : null, node["Str"]?.Value<string>());
             Assert.AreEqual(span.Length > 0 ? span : null, node["Span"]?.Value<string>());
-            Assert.AreEqual(isMissing ? (int?) 1 : null, node["IsMissing"]?.Value<int>());
-            Assert.AreEqual(childCount > 0 ? (int?) childCount : null, node["Child"]?.Count());
+            Assert.AreEqual(isMissing ? (int?)1 : null, node["IsMissing"]?.Value<int>());
+            Assert.AreEqual(childCount > 0 ? (int?)childCount : null, node["Child"]?.Count());
         }
     }
 }
