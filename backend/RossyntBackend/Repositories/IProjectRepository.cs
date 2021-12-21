@@ -3,12 +3,12 @@ using RossyntBackend.Models;
 
 namespace RossyntBackend.Repositories {
     public interface IProjectRepository {
-        void SetTree([NotNull] Tree tree);
+        public void SetTree([NotNull] Tree tree);
 
         [Pure]
         [CanBeNull]
-        Tree GetTree();
+        public Tree GetTree();
 
-        void RemoveTree();
+        public void RemoveTree();
     }
 }
