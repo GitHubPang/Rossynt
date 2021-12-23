@@ -3,6 +3,12 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Added
+- Support .NET 6.
+
+### Removed
+- Dropped support for .NET Core 2.1, which [has already reached end of support on 2021-08-21](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core).
+
 ## [213.9.0] - 2021-12-23
 ### Added
 - Recognize a few more syntax kinds as error: `BadDirectiveTrivia`, `UnknownAccessorDeclaration`, `IncompleteMember` - 40e352100d4e1437adaedba290b079add3d8ff3f
