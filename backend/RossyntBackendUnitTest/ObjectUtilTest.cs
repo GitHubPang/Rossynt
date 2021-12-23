@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using RossyntBackend.Utils;
 
+#nullable enable
+
 namespace RossyntBackendUnitTest {
     public class ObjectUtilTest {
         private sealed class Foo {
@@ -24,9 +26,8 @@ namespace RossyntBackendUnitTest {
 
         [Test]
         public void GetObjectProperties_ArgumentNullException() {
-            const object rawObject = null;
-            // ReSharper disable once AssignNullToNotNullAttribute
-            Assert.Catch<ArgumentNullException>(() => _ = ObjectUtil.GetObjectProperties(rawObject));
+            const object? rawObject = null;
+            Assert.Catch<ArgumentNullException>(() => _ = ObjectUtil.GetObjectProperties(rawObject!));
         }
 
         [Test]

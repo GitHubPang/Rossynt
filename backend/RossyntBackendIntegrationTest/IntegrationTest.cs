@@ -5,17 +5,18 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoFixture;
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using RossyntBackend;
 
+#nullable enable
+
 namespace RossyntBackendIntegrationTest {
     [Parallelizable(ParallelScope.All)]
     public class IntegrationTest {
-        [NotNull] private readonly Fixture _fixture = new Fixture();
+        private readonly Fixture _fixture = new Fixture();
 
         // ******************************************************************************** //
 
@@ -59,7 +60,7 @@ namespace RossyntBackendIntegrationTest {
             var root = await CompileFile(httpClient, "using");
             var nodeId = root["Child"]?[0]?["Id"]?.Value<string>();
             Assert.IsNotNull(nodeId);
-            var nodeInfo = await GetNodeInfo(httpClient, nodeId);
+            var nodeInfo = await GetNodeInfo(httpClient, nodeId!);
             Assert.AreEqual("", nodeInfo["Alias"]);
             Assert.AreEqual("False", nodeInfo["ContainsAnnotations"]);
             Assert.AreEqual("True", nodeInfo["ContainsDiagnostics"]);
@@ -93,10 +94,10 @@ namespace RossyntBackendIntegrationTest {
             var root = await CompileFile(httpClient, "using");
             var nodeId = root["Id"]?.Value<string>();
             Assert.IsNotNull(nodeId);
-            var nodeInfo = await GetNodeInfo(httpClient, nodeId);
+            var nodeInfo = await GetNodeInfo(httpClient, nodeId!);
             Assert.IsTrue(nodeInfo.Count > 0);
             await ResetActiveFile(httpClient);
-            Assert.CatchAsync<Exception>(() => GetNodeInfo(httpClient, nodeId));
+            Assert.CatchAsync<Exception>(() => GetNodeInfo(httpClient, nodeId!));
         });
 
         [Test]
@@ -111,72 +112,68 @@ namespace RossyntBackendIntegrationTest {
             Assert.AreEqual(nodeId, node?["Id"]?.Value<string>());
         });
 
-        private static async Task RunWithHttpClient([NotNull] Func<HttpClient, Task> func) {
+        private static async Task RunWithHttpClient(Func<HttpClient, Task> func) {
             if (func == null) throw new ArgumentNullException(nameof(func));
 
-            using (var webApplicationFactory = new WebApplicationFactory<Startup>()) {
-                var httpClient = webApplicationFactory.CreateClient();
-                await func(httpClient);
-            }
+            using var webApplicationFactory = new WebApplicationFactory<Startup>();
+            var httpClient = webApplicationFactory.CreateClient();
+            await func(httpClient);
         }
 
-        [ItemNotNull]
-        private async Task<JObject> CompileFile([NotNull] HttpClient httpClient, [NotNull] string fileText) {
+        private async Task<JObject> CompileFile(HttpClient httpClient, string fileText) {
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (fileText == null) throw new ArgumentNullException(nameof(fileText));
 
             var parameters = ImmutableDictionary<string, string>.Empty;
             parameters = parameters.Add("FilePath", _fixture.Create<string>());
             parameters = parameters.Add("FileText", fileText);
-            var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/compileFile", new FormUrlEncodedContent(parameters));
+            var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/compileFile", new FormUrlEncodedContent(parameters!));
             Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
             var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
             return JObject.Parse(responseBody);
         }
 
-        [ItemNotNull]
-        private static async Task<IDictionary<string, string>> GetNodeInfo([NotNull] HttpClient httpClient, [NotNull] string nodeId) {
+        private static async Task<IDictionary<string, string>> GetNodeInfo(HttpClient httpClient, string nodeId) {
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (nodeId == null) throw new ArgumentNullException(nameof(nodeId));
 
             var parameters = ImmutableDictionary<string, string>.Empty;
             parameters = parameters.Add("NodeId", nodeId);
-            var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/getNodeInfo", new FormUrlEncodedContent(parameters));
+            var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/getNodeInfo", new FormUrlEncodedContent(parameters!));
             Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
             var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
             var dictionary = JsonConvert.DeserializeObject<IDictionary<string, string>>(responseBody);
             Assert.IsNotNull(dictionary);
-            return dictionary;
+            return dictionary!;
         }
 
-        private static async Task ResetActiveFile([NotNull] HttpClient httpClient) {
+        private static async Task ResetActiveFile(HttpClient httpClient) {
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
 
             var parameters = ImmutableDictionary<string, string>.Empty;
-            var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/resetActiveFile", new FormUrlEncodedContent(parameters));
+            var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/resetActiveFile", new FormUrlEncodedContent(parameters!));
             Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
         }
 
-        [ItemNotNull]
-        private static async Task<string> FindNode([NotNull] HttpClient httpClient, int start, int end) {
+        private static async Task<string> FindNode(HttpClient httpClient, int start, int end) {
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
 
             var parameters = ImmutableDictionary<string, string>.Empty;
             parameters = parameters.Add("Start", start.ToString());
             parameters = parameters.Add("End", end.ToString());
-            var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/findNode", new FormUrlEncodedContent(parameters));
+            var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/findNode", new FormUrlEncodedContent(parameters!));
             Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
             var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
             var dictionary = JsonConvert.DeserializeObject<IDictionary<string, string>>(responseBody);
             Assert.IsNotNull(dictionary);
-            Assert.AreEqual(1, dictionary.Count);
+            Assert.AreEqual(1, dictionary!.Count);
             Assert.IsTrue(dictionary.ContainsKey("nodeId"));
             var nodeId = dictionary["nodeId"];
             Assert.IsNotNull(nodeId);
             return nodeId;
         }
 
-        private static void AssertNode([CanBeNull] JToken node, [NotNull] string cat, [NotNull] string type, [NotNull] string kind, [NotNull] string str, [NotNull] string span, bool isMissing, int childCount) {
+        private static void AssertNode(JToken? node, string cat, string type, string kind, string str, string span, bool isMissing, int childCount) {
             if (cat == null) throw new ArgumentNullException(nameof(cat));
             if (type == null) throw new ArgumentNullException(nameof(type));
             if (kind == null) throw new ArgumentNullException(nameof(kind));
@@ -184,13 +181,13 @@ namespace RossyntBackendIntegrationTest {
             if (span == null) throw new ArgumentNullException(nameof(span));
 
             Assert.IsNotNull(node);
-            Assert.AreEqual(cat, node["Cat"]?.Value<string>());
+            Assert.AreEqual(cat, node!["Cat"]?.Value<string>());
             Assert.AreEqual(type, node["Type"]?.Value<string>());
             Assert.AreEqual(kind, node["Kind"]?.Value<string>());
             Assert.AreEqual(str.Length > 0 ? str : null, node["Str"]?.Value<string>());
             Assert.AreEqual(span.Length > 0 ? span : null, node["Span"]?.Value<string>());
-            Assert.AreEqual(isMissing ? (int?) 1 : null, node["IsMissing"]?.Value<int>());
-            Assert.AreEqual(childCount > 0 ? (int?) childCount : null, node["Child"]?.Count());
+            Assert.AreEqual(isMissing ? (int?)1 : null, node["IsMissing"]?.Value<int>());
+            Assert.AreEqual(childCount > 0 ? (int?)childCount : null, node["Child"]?.Count());
         }
     }
 }

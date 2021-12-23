@@ -7,6 +7,8 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 using RossyntBackend.Utils;
 
+#nullable enable
+
 namespace RossyntBackend.Models {
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public sealed class TreeNodeSyntaxOrToken : TreeNode {
@@ -14,7 +16,7 @@ namespace RossyntBackend.Models {
 
         // ******************************************************************************** //
 
-        public TreeNodeSyntaxOrToken(SyntaxNodeOrToken syntaxNodeOrToken, [CanBeNull] TreeNode parentTreeNode) : base(parentTreeNode) => SyntaxNodeOrToken = syntaxNodeOrToken;
+        public TreeNodeSyntaxOrToken(SyntaxNodeOrToken syntaxNodeOrToken, TreeNode? parentTreeNode) : base(parentTreeNode) => SyntaxNodeOrToken = syntaxNodeOrToken;
 
         [Pure]
         public override SyntaxKind SyntaxKind() => SyntaxNodeOrToken.Kind();
@@ -23,11 +25,9 @@ namespace RossyntBackend.Models {
         public override TreeNodeCategory TreeNodeCategory() => SyntaxNodeOrToken.IsNode ? Models.TreeNodeCategory.SyntaxNode : Models.TreeNodeCategory.SyntaxToken;
 
         [Pure]
-        [NotNull]
         public override string RawString() => SyntaxNodeOrToken.ToString();
 
         [Pure]
-        [NotNull]
         public override Type RawType() => RawObject().GetType();
 
         [Pure]
@@ -37,7 +37,6 @@ namespace RossyntBackend.Models {
         public override bool IsMissing() => SyntaxNodeOrToken.IsMissing;
 
         [Pure]
-        [NotNull]
         public override IReadOnlyDictionary<string, string> RawProperties() {
             var basicProperties = ObjectUtil.GetObjectProperties(SyntaxNodeOrToken);
             var moreProperties = ObjectUtil.GetObjectProperties(RawObject());
@@ -54,9 +53,8 @@ namespace RossyntBackend.Models {
         public string DebuggerDisplay => $"({TreeNodeCategory()}) {SyntaxNodeOrToken}";
 
         [Pure]
-        [NotNull]
         private object RawObject() {
-            return SyntaxNodeOrToken.IsNode ? (object) (SyntaxNodeOrToken.AsNode() ?? throw new InvalidOperationException($"{nameof(SyntaxNodeOrToken.AsNode)}() is null.")) : SyntaxNodeOrToken.AsToken();
+            return SyntaxNodeOrToken.IsNode ? (object)(SyntaxNodeOrToken.AsNode() ?? throw new InvalidOperationException($"{nameof(SyntaxNodeOrToken.AsNode)}() is null.")) : SyntaxNodeOrToken.AsToken();
         }
     }
 }

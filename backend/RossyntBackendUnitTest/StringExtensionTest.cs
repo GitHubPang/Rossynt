@@ -1,12 +1,13 @@
 using System;
 using AutoFixture;
-using JetBrains.Annotations;
 using NUnit.Framework;
 using RossyntBackend.Utils;
 
+#nullable enable
+
 namespace RossyntBackendUnitTest {
     public class StringExtensionTest {
-        [NotNull] private readonly Fixture _fixture = new Fixture();
+        private readonly Fixture _fixture = new Fixture();
 
         // ******************************************************************************** //
 
@@ -22,15 +23,14 @@ namespace RossyntBackendUnitTest {
         [TestCase("😀", 2, "😀")]
         [TestCase("😀", 1, "")]
         [TestCase("😀", 0, "")]
-        public void SurrogateSafeLeft([NotNull] string inputString, int maxLength, [NotNull] string expectedResult) {
+        public void SurrogateSafeLeft(string inputString, int maxLength, string expectedResult) {
             Assert.AreEqual(expectedResult, inputString.SurrogateSafeLeft(maxLength));
         }
 
         [Test]
         public void SurrogateSafeLeft_ArgumentNullException() {
-            const string inputString = null;
-            // ReSharper disable once AssignNullToNotNullAttribute
-            Assert.Catch<ArgumentNullException>(() => _ = inputString.SurrogateSafeLeft(_fixture.Create<int>()));
+            const string? inputString = null;
+            Assert.Catch<ArgumentNullException>(() => _ = inputString!.SurrogateSafeLeft(_fixture.Create<int>()));
         }
 
         [Test]

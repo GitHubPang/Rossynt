@@ -3,30 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 
+#nullable enable
+
 namespace RossyntBackend.Models {
     public sealed class Tree {
-        [NotNull] private readonly SyntaxNode _rootSyntaxNode;
-        [NotNull] public TreeNode RootTreeNode { get; }
+        private readonly SyntaxNode _rootSyntaxNode;
+        public TreeNode RootTreeNode { get; }
 
         /// <summary>
         /// Key is <see cref="TreeNode.NodeId"/> of <see cref="TreeNode"/>.
         /// </summary>
-        [NotNull] private readonly Dictionary<string, TreeNode> _treeNodes = new Dictionary<string, TreeNode>();
+        private readonly Dictionary<string, TreeNode> _treeNodes = new Dictionary<string, TreeNode>();
 
         /// <summary>
         /// Key is <see cref="TreeNode.NodeId"/> of <see cref="TreeNode"/>.
         /// </summary>
-        [NotNull]
         public IReadOnlyDictionary<string, TreeNode> TreeNodes => _treeNodes;
 
         // ******************************************************************************** //
 
-        private Tree([NotNull] SyntaxNode root) {
+        private Tree(SyntaxNode root) {
             _rootSyntaxNode = root ?? throw new ArgumentNullException(nameof(root));
 
             var rootTreeNode = AddTreeNode(new TreeNodeSyntaxOrToken(root, null));
@@ -34,14 +34,16 @@ namespace RossyntBackend.Models {
             RootTreeNode = rootTreeNode;
         }
 
-        [NotNull]
-        public static async Task<Tree> CompileFile([NotNull] string fileText, [NotNull] string filePath, CancellationToken cancellationToken) {
+        public static async Task<Tree> CompileFile(string fileText, string filePath, CancellationToken cancellationToken) {
+            if (fileText == null) throw new ArgumentNullException(nameof(fileText));
+            if (filePath == null) throw new ArgumentNullException(nameof(filePath));
+
             var syntaxTree = CSharpSyntaxTree.ParseText(fileText, path: filePath, cancellationToken: cancellationToken);
             var root = await syntaxTree.GetRootAsync(cancellationToken);
             return new Tree(root);
         }
 
-        private void ProcessTreeNode([NotNull] TreeNodeSyntaxOrToken treeNode) {
+        private void ProcessTreeNode(TreeNodeSyntaxOrToken treeNode) {
             if (treeNode == null) throw new ArgumentNullException(nameof(treeNode));
 
             // Process leading trivia.
@@ -60,14 +62,14 @@ namespace RossyntBackend.Models {
             }
         }
 
-        [NotNull]
-        private TTreeNode AddTreeNode<TTreeNode>([NotNull] TTreeNode treeNode) where TTreeNode : TreeNode {
+        private TTreeNode AddTreeNode<TTreeNode>(TTreeNode treeNode) where TTreeNode : TreeNode {
+            if (treeNode == null) throw new ArgumentNullException(nameof(treeNode));
+
             _treeNodes.Add(treeNode.NodeId, treeNode);
             return treeNode;
         }
 
-        [CanBeNull]
-        public TreeNode FindTreeNode(TextSpan textSpan) {
+        public TreeNode? FindTreeNode(TextSpan textSpan) {
             // Skip if out of range.
             if (!_rootSyntaxNode.FullSpan.Contains(textSpan)) {
                 return null;

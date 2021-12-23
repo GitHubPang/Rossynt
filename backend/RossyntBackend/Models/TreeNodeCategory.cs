@@ -1,4 +1,6 @@
-﻿namespace RossyntBackend.Models {
+﻿#nullable enable
+
+namespace RossyntBackend.Models {
     /// <remarks>
     /// Note: must sync with front end.
     /// </remarks>

@@ -12,6 +12,8 @@ using RossyntBackend.Models;
 using RossyntBackend.Repositories;
 using RossyntBackend.Utils;
 
+#nullable enable
+
 namespace RossyntBackend.Controllers {
     [ApiController]
     [Route("[controller]")]
@@ -20,11 +22,11 @@ namespace RossyntBackend.Controllers {
 
         // ******************************************************************************** //
 
-        [NotNull] private readonly IProjectRepository _projectRepository;
+        private readonly IProjectRepository _projectRepository;
 
         // ******************************************************************************** //
 
-        public SyntaxTreeController([NotNull] IProjectRepository projectRepository) {
+        public SyntaxTreeController(IProjectRepository projectRepository) {
             _projectRepository = projectRepository ?? throw new ArgumentNullException(nameof(projectRepository));
         }
 
@@ -34,8 +36,7 @@ namespace RossyntBackend.Controllers {
         }
 
         [HttpPost(nameof(CompileFile))]
-        [NotNull, ItemNotNull]
-        public async Task<IActionResult> CompileFile([NotNull] [FromForm] CompileFileRequest request) {
+        public async Task<IActionResult> CompileFile([FromForm] CompileFileRequest request) {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             // Compile tree.
@@ -65,15 +66,11 @@ namespace RossyntBackend.Controllers {
         }
 
         [HttpPost(nameof(GetNodeInfo))]
-        [NotNull]
-        public IReadOnlyDictionary<string, string> GetNodeInfo([NotNull] [FromForm] GetNodeInfoRequest request) {
+        public IReadOnlyDictionary<string, string> GetNodeInfo([FromForm] GetNodeInfoRequest request) {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             // Get tree.
-            var tree = _projectRepository.GetTree();
-            if (tree == null) {
-                throw new InvalidOperationException("No tree in repository.");
-            }
+            var tree = _projectRepository.GetTree() ?? throw new InvalidOperationException("No tree in repository.");
 
             // Get tree node.
             if (!tree.TreeNodes.TryGetValue(request.NodeId, out var treeNode)) {
@@ -85,15 +82,11 @@ namespace RossyntBackend.Controllers {
         }
 
         [HttpPost(nameof(FindNode))]
-        [NotNull]
-        public IReadOnlyDictionary<string, string> FindNode([NotNull] [FromForm] FindNodeRequest request) {
+        public IReadOnlyDictionary<string, string> FindNode([FromForm] FindNodeRequest request) {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             // Get tree.
-            var tree = _projectRepository.GetTree();
-            if (tree == null) {
-                throw new InvalidOperationException("No tree in repository.");
-            }
+            var tree = _projectRepository.GetTree() ?? throw new InvalidOperationException("No tree in repository.");
 
             // Find tree node.
             var treeNode = tree.FindTreeNode(TextSpan.FromBounds(request.Start, request.End));
@@ -108,8 +101,7 @@ namespace RossyntBackend.Controllers {
         }
 
         [Pure]
-        [NotNull]
-        private static IReadOnlyDictionary<string, object> RenderTree([NotNull] TreeNode treeNode) {
+        private static IReadOnlyDictionary<string, object> RenderTree(TreeNode treeNode) {
             if (treeNode == null) throw new ArgumentNullException(nameof(treeNode));
 
             var childNodes = treeNode.ChildTreeNodes.Select(RenderTree).ToImmutableArray();
@@ -143,8 +135,7 @@ namespace RossyntBackend.Controllers {
         }
 
         [Pure]
-        [NotNull]
-        private static string ShortString([NotNull] TreeNode treeNode) {
+        private static string ShortString(TreeNode treeNode) {
             if (treeNode == null) throw new ArgumentNullException(nameof(treeNode));
 
             var rawString = treeNode.RawString();

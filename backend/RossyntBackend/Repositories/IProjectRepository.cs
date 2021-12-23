@@ -1,14 +1,15 @@
 ﻿using JetBrains.Annotations;
 using RossyntBackend.Models;
 
+#nullable enable
+
 namespace RossyntBackend.Repositories {
     public interface IProjectRepository {
-        void SetTree([NotNull] Tree tree);
+        public void SetTree(Tree tree);
 
         [Pure]
-        [CanBeNull]
-        Tree GetTree();
+        public Tree? GetTree();
 
-        void RemoveTree();
+        public void RemoveTree();
     }
 }
