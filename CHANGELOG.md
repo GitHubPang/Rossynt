@@ -3,6 +3,7 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+## [213.10.0] - 2022-01-06
 ### Added
 - Support .NET 6.
 
