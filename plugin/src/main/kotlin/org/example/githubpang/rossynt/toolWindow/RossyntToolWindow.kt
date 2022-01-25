@@ -63,7 +63,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
     }
 
     private inner class UiTableModel : AbstractTableModel() {
-        override fun getRowCount(): Int = this@RossyntToolWindow.nodeInfo.size + when (this@RossyntToolWindow.selectedTreeNode) {
+        override fun getRowCount(): Int = nodeInfo.size + when (selectedTreeNode) {
             null -> 0
             else -> SpecialRow.values().size
         }
@@ -80,7 +80,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         }
 
         private fun getRowValueAt(rowIndex: Int): Pair<String, String> {
-            val selectedTreeNode = this@RossyntToolWindow.selectedTreeNode
+            val selectedTreeNode = selectedTreeNode
 
             @Suppress("NAME_SHADOWING")
             var rowIndex = rowIndex
@@ -98,7 +98,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
                 rowIndex -= specialRows.size
             }
 
-            return this@RossyntToolWindow.nodeInfo[rowIndex]
+            return nodeInfo[rowIndex]
         }
     }
 
@@ -163,7 +163,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
     //todo disable this action when not applicable (e.g. not viewing C# file)
     private inner class SelectNodeAtCaretAction : AnAction("Select Node at Caret", null, AllIcons.General.Locate), DumbAware {
         override fun actionPerformed(e: AnActionEvent) {
-            this@RossyntToolWindow.rossyntService.findNodeAtCaret()
+            rossyntService.findNodeAtCaret()
         }
     }
 
