@@ -3,6 +3,9 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Changed
+- Disable the "Select Node at Caret" button whenever the tree is empty - c26720c63159fae45d704415e5c372f1bdd445f2
+
 ## [213.10.0] - 2022-01-06
 ### Added
 - Support .NET 6.
