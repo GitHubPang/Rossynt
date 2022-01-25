@@ -160,8 +160,13 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         }
     }
 
-    //todo disable this action when not applicable (e.g. not viewing C# file)
     private inner class SelectNodeAtCaretAction : AnAction("Select Node at Caret", null, AllIcons.General.Locate), DumbAware {
+        override fun update(e: AnActionEvent) {
+            super.update(e)
+
+            e.presentation.isEnabled = rootTreeNode != null
+        }
+
         override fun actionPerformed(e: AnActionEvent) {
             rossyntService.findNodeAtCaret()
         }
