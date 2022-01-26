@@ -3,6 +3,7 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+## [213.11.0] - 2022-01-26
 ### Changed
 - Disable the "Select Node at Caret" button whenever the tree is empty - c26720c63159fae45d704415e5c372f1bdd445f2
 
