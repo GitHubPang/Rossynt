@@ -8,7 +8,7 @@
 | [Architecture](docs/architecture.md)
 | [Build](docs/build.md)
 
-<img src="docs/screenshot01.png" width="345" /> <img src="docs/screenshot02.png" width="345" />
+<img src="docs/screenshot01.png" width="345" title="Screenshot - light theme" /> <img src="docs/screenshot02.png" width="345" title="Screenshot - dark theme" />
 
 <!-- Plugin description -->
 Rossynt - **Ros**lyn **syn**tax **t**ree viewer for C#. Works on JetBrains Rider and all other IntelliJ IDEA-based IDEs.
