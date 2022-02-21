@@ -4,7 +4,7 @@
 
 ## [Unreleased]
 ### Changed
-- Updated [`Microsoft.CodeAnalysis.CSharp`](https://www.nuget.org/packages/Microsoft.CodeAnalysis.CSharp) (Roslyn) from 4.0.1 to 4.1.0. Now it recognizes C# 11 stuff such as [`ExclamationExclamationToken`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntaxkind?view=roslyn-dotnet-4.1.0#fields - 82128cfe9a24d1ca016db19b93216fc3585d1b0c, 0be63f72cd34e9276bd8c227bdf17abb9b46561c
+- Updated [`Microsoft.CodeAnalysis.CSharp`](https://www.nuget.org/packages/Microsoft.CodeAnalysis.CSharp) (Roslyn) from 4.0.1 to 4.1.0. Now it recognizes C# 11 stuff such as [`ExclamationExclamationToken`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntaxkind?view=roslyn-dotnet-4.1.0#fields) - 82128cfe9a24d1ca016db19b93216fc3585d1b0c, 0be63f72cd34e9276bd8c227bdf17abb9b46561c
 
 ## [213.11.0] - 2022-01-26
 ### Changed
