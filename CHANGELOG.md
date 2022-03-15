@@ -3,8 +3,119 @@
 # IntelliJ Platform Plugin Template Changelog
 
 ## [Unreleased]
+### Changed
+- Dependencies (GitHub Actions) - upgrade `actions/checkout` to `3`
+- Upgrade Gradle Wrapper to `7.4.1`
+
+## [1.1.2]
+### Changed
+- Update `platformVersion` to `2021.1.3` for compatibility with Apple M1
+- Change since/until build to `211-213.*` (2021.1 - 2021.3)
+- Upgrade Gradle Wrapper to `7.4`
+- Dependencies - upgrade `org.jetbrains.intellij` to `1.4.0`
+- Dependencies (GitHub Actions) - upgrade `JetBrains/qodana-action` to `4.2.5`
+
+## [1.1.1]
+### Changed
+- GitHub Actions - fixed duplicated `.zip` extension in artifact file's name of the build flow
+- Upgrade Gradle Wrapper to `7.3.3`
+- Dependencies - upgrade `org.jetbrains.intellij` to `1.3.1`
+- Dependencies - upgrade `org.jetbrains.kotlin.jvm` to `1.6.10`
+- Dependencies (GitHub Actions) - upgrade `JetBrains/qodana-action` to `4.2.3`
+- Dependencies (GitHub Actions) - upgrade `actions/cache` to `v2.1.7`
+
+## [1.1.0]
+### Added
+- GitHub Actions: Collect Qodana/Tests/Plugin Verifier results as artifacts
+
+### Changed
+- Dependencies - upgrade `org.jetbrains.intellij` to `1.3.0` 
+- Dependencies - upgrade `org.jetbrains.changelog` to `1.3.1`
+- Dependencies - upgrade `org.jetbrains.kotlin.jvm` to `1.6.0`
+- Dependencies (GitHub Actions) - upgrade `jtalk/url-health-check-action` to `2`
+- Dependencies (GitHub Actions) - upgrade `actions/checkout` to `2.3.5`
+- GitHub Actions general performance refactoring
+- GitHub Actions - prepare plugin archive content to be archived once
+- GitHub Actions - patch changelog only if change notes are provided
+- Update `pluginUntilBuild` to include `213.*` (2021.3.*)
+- Upgrade Gradle Wrapper to `7.3`
+
+### Fixed
+- Fixed passing change notes from `CHANGELOG.md` to the Release Draft
+- Fixed passing updated change notes from the Release Draft to `patchChangelog` Gradle task
+- Fixed `QODANA_SHOW_REPORT` environment variable resolving for Gradle `6.x` 
+
+### Removed
+- Removed the `pluginVerifierIdeVersions` configuration to use default IDEs list provided by the `listProductsReleases` task for `runPluginVerifier` 
+- Removed `platformDownloadSources` from Gradle configuration to use default value 
+- Removed `updateSinceUntilBuild.set(true)` from Gradle configuration to use default value
+
+## [1.0.0]
+### Added
+- Plugin Signing
+- Qodana integration
+- Functional tests
+- Compatibility with Java 11
+- `Run Qodana` and `Run IDE for UI Tests` run configurations
+- Use Gradle `wrapper` task to handle Gradle updates
+- JVM compatibility version extracted to `gradle.properties` file
+- Suppress `UnusedProperty` inspection for the `kotlin.stdlib.default.dependency` in `gradle.properties`
+
+### Changed
+- GitHub Actions: Use Java 11
+- GitHub Actions: Update Build and Release flows
+- GitHub Actions: Use Gradle cache provided with `actions/setup-java`
+- Update `pluginVerifierIdeVersions` to `2020.3.4, 2021.1.3, 2021.2.1`
+- Change since/until build to `203-212.*`
+- Upgrade Gradle Wrapper to `7.2`
+- Gradle – Changelog plugin configuration update
+- Dependencies - upgrade `org.jetbrains.kotlin.jvm` to `1.5.30`
+- Dependencies - upgrade `org.jetbrains.changelog` to `1.3.0`
+- Dependencies - upgrade `org.jetbrains.intellij` to `1.1.6`
+- Dependencies (GitHub Actions) - upgrade `actions/upload-artifact` to `v2.2.4`
+
+### Fixed
+- Use `DynamicBundle` instead of `AbstractBundle` in `MyBundle.kt`
+
+### Removed
+- Removed `detekt`/`ktlint` integration
+
+## [0.10.1]
+### Added
+- Introduced `next` branch in the root repository to make `main` always a stable one
+
+### Changed
+- Dependencies (GitHub Actions) - upgrade `actions/cache` to `v2.1.6`
+- Trigger GitHub Actions `Build` workflows only on pushes to `main` branch or pull request to avoid duplicated checks
+
+## [0.10.0]
+### Changed
+- Remove reference to the `jcenter()` from Gradle configuration file
+- Update `pluginVerifierIdeVersions` to `2020.2.4, 2020.3.4, 2021.1.2`
+- Update `pluginUntilBuild` to include `211.*` (2021.1.*)
+- Dependencies - upgrade `org.jetbrains.kotlin.jvm` to `1.5.10`
+- Dependencies - upgrade `detekt-formatting from` to `1.17.1`
+- Dependencies - upgrade `io.gitlab.arturbosch.detekt` to `1.17.1`
+- Dependencies (GitHub Actions) - upgrade `actions/cache` to `v2.1.5`
+- Dependencies (GitHub Actions) - upgrade `actions/checkout` to `v2.3.4`
+- Dependencies (GitHub Actions) - upgrade `actions/upload-release-asset` to `v1.0.2`
+- Dependencies (GitHub Actions) - upgrade `actions/create-release` to `v1.1.4`
+- Upgrade Gradle Wrapper to `7.0.2`
+
+## [0.9.0]
 ### Added
 - `properties` shorthand function for accessing `gradle.properties` in a cleaner way
+- Dependabot check for GitHub Actions used in [workflow files](.github/workflows)
+
+### Changed
+- Dependencies - upgrade `detekt-formatting from` to `1.16.0` 
+- Dependencies - upgrade `io.gitlab.arturbosch.detekt` to `1.16.0` 
+- Dependencies - upgrade `org.jetbrains.kotlin.jvm` to `1.4.32` 
+- Dependencies (GitHub Actions) - upgrade `actions/upload-artifact` to `v2.2.2`
+- Dependencies (GitHub Actions) - upgrade `actions/cache` to `v2.1.4`
+
+### Fixed
+- Fix `README.md` file resolution in the `build.gradle.kts`
 
 ## [0.8.3]
 ### Changed
@@ -148,15 +259,10 @@
 - Gradle - remove kotlin("stdlib-jdk8") dependency to decrease the plugin artifact size
 - Dependencies - bump ktlint to `9.3.0`
 - GitHub Actions - make *Update Changelog* job dependent on the *Publish Plugin*
-
-### Fixed
-- Resolve ktlint reports
-
-## [0.3.1]
-### Changed
 - GitHub Actions - run plugin verifier against `2019.3` `2020.1` `2020.2`
 
 ### Fixed
+- Resolve ktlint reports
 - GitHub Actions - Plugin Verifier broken for artifacts with whitespaces in name
 
 ## [0.3.0]
