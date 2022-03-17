@@ -25,7 +25,6 @@ repositories {
 }
 dependencies {
     // https://kotlinlang.org/docs/releases.html#release-details
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.0-native-mt")
     implementation("io.ktor:ktor-client-content-negotiation:2.0.0-beta-1")
     implementation("io.ktor:ktor-client-core:2.0.0-beta-1")
     implementation("io.ktor:ktor-client-cio:2.0.0-beta-1")
@@ -107,6 +106,24 @@ tasks {
         systemProperty("ide.mac.message.dialogs.as.sheets", "false")
         systemProperty("jb.privacy.policy.text", "<!--999.999-->")
         systemProperty("jb.consents.confirmation.enabled", "false")
+    }
+
+    // Exclude Kotlin packages from the plugin in order to use the ones packed in IntelliJ platform 2022.1.
+    // Note: to see list of packages included, go to folder: build/idea-sandbox/plugins/Rossynt/lib
+    //
+    // References:
+    // https://youtrack.jetbrains.com/issue/IDEA-285839
+    // https://youtrack.jetbrains.com/issue/KTIJ-20529
+    //
+    buildPlugin {
+        exclude {
+            it.name.startsWith("kotlinx-coroutines-") || it.name.startsWith("kotlin-stdlib-") || it.name.startsWith("kotlin-reflect-")
+        }
+    }
+    prepareSandbox {
+        exclude {
+            it.name.startsWith("kotlinx-coroutines-") || it.name.startsWith("kotlin-stdlib-") || it.name.startsWith("kotlin-reflect-")
+        }
     }
 
     signPlugin {
