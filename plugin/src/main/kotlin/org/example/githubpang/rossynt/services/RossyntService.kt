@@ -162,11 +162,13 @@ internal class RossyntService : Disposable {
             override fun documentChanged(event: DocumentEvent) {
                 super.documentChanged(event)
 
-                if (FileEditorManager.getInstance(project).selectedTextEditor?.document != event.document) {
-                    return
-                }
+                GlobalScope.launch(Dispatchers.Main) {
+                    if (FileEditorManager.getInstance(project).selectedTextEditor?.document != event.document) {
+                        return@launch
+                    }
 
-                textEventThrottler.queueEvent(event.document.text)
+                    textEventThrottler.queueEvent(event.document.text)
+                }
             }
         }, this)
         textEventThrottler.setCallback(object : ITextEventThrottlerCallback {
