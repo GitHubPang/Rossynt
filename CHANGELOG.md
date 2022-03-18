@@ -3,6 +3,7 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+## [213.12.1] - 2022-03-18
 ### Fixed
 - Fix #86, caused by threading issues - 0a406c6c31e02056a7a0501202f80b0912c05c31
 
