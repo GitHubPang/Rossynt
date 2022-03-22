@@ -11,10 +11,12 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.SystemInfoRt
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
-import io.ktor.client.features.json.*
+import io.ktor.client.plugins.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
+import io.ktor.serialization.gson.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import org.example.githubpang.rossynt.settings.PluginSettingsData
@@ -327,9 +329,9 @@ internal class BackendService : IBackendService {
 
             // Do HTTP request.
             HttpClient(CIO) {
-                install(JsonFeature) { serializer = GsonSerializer() }
+                install(ContentNegotiation) { gson() }
             }.use { client ->
-                return client.submitForm("$backendUrl/$urlPath", formParameters)
+                return client.submitForm("$backendUrl/$urlPath", formParameters).body()
             }
         } catch (e: Exception) {
             if (!isDisposed.get()) {
