@@ -4,7 +4,7 @@
 
 ## [Unreleased]
 ### Added
-- Support IntelliJ Platform 2022.1 - 93661519db241a33cefa2a72b18c63dfcc7c439f
+- Support IntelliJ Platform 2022.1.
 
 ## [213.12.1] - 2022-03-18
 ### Fixed
