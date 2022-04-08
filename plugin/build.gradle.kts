@@ -29,7 +29,7 @@ dependencies {
     implementation("io.ktor:ktor-client-core:2.0.0-beta-1")
     implementation("io.ktor:ktor-client-cio:2.0.0-beta-1")
     implementation("io.ktor:ktor-client-gson:2.0.0-beta-1")
-    implementation("io.ktor:ktor-serialization-gson:2.0.0-beta-1")
+    implementation("io.ktor:ktor-serialization-gson:2.0.0")
 }
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
