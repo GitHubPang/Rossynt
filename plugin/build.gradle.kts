@@ -9,7 +9,7 @@ plugins {
     // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "1.6.10"
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij") version "1.4.0"
+    id("org.jetbrains.intellij") version "1.5.2"
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "1.3.1"
     // Gradle Qodana Plugin
@@ -26,7 +26,7 @@ repositories {
 dependencies {
     // https://kotlinlang.org/docs/releases.html#release-details
     implementation("io.ktor:ktor-client-content-negotiation:2.0.0-beta-1")
-    implementation("io.ktor:ktor-client-core:2.0.0-beta-1")
+    implementation("io.ktor:ktor-client-core:2.0.0")
     implementation("io.ktor:ktor-client-cio:2.0.0-beta-1")
     implementation("io.ktor:ktor-client-gson:2.0.0-beta-1")
     implementation("io.ktor:ktor-serialization-gson:2.0.0-beta-1")
