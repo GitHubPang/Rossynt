@@ -27,6 +27,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.coroutines.EmptyCoroutineContext
 
 internal class BackendService : IBackendService {
     private companion object {
@@ -60,6 +61,8 @@ internal class BackendService : IBackendService {
 
     // ******************************************************************************** //
 
+    private val scope = CoroutineScope(EmptyCoroutineContext + Job())
+
     @Volatile
     private var isReady = false
     private var isDisposed: AtomicBoolean = AtomicBoolean()
@@ -79,7 +82,7 @@ internal class BackendService : IBackendService {
         require(this.project == null)
         this.project = project
         this.delegate = delegate
-        backendJob = GlobalScope.launch(Dispatchers.IO) {
+        backendJob = scope.launch(Dispatchers.IO) {
             runBackend()
         }
     }
@@ -98,6 +101,7 @@ internal class BackendService : IBackendService {
 
                 shutdownBackend()
             }
+            scope.cancel()
         } finally {
             LOGGER.info("Backend service dispose end.")
         }
@@ -134,7 +138,7 @@ internal class BackendService : IBackendService {
             LOGGER.info("Started backend process, backendUrl = $backendUrl")
 
             // Publish message.
-            GlobalScope.launch(Dispatchers.Main) {
+            scope.launch(Dispatchers.Main) {
                 val messageBus = project.messageBus
                 val publisher = messageBus.syncPublisher(BackendServiceNotifier.TOPIC)
                 publisher.backendServiceBecameReady()
@@ -164,7 +168,7 @@ internal class BackendService : IBackendService {
                 }
 
                 // Inform delegate.
-                GlobalScope.launch(Dispatchers.Main) {
+                scope.launch(Dispatchers.Main) {
                     this@BackendService.delegate?.onBackendExceptionMessageUpdated(backendExceptionMessage)
                 }
 
@@ -270,7 +274,7 @@ internal class BackendService : IBackendService {
                     val parseResult = BackendProcessOutputParser.parseText(event.text)
                     if (parseResult != null) {
                         // Send backend url to channel.
-                        GlobalScope.launch(Dispatchers.IO) {
+                        scope.launch(Dispatchers.IO) {
                             backendUrlChannel.send(parseResult.backendUrl)
                         }
                     }

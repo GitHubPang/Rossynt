@@ -1,8 +1,11 @@
 package org.example.githubpang.rossynt.events
 
+import com.intellij.openapi.Disposable
 import kotlinx.coroutines.*
+import kotlin.coroutines.EmptyCoroutineContext
 
-internal class TextEventThrottler {
+internal class TextEventThrottler : Disposable {
+    private val scope = CoroutineScope(EmptyCoroutineContext + Job())
     private var job: Job? = null
     private var lastText: String? = null
     private var callback: ITextEventThrottlerCallback? = null
@@ -11,6 +14,11 @@ internal class TextEventThrottler {
 
     fun setCallback(callback: ITextEventThrottlerCallback?) {
         this.callback = callback
+    }
+
+    override fun dispose() {
+        reset()
+        scope.cancel()
     }
 
     fun reset() {
@@ -22,7 +30,7 @@ internal class TextEventThrottler {
         lastText = text
 
         job?.cancel()
-        job = GlobalScope.launch(Dispatchers.IO) {
+        job = scope.launch(Dispatchers.IO) {
             try {
                 delay(1000)
             } catch (e: CancellationException) {

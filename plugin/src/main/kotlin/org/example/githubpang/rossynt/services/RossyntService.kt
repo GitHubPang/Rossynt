@@ -12,11 +12,10 @@ import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent
 import com.intellij.openapi.fileEditor.FileEditorManagerListener
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.util.TextRange
 import com.intellij.util.LineSeparator
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.example.githubpang.rossynt.RossyntToolWindowStateNotifier
 import org.example.githubpang.rossynt.events.ITextEventThrottlerCallback
 import org.example.githubpang.rossynt.events.TextEventThrottler
@@ -24,6 +23,7 @@ import org.example.githubpang.rossynt.settings.PluginSettingsNotifier
 import org.example.githubpang.rossynt.trees.TreeNode
 import java.util.*
 import javax.annotation.concurrent.Immutable
+import kotlin.coroutines.EmptyCoroutineContext
 
 @Service
 internal class RossyntService : Disposable {
@@ -43,6 +43,8 @@ internal class RossyntService : Disposable {
 
     // ******************************************************************************** //
 
+    private val scope = CoroutineScope(EmptyCoroutineContext + Job())
+
     private val textEventThrottler = TextEventThrottler()
 
     private var delegate: IRossyntService? = null
@@ -59,8 +61,12 @@ internal class RossyntService : Disposable {
 
     // ******************************************************************************** //
 
+    init {
+        Disposer.register(this, textEventThrottler)
+    }
+
     override fun dispose() {
-        textEventThrottler.reset()
+        scope.cancel()
         delegate = null
     }
 
@@ -162,7 +168,7 @@ internal class RossyntService : Disposable {
             override fun documentChanged(event: DocumentEvent) {
                 super.documentChanged(event)
 
-                GlobalScope.launch(Dispatchers.Main) {
+                scope.launch(Dispatchers.Main) {
                     if (FileEditorManager.getInstance(project).selectedTextEditor?.document != event.document) {
                         return@launch
                     }
@@ -209,7 +215,7 @@ internal class RossyntService : Disposable {
         }
 
         val selection = getSelection() ?: return
-        GlobalScope.launch(Dispatchers.IO) {
+        scope.launch(Dispatchers.IO) {
             val nodeId = backendService.findNode(selection.startOffset, selection.endOffset)
             launch(Dispatchers.Main) innerLaunch@{
                 val newSelection = getSelection() ?: return@innerLaunch
@@ -259,7 +265,7 @@ internal class RossyntService : Disposable {
             setCurrentData(Data())
 
             val fetchingState = expectedState
-            GlobalScope.launch(Dispatchers.IO) {
+            scope.launch(Dispatchers.IO) {
                 val rootTreeNode = backendService.compileFile(LineSeparatorUtil.convertLineSeparators(fetchingState.fileText, fetchingState.lineSeparator), fetchingState.filePath)
                 launch(Dispatchers.Main) {
                     if (fetchingState.uniqueId == expectedState.uniqueId) {
@@ -279,7 +285,7 @@ internal class RossyntService : Disposable {
             setCurrentData(Data(currentData.fileText, currentData.lineSeparator, currentData.filePath, currentData.rootTreeNode, null, null))
 
             val fetchingState = expectedState
-            GlobalScope.launch(Dispatchers.IO) {
+            scope.launch(Dispatchers.IO) {
                 val nodeInfo = when {
                     fetchingState.nodeId != null -> ImmutableMap.copyOf(backendService.getNodeInfo(fetchingState.nodeId))
                     else -> ImmutableMap.of()
