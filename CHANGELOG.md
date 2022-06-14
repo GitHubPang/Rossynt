@@ -3,6 +3,9 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Added
+- Support IntelliJ Platform 2022.2 - 20ce200fcd306c7037f1de4fa595501581aef04b
+
 ## [221.1.0] - 2022-04-12
 ### Added
 - Support IntelliJ Platform 2022.1.
