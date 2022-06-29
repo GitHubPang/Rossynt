@@ -29,7 +29,7 @@ dependencies {
     implementation("io.ktor:ktor-client-core:2.0.0-beta-1")
     implementation("io.ktor:ktor-client-cio:2.0.0-beta-1")
     implementation("io.ktor:ktor-client-gson:2.0.0-beta-1")
-    implementation("io.ktor:ktor-serialization-gson:2.0.0-beta-1")
+    implementation("io.ktor:ktor-serialization-gson:2.0.3")
 }
 
 // Set the JVM language level used to compile sources and generate files - Java 11 is required since 2020.3
