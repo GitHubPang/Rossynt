@@ -26,7 +26,7 @@ repositories {
 dependencies {
     // https://kotlinlang.org/docs/releases.html#release-details
     implementation("io.ktor:ktor-client-content-negotiation:2.0.0-beta-1")
-    implementation("io.ktor:ktor-client-core:2.0.0-beta-1")
+    implementation("io.ktor:ktor-client-core:2.0.3")
     implementation("io.ktor:ktor-client-cio:2.0.0-beta-1")
     implementation("io.ktor:ktor-client-gson:2.0.0-beta-1")
     implementation("io.ktor:ktor-serialization-gson:2.0.0-beta-1")
