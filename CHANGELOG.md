@@ -7,18 +7,22 @@
 - Use JVM toolchain for configuring source/target compilation compatibility
 - Make sure GitHub Actions release jobs have write permissions
 - Example implementation: Add `TODO()` with a hint to remove stale sample code
+- Exclude `.qodana` directory from Qodana analysis
 
 ### Changed
-- Upgrade Gradle Wrapper to `7.5`
-- Update `platformVersion` to `2021.2.4`
-- Change since/until build to `212-221.*` (2021.2 - 2022.1)
-- Dependencies - upgrade `org.jetbrains.intellij` to `1.7.0`
+- Upgrade Gradle Wrapper to `7.5.1`
+- Update `platformVersion` to `2021.3.3`
+- Change since/until build to `213-222.*` (2021.3 - 2022.2)
+- Dependencies - upgrade `org.jetbrains.intellij` to `1.8.0`
 - Dependencies - upgrade `org.jetbrains.kotlin.jvm` to `1.7.10`
 - Dependencies (GitHub Actions) - upgrade `actions/checkout` to `3`
 - Dependencies (GitHub Actions) - upgrade `actions/cache` to `3`
 - Dependencies (GitHub Actions) - upgrade `actions/setup-java` to `3`
 - Dependencies (GitHub Actions) - upgrade `actions/upload-artifact` to `3`
-- Dependencies (GitHub Actions) - upgrade `JetBrains/qodana-action` to `v2022.1.1`
+- Dependencies (GitHub Actions) - upgrade `JetBrains/qodana-action` to `v2022.2.1`
+
+### Fixed
+- Pass Plugin Signing secrets as environment variables in the Release workflow
 
 ### Removed
 - Removed Gradle caching from GitHub Actions 
