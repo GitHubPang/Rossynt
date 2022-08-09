@@ -61,7 +61,7 @@ jobs:
         run: ./publish.sh
 
       - name: Upload Backend Artifact
-        uses: actions/upload-artifact@v2.2.4
+        uses: actions/upload-artifact@v3
         with:
           name: backend-artifact
           path: plugin/src/main/resources/raw/RossyntBackend
