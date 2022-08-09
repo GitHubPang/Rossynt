@@ -34,6 +34,8 @@ jobs:
     name: Update Changelog
     needs: release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
 
       # Check out current repository
