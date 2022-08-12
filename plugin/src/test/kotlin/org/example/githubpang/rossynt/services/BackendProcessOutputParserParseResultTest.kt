@@ -6,7 +6,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
 @RunWith(Parameterized::class)
-class BackendProcessOutputParserResultTest internal constructor(private val urlScheme: String, private val serverPort: String, private val backendUrl: String) {
+class BackendProcessOutputParserParseResultTest internal constructor(private val urlScheme: String, private val serverPort: String, private val backendUrl: String) {
     companion object {
         @JvmStatic
         @Parameterized.Parameters
