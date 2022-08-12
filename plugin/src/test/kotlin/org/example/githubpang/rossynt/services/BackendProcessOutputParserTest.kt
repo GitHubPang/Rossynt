@@ -44,7 +44,7 @@ class BackendProcessOutputParserTest internal constructor(private val line: Stri
     // ******************************************************************************** //
 
     @Test
-    fun extractVersionFromLine() {
+    fun parseText() {
         val parseResult = BackendProcessOutputParser.parseText(line)
         Assert.assertEquals(urlScheme, parseResult?.urlScheme)
         Assert.assertEquals(serverPort, parseResult?.serverPort)
