@@ -6,6 +6,7 @@ import com.intellij.ui.components.JBRadioButton
 import com.intellij.ui.dsl.builder.Cell
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.dsl.builder.selected
+import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import com.intellij.ui.layout.selected
 import com.intellij.util.text.nullize
 import javax.swing.JPanel
@@ -41,6 +42,7 @@ internal class PluginSettingsUi {
                                 it.name.startsWith("dotnet")
                             },
                         )
+                            .horizontalAlign(HorizontalAlign.FILL)
                             .enabledIf(radioButtonDotNetPathCustomCell!!.selected)
                             .component
                     }
