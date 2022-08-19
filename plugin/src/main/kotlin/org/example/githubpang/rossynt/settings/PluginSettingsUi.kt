@@ -3,7 +3,10 @@ package org.example.githubpang.rossynt.settings
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.components.JBRadioButton
-import com.intellij.ui.layout.panel
+import com.intellij.ui.dsl.builder.Cell
+import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.dsl.builder.selected
+import com.intellij.ui.layout.selected
 import com.intellij.util.text.nullize
 import javax.swing.JPanel
 
@@ -17,24 +20,29 @@ internal class PluginSettingsUi {
 
     init {
         var radioButtonDotNetPathAutomatic: JBRadioButton? = null
+        var radioButtonDotNetPathCustomCell: Cell<JBRadioButton>? = null
         var radioButtonDotNetPathCustom: JBRadioButton? = null
         var textFieldDotNetPath: TextFieldWithBrowseButton? = null
 
         rootComponent = panel {
-            buttonGroup {
+            buttonsGroup {
                 row {
                     radioButtonDotNetPathAutomatic = radioButton("Automatic").component
                 }
                 row {
-                    radioButtonDotNetPathCustom = radioButton("Custom").component
-
+                    radioButtonDotNetPathCustomCell = radioButton("Custom")
+                    radioButtonDotNetPathCustom = radioButtonDotNetPathCustomCell!!.component
+                }
+                indent {
                     row("Path to dotnet executable:") {
                         textFieldDotNetPath = textFieldWithBrowseButton(
                             "Select Executable",
                             fileChooserDescriptor = FileChooserDescriptorFactory.createSingleLocalFileDescriptor().withFileFilter {
                                 it.name.startsWith("dotnet")
                             },
-                        ).component
+                        )
+                            .enabledIf(radioButtonDotNetPathCustomCell!!.selected)
+                            .component
                     }
                 }
             }
