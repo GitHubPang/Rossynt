@@ -3,6 +3,7 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+## [222.1.1] - 2022-08-23
 ### Changed
 - Improve UI in settings - 081b56cc8bdf541d644da4aa977fe55b6b65063e
 
