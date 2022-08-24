@@ -11,7 +11,7 @@ internal class RossyntToolWindowFactory : ToolWindowFactory, DumbAware {
         require(toolWindow.id == RossyntToolWindow.TOOL_WINDOW_ID)
 
         val rossyntToolWindow = RossyntToolWindow(project, toolWindow)
-        val contentFactory = ContentFactory.SERVICE.getInstance()
+        val contentFactory = ContentFactory.getInstance()
         val content = contentFactory.createContent(rossyntToolWindow.rootComponent, "", false)
         toolWindow.contentManager.addContent(content)
     }
