@@ -3,6 +3,7 @@ package org.example.githubpang.rossynt.services
 /**
  * Note: must sync with Microsoft.CodeAnalysis.CSharp.LanguageVersion and backend.
  */
+@Suppress("EnumEntryName")
 internal enum class CSharpVersion {
     Default,
     CSharp1,
