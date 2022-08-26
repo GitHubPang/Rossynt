@@ -9,7 +9,9 @@ import com.intellij.ide.DefaultTreeExpander
 import com.intellij.ide.HelpTooltip
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.actionSystem.DefaultActionGroup
 import com.intellij.openapi.actionSystem.ToggleAction
+import com.intellij.openapi.actionSystem.ex.ComboBoxAction
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.colors.EditorColors
 import com.intellij.openapi.editor.markup.HighlighterLayer
@@ -29,6 +31,7 @@ import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.StatusText
 import com.intellij.util.ui.UIUtil
 import com.intellij.util.ui.tree.TreeUtil
+import org.example.githubpang.rossynt.services.CSharpVersion
 import org.example.githubpang.rossynt.services.IRossyntService
 import org.example.githubpang.rossynt.services.RossyntService
 import org.example.githubpang.rossynt.services.RossyntServiceNotifier
@@ -172,6 +175,20 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         }
     }
 
+    private inner class CSharpVersionChooserAction : ComboBoxAction(), DumbAware {
+        private inner class CSharpVersionAction(cSharpVersion: CSharpVersion) : AnAction(cSharpVersion.name) {
+            override fun actionPerformed(e: AnActionEvent) {
+                TODO("Not yet implemented")
+            }
+        }
+
+        override fun createPopupActionGroup(button: JComponent?): DefaultActionGroup {
+            val defaultActionGroup = DefaultActionGroup()
+            CSharpVersion.values().forEach { defaultActionGroup.add(CSharpVersionAction(it)) }
+            return defaultActionGroup
+        }
+    }
+
     // ******************************************************************************** //
 
     // Data.
@@ -222,7 +239,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
 
         // Add tool window buttons.
         val collapseAction = CommonActionsManager.getInstance().createCollapseAllAction(RossyntTreeExpander(uiTree), uiTree)
-        toolWindow.setTitleActions(listOf(ToggleHighlightNodeInSourceAction(), SelectNodeAtCaretAction(), collapseAction))
+        toolWindow.setTitleActions(listOf(ToggleHighlightNodeInSourceAction(), SelectNodeAtCaretAction(), collapseAction, CSharpVersionChooserAction()))
 
         // Setup banner.
         uiBanner.text = "Error occurred"
