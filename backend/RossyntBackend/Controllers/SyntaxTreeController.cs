@@ -40,7 +40,7 @@ namespace RossyntBackend.Controllers {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             // Compile tree.
-            var tree = await Tree.CompileFile(request.FileText, request.FilePath, HttpContext.RequestAborted);
+            var tree = await Tree.CompileFile(request.FileText, request.FilePath, request.CSharpVersion, HttpContext.RequestAborted);
 
             // Save in repository.
             _projectRepository.SetTree(tree);

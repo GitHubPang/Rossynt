@@ -34,11 +34,11 @@ namespace RossyntBackend.Models {
             RootTreeNode = rootTreeNode;
         }
 
-        public static async Task<Tree> CompileFile(string fileText, string filePath, CancellationToken cancellationToken) {
+        public static async Task<Tree> CompileFile(string fileText, string filePath, LanguageVersion cSharpVersion, CancellationToken cancellationToken) {
             if (fileText == null) throw new ArgumentNullException(nameof(fileText));
             if (filePath == null) throw new ArgumentNullException(nameof(filePath));
 
-            var syntaxTree = CSharpSyntaxTree.ParseText(fileText, path: filePath, cancellationToken: cancellationToken);
+            var syntaxTree = CSharpSyntaxTree.ParseText(fileText, CSharpParseOptions.Default.WithLanguageVersion(cSharpVersion), filePath, cancellationToken: cancellationToken);
             var root = await syntaxTree.GetRootAsync(cancellationToken);
             return new Tree(root);
         }
