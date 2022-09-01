@@ -266,7 +266,7 @@ internal class RossyntService : Disposable {
 
             val fetchingState = expectedState
             scope.launch(Dispatchers.IO) {
-                val rootTreeNode = backendService.compileFile(LineSeparatorUtil.convertLineSeparators(fetchingState.fileText, fetchingState.lineSeparator), fetchingState.filePath)
+                val rootTreeNode = backendService.compileFile(LineSeparatorUtil.convertLineSeparators(fetchingState.fileText, fetchingState.lineSeparator), fetchingState.filePath, CSharpVersion.Default)
                 launch(Dispatchers.Main) {
                     if (fetchingState.uniqueId == expectedState.uniqueId) {
                         setCurrentData(Data(fetchingState.fileText, fetchingState.lineSeparator, fetchingState.filePath, rootTreeNode, null, null))

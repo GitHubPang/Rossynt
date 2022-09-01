@@ -292,9 +292,9 @@ internal class BackendService : IBackendService {
         return process
     }
 
-    override suspend fun compileFile(fileText: String?, filePath: String?): TreeNode? {
+    override suspend fun compileFile(fileText: String?, filePath: String?, cSharpVersion: CSharpVersion): TreeNode? {
         return if (fileText != null && filePath != null && RossyntUtil.isCSFile(filePath)) {
-            sendRequestToBackend("syntaxTree/compileFile", parametersOf("FileText", fileText).plus(parametersOf("FilePath", filePath)))
+            sendRequestToBackend("syntaxTree/compileFile", parametersOf("FileText", fileText).plus(parametersOf("FilePath", filePath)).plus(parametersOf("CSharpVersion", cSharpVersion.name)))
         } else {
             sendRequestToBackend<String>("syntaxTree/resetActiveFile")
             null
