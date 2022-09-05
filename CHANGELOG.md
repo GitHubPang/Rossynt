@@ -3,6 +3,12 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Changed
+- Updated [`Microsoft.CodeAnalysis.CSharp`](https://www.nuget.org/packages/Microsoft.CodeAnalysis.CSharp) (Roslyn) from 4.2.0 to 4.3.0 - 19349cf11e53bdfa4ea57039b7b054db51da66da, fdb7ce10806005cfa753c6aad81729833aabb67b
+  - In particular, [`ExclamationExclamationToken`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.syntaxkind?view=roslyn-dotnet-4.3.0#fields) was removed.
+    - See also https://github.com/dotnet/roslyn/issues/62671 and https://github.com/dotnet/roslyn/blob/277eba3a507ccdf17c0b89854c3fec54d72a58cd/src/Compilers/CSharp/Portable/Syntax/SyntaxKind.cs#L149
+  - On the other hand, a few other `SyntaxKind` members were added, such as `GreaterThanGreaterThanGreaterThanToken`.
+
 ## [222.1.1] - 2022-08-23
 ### Changed
 - Improve UI in settings - 081b56cc8bdf541d644da4aa977fe55b6b65063e
