@@ -56,10 +56,10 @@ namespace RossyntBackendIntegrationTest {
         });
 
         [Test]
-        public Task CompileFileCSharp11ExclamationExclamationToken() => RunWithHttpClient(async httpClient => {
-            var root = await CompileFile(httpClient, "int F(int a!!) {}");
-            AssertNode(root, "SyntaxNode", "CompilationUnitSyntax", "CompilationUnit", "int F(int a!!) {}", "0,17", false, 2);
-            AssertNode(root["Child"]?[0]?["Child"]?[0]?["Child"]?[2]?["Child"]?[1]?["Child"]?[2], "SyntaxToken", "SyntaxToken", "ExclamationExclamationToken", "!!", "11,2", false, 0);
+        public Task CompileFileCSharp11GreaterThanGreaterThanGreaterThanToken() => RunWithHttpClient(async httpClient => {
+            var root = await CompileFile(httpClient, "1 >>> 3");
+            AssertNode(root, "SyntaxNode", "CompilationUnitSyntax", "CompilationUnit", "1 >>> 3", "0,7", false, 2);
+            AssertNode(root["Child"]?[0]?["Child"]?[0]?["Child"]?[0]?["Child"]?[1], "SyntaxToken", "SyntaxToken", "GreaterThanGreaterThanGreaterThanToken", ">>>", "2,3", false, 1);
         });
 
         [Test]
