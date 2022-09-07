@@ -38,7 +38,7 @@ dependencies {
     This, apparently, is because the IntelliJ platform 2022.2 bundles with kotlinx.coroutines 1.5.2 while CoroutineDispatcher.limitedParallelism(), needed by newer versions of Ktor, was introduced in 1.6.0
     * https://www.jetbrains.com/legal/third-party-software/?product=IIC&version=2022.2
     * https://github.com/Kotlin/kotlinx.coroutines/releases/tag/1.6.0
-    * https://mvnrepository.com/artifact/io.ktor/ktor-client-core/2.0.0-beta-1
+    * https://mvnrepository.com/artifact/io.ktor/ktor-client-core/2.1.1
     * https://mvnrepository.com/artifact/io.ktor/ktor-client-core/2.0.0-rc-1
 
     Related commits: 1440aad88dd4a00d7afbecd578bd2d6b5c8de1b2, b159cd0abbbd04dd86d9180907f6b01a7ab69135
