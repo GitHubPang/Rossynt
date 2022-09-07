@@ -43,7 +43,7 @@ dependencies {
 
     Related commits: 1440aad88dd4a00d7afbecd578bd2d6b5c8de1b2, b159cd0abbbd04dd86d9180907f6b01a7ab69135
      */
-    implementation("io.ktor:ktor-client-content-negotiation:2.0.0-beta-1")
+    implementation("io.ktor:ktor-client-content-negotiation:2.1.1")
     implementation("io.ktor:ktor-client-core:2.0.0-beta-1")
     implementation("io.ktor:ktor-client-cio:2.0.0-beta-1")
     implementation("io.ktor:ktor-client-gson:2.0.0-beta-1")
