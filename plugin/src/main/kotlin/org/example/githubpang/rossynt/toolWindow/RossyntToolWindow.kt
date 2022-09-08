@@ -176,10 +176,18 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
     }
 
     private inner class CSharpVersionChooserAction : ComboBoxAction(), DumbAware {
-        private inner class CSharpVersionAction(cSharpVersion: CSharpVersion) : AnAction(cSharpVersion.name) {
+        private inner class CSharpVersionAction(val cSharpVersion: CSharpVersion) : AnAction(cSharpVersion.name) {
             override fun actionPerformed(e: AnActionEvent) {
-                TODO("Not yet implemented")
+                rossyntService.setCSharpVersion(cSharpVersion)
             }
+        }
+
+        // ******************************************************************************** //
+
+        override fun update(e: AnActionEvent) {
+            super.update(e)
+
+            e.presentation.text = rossyntService.getCSharpVersion().name
         }
 
         override fun createPopupActionGroup(button: JComponent?): DefaultActionGroup {
