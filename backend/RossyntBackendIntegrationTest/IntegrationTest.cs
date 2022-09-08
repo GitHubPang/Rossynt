@@ -162,14 +162,17 @@ namespace RossyntBackendIntegrationTest {
             await func(httpClient);
         }
 
-        private async Task<JObject> CompileFile(HttpClient httpClient, string fileText, LanguageVersion cSharpVersion = LanguageVersion.Default) {
+        private async Task<JObject> CompileFile(HttpClient httpClient, string fileText, LanguageVersion? cSharpVersion = null) {
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (fileText == null) throw new ArgumentNullException(nameof(fileText));
 
             var parameters = ImmutableDictionary<string, string>.Empty;
             parameters = parameters.Add("FilePath", _fixture.Create<string>());
             parameters = parameters.Add("FileText", fileText);
-            parameters = parameters.Add("CSharpVersion", cSharpVersion.ToString());
+            if (cSharpVersion != null) {
+                parameters = parameters.Add("CSharpVersion", cSharpVersion.Value.ToString());
+            }
+
             var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/compileFile", new FormUrlEncodedContent(parameters!));
             Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
             var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
