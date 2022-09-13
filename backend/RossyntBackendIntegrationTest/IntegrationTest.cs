@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using AutoFixture;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.CodeAnalysis.CSharp;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -38,6 +39,40 @@ namespace RossyntBackendIntegrationTest {
             AssertNode(root["Child"]?[0]?["Child"]?[1]?["Child"]?[0], "SyntaxToken", "SyntaxToken", "IdentifierToken", "", "", true, 0);
             AssertNode(root["Child"]?[0]?["Child"]?[2], "SyntaxToken", "SyntaxToken", "SemicolonToken", "", "", true, 0);
             AssertNode(root["Child"]?[1], "SyntaxToken", "SyntaxToken", "EndOfFileToken", "", "", false, 0);
+        });
+
+        [Test]
+        public Task CompileFileCSharp9Record([Values] LanguageVersion cSharpVersion) => RunWithHttpClient(async httpClient => {
+            var root = await CompileFile(httpClient, "record R;", cSharpVersion);
+            AssertNode(root, "SyntaxNode", "CompilationUnitSyntax", "CompilationUnit", "record R;", "0,9", false, 2);
+
+            switch (cSharpVersion) {
+                case LanguageVersion.CSharp1:
+                case LanguageVersion.CSharp2:
+                case LanguageVersion.CSharp3:
+                case LanguageVersion.CSharp4:
+                case LanguageVersion.CSharp5:
+                case LanguageVersion.CSharp6:
+                case LanguageVersion.CSharp7:
+                case LanguageVersion.CSharp7_1:
+                case LanguageVersion.CSharp7_2:
+                case LanguageVersion.CSharp7_3:
+                case LanguageVersion.CSharp8:
+                    AssertNode(root["Child"]?[0], "SyntaxNode", "GlobalStatementSyntax", "GlobalStatement", "record R;", "0,9", false, 1);
+                    break;
+
+                case LanguageVersion.CSharp9:
+                case LanguageVersion.CSharp10:
+                case LanguageVersion.LatestMajor:
+                case LanguageVersion.Preview:
+                case LanguageVersion.Latest:
+                case LanguageVersion.Default:
+                    AssertNode(root["Child"]?[0], "SyntaxNode", "RecordDeclarationSyntax", "RecordDeclaration", "record R;", "0,9", false, 3);
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(cSharpVersion), cSharpVersion, null);
+            }
         });
 
         [Test]
@@ -127,13 +162,17 @@ namespace RossyntBackendIntegrationTest {
             await func(httpClient);
         }
 
-        private async Task<JObject> CompileFile(HttpClient httpClient, string fileText) {
+        private async Task<JObject> CompileFile(HttpClient httpClient, string fileText, LanguageVersion? cSharpVersion = null) {
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
             if (fileText == null) throw new ArgumentNullException(nameof(fileText));
 
             var parameters = ImmutableDictionary<string, string>.Empty;
             parameters = parameters.Add("FilePath", _fixture.Create<string>());
             parameters = parameters.Add("FileText", fileText);
+            if (cSharpVersion != null) {
+                parameters = parameters.Add("CSharpVersion", cSharpVersion.Value.ToString());
+            }
+
             var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/compileFile", new FormUrlEncodedContent(parameters!));
             Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
             var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();

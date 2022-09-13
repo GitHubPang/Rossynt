@@ -3,6 +3,9 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Added
+- Add dropdown for selecting the C# version used for parsing the source code. This corresponds to the [`Microsoft.CodeAnalysis.CSharp.LanguageVersion`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.languageversion) enum.
+
 ## [222.2.0] - 2022-09-13
 ### Changed
 - Updated [`Microsoft.CodeAnalysis.CSharp`](https://www.nuget.org/packages/Microsoft.CodeAnalysis.CSharp) (Roslyn) from 4.2.0 to 4.3.0 - 19349cf11e53bdfa4ea57039b7b054db51da66da, fdb7ce10806005cfa753c6aad81729833aabb67b
