@@ -3,6 +3,9 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Added
+- Add tooltip for C# version dropdown - 44ca0d2a7d52dd74d9826a0c6b229c3aa4687184
+
 ## [222.3.0] - 2022-10-03
 ### Added
 - Add dropdown for selecting the C# version used for parsing the source code. This corresponds to the [`Microsoft.CodeAnalysis.CSharp.LanguageVersion`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.languageversion) enum.
