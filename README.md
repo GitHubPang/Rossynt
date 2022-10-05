@@ -26,6 +26,7 @@ These are all included if you have installed [.NET SDK](https://dotnet.microsoft
 * View properties of each node.
 * Highlight selected node in source code.
 * Find corresponding node for selected text.
+* Choose C# version for parsing source code.
 * Support light theme and dark theme.
 
 ## Settings
