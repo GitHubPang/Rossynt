@@ -188,6 +188,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
             super.update(e)
 
             e.presentation.text = rossyntService.getCSharpVersion().name
+            e.presentation.description = "C# version"
         }
 
         override fun createPopupActionGroup(button: JComponent?): DefaultActionGroup {
