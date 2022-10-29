@@ -3,6 +3,7 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+## [222.3.1] - 2022-10-29
 ### Added
 - Add tooltip for C# version dropdown - 44ca0d2a7d52dd74d9826a0c6b229c3aa4687184
 
