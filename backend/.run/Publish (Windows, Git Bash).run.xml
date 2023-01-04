@@ -1,5 +1,5 @@
 ﻿<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Publish" type="ShConfigurationType">
+  <configuration default="false" name="Publish (Windows, Git Bash)" type="ShConfigurationType">
     <option name="INDEPENDENT_SCRIPT_PATH" value="false" />
     <option name="SCRIPT_PATH" value="$PROJECT_DIR$/publish.sh" />
     <option name="SCRIPT_OPTIONS" value="" />
