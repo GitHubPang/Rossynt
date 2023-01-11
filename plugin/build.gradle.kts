@@ -68,7 +68,6 @@ intellij {
 
 // Configure Gradle Changelog Plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
 changelog {
-    version.set(properties("pluginVersion"))
     groups.set(emptyList())
     repositoryUrl.set(properties("pluginRepositoryUrl"))
     path.set(File(projectDir, "../CHANGELOG.md").absolutePath)
