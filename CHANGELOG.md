@@ -3,6 +3,9 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Added
+- Support IntelliJ Platform 2022.3 - e26c9f557296e6d32dd7059602e543a9caf0c23d
+
 ## [222.3.1] - 2022-10-29
 ### Added
 - Add tooltip for C# version dropdown - 44ca0d2a7d52dd74d9826a0c6b229c3aa4687184
