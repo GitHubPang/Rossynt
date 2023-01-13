@@ -3,6 +3,7 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+## [223.1.0] - 2023-01-13
 ### Added
 - Support IntelliJ Platform 2022.3 - e26c9f557296e6d32dd7059602e543a9caf0c23d
 
