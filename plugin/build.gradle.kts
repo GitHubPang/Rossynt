@@ -24,31 +24,11 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    // https://kotlinlang.org/docs/releases.html#release-details
-    /*
-    We cannot upgrade the ktor dependencies.
-
-    This is because, otherwise, the program throws with:
-
-    Exception in thread "DefaultDispatcher-worker-1 @coroutine#110" java.lang.NoSuchMethodError: 'kotlinx.coroutines.CoroutineDispatcher kotlinx.coroutines.CoroutineDispatcher.limitedParallelism(int)'
-        at io.ktor.client.utils.CoroutineDispatcherUtilsKt.clientDispatcher(CoroutineDispatcherUtils.kt:22)
-        at io.ktor.client.engine.cio.CIOEngine$dispatcher$2.invoke(CIOEngine.kt:28)
-        at io.ktor.client.engine.cio.CIOEngine$dispatcher$2.invoke(CIOEngine.kt:27)
-    ...
-
-    This, apparently, is because the IntelliJ platform 2022.2 bundles with kotlinx.coroutines 1.5.2 while CoroutineDispatcher.limitedParallelism(), needed by newer versions of Ktor, was introduced in 1.6.0
-    * https://www.jetbrains.com/legal/third-party-software/?product=IIC&version=2022.2
-    * https://github.com/Kotlin/kotlinx.coroutines/releases/tag/1.6.0
-    * https://mvnrepository.com/artifact/io.ktor/ktor-client-core/2.0.0-beta-1
-    * https://mvnrepository.com/artifact/io.ktor/ktor-client-core/2.0.0-rc-1
-
-    Related commits: 1440aad88dd4a00d7afbecd578bd2d6b5c8de1b2, b159cd0abbbd04dd86d9180907f6b01a7ab69135
-     */
-    implementation("io.ktor:ktor-client-content-negotiation:2.0.0-beta-1")
-    implementation("io.ktor:ktor-client-core:2.0.0-beta-1")
-    implementation("io.ktor:ktor-client-cio:2.0.0-beta-1")
-    implementation("io.ktor:ktor-client-gson:2.0.0-beta-1")
-    implementation("io.ktor:ktor-serialization-gson:2.0.0-beta-1")
+    implementation("io.ktor:ktor-client-content-negotiation:2.2.1")
+    implementation("io.ktor:ktor-client-core:2.2.1")
+    implementation("io.ktor:ktor-client-cio:2.2.1")
+    implementation("io.ktor:ktor-client-gson:2.2.1")
+    implementation("io.ktor:ktor-serialization-gson:2.2.1")
 }
 
 // Set the JVM language level used to build the project. Use Java 11 for 2020.3+, and Java 17 for 2022.2+.
