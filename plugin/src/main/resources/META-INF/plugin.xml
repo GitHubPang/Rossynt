@@ -14,12 +14,9 @@
                                  instance="org.example.githubpang.rossynt.settings.PluginSettingsConfigurable"
                                  id="org.example.githubpang.rossynt.settings.PluginSettingsConfigurable"
                                  displayName="Rossynt"/>
-    </extensions>
 
-    <applicationListeners>
-        <listener class="org.example.githubpang.rossynt.listeners.AppProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
+        <postStartupActivity implementation="org.example.githubpang.rossynt.startup.AppStartupActivity"/>
+    </extensions>
 
     <projectListeners>
         <listener class="org.example.githubpang.rossynt.listeners.ProjectToolWindowManagerListener"
