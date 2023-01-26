@@ -31,11 +31,7 @@ import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.StatusText
 import com.intellij.util.ui.UIUtil
 import com.intellij.util.ui.tree.TreeUtil
-import org.example.githubpang.rossynt.services.CSharpVersion
-import org.example.githubpang.rossynt.services.IRossyntService
-import org.example.githubpang.rossynt.services.RossyntService
-import org.example.githubpang.rossynt.services.RossyntServiceNotifier
-import org.example.githubpang.rossynt.services.RossyntUtil
+import org.example.githubpang.rossynt.services.*
 import org.example.githubpang.rossynt.settings.PluginSettingsConfigurable
 import org.example.githubpang.rossynt.trees.SyntaxUtil
 import org.example.githubpang.rossynt.trees.TreeNode
@@ -274,7 +270,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
             uiUpdateTable()
             //todo scroll selected node into view when double click, like Structure view in IDEA/Rider. Or even better, add a Navigate with Single Click button, then react to single click
         }
-        TreeSpeedSearch(uiTree, { it.lastPathComponent.toString() }, true)
+        TreeSpeedSearch(uiTree, true) { it.lastPathComponent.toString() }
 
         // Setup table.
         uiTable.tableHeader = null
