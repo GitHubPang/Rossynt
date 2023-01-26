@@ -3,11 +3,10 @@ package org.example.githubpang.rossynt.settings
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.components.JBRadioButton
+import com.intellij.ui.dsl.builder.AlignX
 import com.intellij.ui.dsl.builder.Cell
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.dsl.builder.selected
-import com.intellij.ui.dsl.gridLayout.HorizontalAlign
-import com.intellij.ui.layout.selected
 import com.intellij.util.text.nullize
 import javax.swing.JPanel
 
@@ -42,7 +41,7 @@ internal class PluginSettingsUi {
                                 it.name.startsWith("dotnet")
                             },
                         )
-                            .horizontalAlign(HorizontalAlign.FILL)
+                            .align(AlignX.FILL)
                             .enabledIf(radioButtonDotNetPathCustomCell!!.selected)
                             .component
                     }
