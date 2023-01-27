@@ -28,6 +28,7 @@ namespace RossyntBackendUnitTest {
             CSharp8,
             CSharp9,
             CSharp10,
+            CSharp11,
             Latest,
             LatestMajor,
             Preview,

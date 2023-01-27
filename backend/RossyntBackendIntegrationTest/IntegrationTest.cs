@@ -63,6 +63,7 @@ namespace RossyntBackendIntegrationTest {
 
                 case LanguageVersion.CSharp9:
                 case LanguageVersion.CSharp10:
+                case LanguageVersion.CSharp11:
                 case LanguageVersion.LatestMajor:
                 case LanguageVersion.Preview:
                 case LanguageVersion.Latest:
@@ -95,6 +96,13 @@ namespace RossyntBackendIntegrationTest {
             var root = await CompileFile(httpClient, "1 >>> 3");
             AssertNode(root, "SyntaxNode", "CompilationUnitSyntax", "CompilationUnit", "1 >>> 3", "0,7", false, 2);
             AssertNode(root["Child"]?[0]?["Child"]?[0]?["Child"]?[0]?["Child"]?[1], "SyntaxToken", "SyntaxToken", "GreaterThanGreaterThanGreaterThanToken", ">>>", "2,3", false, 1);
+        });
+
+        [Test]
+        public Task CompileFileCSharp11RawStringLiterals() => RunWithHttpClient(async httpClient => {
+            var root = await CompileFile(httpClient, "var x = $\"\"\"\n  y {{v}}\n  \"\"\"");
+            AssertNode(root, "SyntaxNode", "CompilationUnitSyntax", "CompilationUnit", "var x = $\"\"\"\n  y {{v}}\n  \"\"\"", "0,28", false, 2);
+            AssertNode(root["Child"]?[0]?["Child"]?[0]?["Child"]?[0]?["Child"]?[1]?["Child"]?[1]?["Child"]?[1]?["Child"]?[0], "SyntaxToken", "SyntaxToken", "InterpolatedMultiLineRawStringStartToken", "$\"\"\"\n", "8,5", false, 0);
         });
 
         [Test]
