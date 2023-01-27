@@ -7,10 +7,7 @@ import com.intellij.icons.AllIcons
 import com.intellij.ide.CommonActionsManager
 import com.intellij.ide.DefaultTreeExpander
 import com.intellij.ide.HelpTooltip
-import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.actionSystem.DefaultActionGroup
-import com.intellij.openapi.actionSystem.ToggleAction
+import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.actionSystem.ex.ComboBoxAction
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.colors.EditorColors
@@ -187,7 +184,7 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
             e.presentation.description = "C# version"
         }
 
-        override fun createPopupActionGroup(button: JComponent?): DefaultActionGroup {
+        override fun createPopupActionGroup(button: JComponent, dataContext: DataContext): DefaultActionGroup {
             val defaultActionGroup = DefaultActionGroup()
             CSharpVersion.values().forEach { defaultActionGroup.add(CSharpVersionAction(it)) }
             return defaultActionGroup
