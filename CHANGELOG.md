@@ -3,6 +3,11 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Changed
+- Updated [`Microsoft.CodeAnalysis.CSharp`](https://www.nuget.org/packages/Microsoft.CodeAnalysis.CSharp) (Roslyn) from 4.3.1 to 4.4.0 - 9175e4be8ffa08c302eec73d7575954198b51b6f
+  - Consequently, [`Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp11`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.languageversion?view=roslyn-dotnet-4.4.0#fields) is added - 4a949389470e66f527e2ffcde685f172788a336d
+  - Also, a few `SyntaxKind` members were added, such as `FileKeyword` and `ScopedType` - e834c41d8a4b9cb10b0af0aa556e701e477e6756
+
 ## [223.2.0] - 2023-01-27
 ### Added
 - Support IntelliJ Platform 2023.1 - 0de1790404b50586ddf0c59dc95686995e6081ba, 458f27b6ba6b43a29a05804b804d405b4ca0d7f3, 0044174670aa824edf149710076e332a68b55cfa, 4e4d9af0d360f387b88ee05ee65e8f0aaae00677
