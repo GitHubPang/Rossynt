@@ -106,6 +106,13 @@ namespace RossyntBackendIntegrationTest {
         });
 
         [Test]
+        public Task CompileFileCSharp11FileScopedType() => RunWithHttpClient(async httpClient => {
+            var root = await CompileFile(httpClient, "file class C");
+            AssertNode(root, "SyntaxNode", "CompilationUnitSyntax", "CompilationUnit", "file class C", "0,12", false, 2);
+            AssertNode(root["Child"]?[0]?["Child"]?[0], "SyntaxToken", "SyntaxToken", "FileKeyword", "file", "0,4", false, 1);
+        });
+
+        [Test]
         public Task GetNodeInfo() => RunWithHttpClient(async httpClient => {
             var root = await CompileFile(httpClient, "using");
             var nodeId = root["Child"]?[0]?["Id"]?.Value<string>();
