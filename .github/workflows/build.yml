@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Docker Setup Buildx
-        uses: docker/setup-buildx-action@v2.2.1
+        uses: docker/setup-buildx-action@v2.3.0
 
       # Check out current repository
       - name: Fetch Sources
