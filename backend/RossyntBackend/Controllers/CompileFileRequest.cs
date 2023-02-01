@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.CodeAnalysis.CSharp;
 
-#nullable enable
-
 namespace RossyntBackend.Controllers {
     // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
     public sealed class CompileFileRequest {

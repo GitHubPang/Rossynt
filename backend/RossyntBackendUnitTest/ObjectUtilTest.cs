@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using RossyntBackend.Utils;
 
-#nullable enable
-
 namespace RossyntBackendUnitTest {
     public class ObjectUtilTest {
         private sealed class Foo {

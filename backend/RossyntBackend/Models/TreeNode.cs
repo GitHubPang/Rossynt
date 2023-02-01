@@ -5,8 +5,6 @@ using JetBrains.Annotations;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 
-#nullable enable
-
 namespace RossyntBackend.Models {
     public abstract class TreeNode {
         public string NodeId { get; } = Guid.NewGuid().ToString("D");

@@ -3,8 +3,6 @@ using AutoFixture;
 using NUnit.Framework;
 using RossyntBackend.Utils;
 
-#nullable enable
-
 namespace RossyntBackendUnitTest {
     public class StringExtensionTest {
         private readonly Fixture _fixture = new Fixture();

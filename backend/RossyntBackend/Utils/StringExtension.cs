@@ -1,8 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-#nullable enable
-
 namespace RossyntBackend.Utils {
     public static class StringExtension {
         /// <summary>

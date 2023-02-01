@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-#nullable enable
-
 namespace RossyntBackend {
     // ReSharper disable once ClassNeverInstantiated.Global
     public class Program {

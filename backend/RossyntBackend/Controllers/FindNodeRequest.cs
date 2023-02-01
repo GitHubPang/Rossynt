@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-#nullable enable
-
 namespace RossyntBackend.Controllers {
     // ReSharper disable UnusedAutoPropertyAccessor.Global
     public sealed class FindNodeRequest {

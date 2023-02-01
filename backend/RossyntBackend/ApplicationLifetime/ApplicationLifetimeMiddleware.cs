@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 
-#nullable enable
-
 namespace RossyntBackend.ApplicationLifetime {
     [UsedImplicitly]
     public sealed class ApplicationLifetimeMiddleware {

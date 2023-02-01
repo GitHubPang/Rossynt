@@ -4,8 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using RossyntBackend.ApplicationLifetime;
 using RossyntBackend.Repositories;
 
-#nullable enable
-
 namespace RossyntBackend {
     public class Startup {
         // ReSharper disable once UnusedParameter.Local

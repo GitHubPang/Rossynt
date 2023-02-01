@@ -2,8 +2,6 @@
 using JetBrains.Annotations;
 using RossyntBackend.Models;
 
-#nullable enable
-
 namespace RossyntBackend.Repositories {
     public sealed class ProjectRepository : IProjectRepository {
         private readonly object _lock = new object();

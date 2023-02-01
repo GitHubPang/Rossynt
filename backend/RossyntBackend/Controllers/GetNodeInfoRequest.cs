@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-#nullable enable
-
 namespace RossyntBackend.Controllers {
     // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
     public sealed class GetNodeInfoRequest {

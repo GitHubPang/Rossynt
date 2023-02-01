@@ -7,8 +7,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 
-#nullable enable
-
 namespace RossyntBackend.Models {
     public sealed class Tree {
         private readonly SyntaxNode _rootSyntaxNode;
