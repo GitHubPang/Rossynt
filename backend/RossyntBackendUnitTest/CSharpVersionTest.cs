@@ -36,13 +36,8 @@ namespace RossyntBackendUnitTest {
 
         [Test]
         public void CSharpVersion_ArgumentNullException() {
-#if NET5_0 || NET6_0
             var languageVersions = Enum.GetValues<LanguageVersion>();
             var cSharpVersions = Enum.GetValues<CSharpVersion>();
-#elif NETCOREAPP3_1
-            var languageVersions = (LanguageVersion[])Enum.GetValues(typeof(LanguageVersion));
-            var cSharpVersions = (CSharpVersion[])Enum.GetValues(typeof(CSharpVersion));
-#endif
             Assert.That(languageVersions.Select(_ => _.ToString()), Is.EquivalentTo(cSharpVersions.Select(_ => _.ToString())));
         }
     }
