@@ -12,7 +12,7 @@ namespace RossyntBackend.Models {
         // ReSharper disable once MemberCanBePrivate.Global UnusedAutoPropertyAccessor.Global
         public TreeNode? ParentTreeNode { get; }
 
-        private readonly List<TreeNode> _childTreeNodes = new List<TreeNode>();
+        private readonly List<TreeNode> _childTreeNodes = new();
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         // ReSharper disable once ReturnTypeCanBeEnumerable.Global

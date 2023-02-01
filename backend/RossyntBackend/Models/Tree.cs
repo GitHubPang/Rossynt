@@ -15,7 +15,7 @@ namespace RossyntBackend.Models {
         /// <summary>
         /// Key is <see cref="TreeNode.NodeId"/> of <see cref="TreeNode"/>.
         /// </summary>
-        private readonly Dictionary<string, TreeNode> _treeNodes = new Dictionary<string, TreeNode>();
+        private readonly Dictionary<string, TreeNode> _treeNodes = new();
 
         /// <summary>
         /// Key is <see cref="TreeNode.NodeId"/> of <see cref="TreeNode"/>.

@@ -4,7 +4,7 @@ using RossyntBackend.Models;
 
 namespace RossyntBackend.Repositories {
     public sealed class ProjectRepository : IProjectRepository {
-        private readonly object _lock = new object();
+        private readonly object _lock = new();
         private Tree? _tree;
 
         // ******************************************************************************** //

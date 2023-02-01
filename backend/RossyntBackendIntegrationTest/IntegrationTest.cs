@@ -15,7 +15,7 @@ using RossyntBackend;
 namespace RossyntBackendIntegrationTest {
     [Parallelizable(ParallelScope.All)]
     public class IntegrationTest {
-        private readonly Fixture _fixture = new Fixture();
+        private readonly Fixture _fixture = new();
 
         // ******************************************************************************** //
 

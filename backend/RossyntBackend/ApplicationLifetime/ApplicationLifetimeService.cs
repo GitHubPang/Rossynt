@@ -12,11 +12,11 @@ namespace RossyntBackend.ApplicationLifetime {
 
         private readonly IHostApplicationLifetime _applicationLifetime;
 
-        private readonly object _lock = new object();
+        private readonly object _lock = new();
         private readonly ILogger<ApplicationLifetimeService> _logger;
         private bool _isCountdownStarted;
         private bool _isRestartCountdown;
-        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _cancellationTokenSource = new();
 
         // ******************************************************************************** //
 
