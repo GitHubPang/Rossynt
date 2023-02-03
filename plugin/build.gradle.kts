@@ -11,7 +11,11 @@ plugins {
     // Gradle IntelliJ Plugin
     id("org.jetbrains.intellij") version "1.12.0"
     // Gradle Changelog Plugin
+/* ROLL_BACK_CHANGELOG_PLUGIN BEGIN - https://github.com/JetBrains/gradle-changelog-plugin/issues/147
     id("org.jetbrains.changelog") version "2.0.0"
+*/
+    id("org.jetbrains.changelog") version "1.3.1"
+/* ROLL_BACK_CHANGELOG_PLUGIN END */
     // Gradle Qodana Plugin
     id("org.jetbrains.qodana") version "0.1.13"
 }
@@ -49,7 +53,10 @@ intellij {
 // Configure Gradle Changelog Plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
 changelog {
     groups.set(emptyList())
+/* ROLL_BACK_CHANGELOG_PLUGIN BEGIN - https://github.com/JetBrains/gradle-changelog-plugin/issues/147
     repositoryUrl.set(properties("pluginRepositoryUrl"))
+*/
+/* ROLL_BACK_CHANGELOG_PLUGIN END */
     path.set(File(projectDir, "../CHANGELOG.md").absolutePath)
 }
 
@@ -87,11 +94,17 @@ tasks {
         // Get the latest available change notes from the changelog file
         changeNotes.set(provider {
             with(changelog) {
+/* ROLL_BACK_CHANGELOG_PLUGIN BEGIN - https://github.com/JetBrains/gradle-changelog-plugin/issues/147
                 renderItem(
                     getOrNull(properties("pluginVersion"))
                         ?: runCatching { getLatest() }.getOrElse { getUnreleased() },
                     Changelog.OutputType.HTML,
                 )
+*/
+                changelog.run {
+                    getOrNull(properties("pluginVersion")) ?: getLatest()
+                }.toHTML()
+/* ROLL_BACK_CHANGELOG_PLUGIN END */
             }
         })
     }
