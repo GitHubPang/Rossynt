@@ -170,7 +170,7 @@ namespace RossyntBackendIntegrationTest {
         private static async Task RunWithHttpClient(Func<HttpClient, Task> func) {
             if (func == null) throw new ArgumentNullException(nameof(func));
 
-            using var webApplicationFactory = new WebApplicationFactory<Startup>();
+            await using var webApplicationFactory = new WebApplicationFactory<Startup>();
             var httpClient = webApplicationFactory.CreateClient();
             await func(httpClient);
         }
@@ -186,7 +186,7 @@ namespace RossyntBackendIntegrationTest {
                 parameters = parameters.Add("CSharpVersion", cSharpVersion.Value.ToString());
             }
 
-            var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/compileFile", new FormUrlEncodedContent(parameters!));
+            var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/compileFile", new FormUrlEncodedContent(parameters));
             Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
             var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
             return JObject.Parse(responseBody);
@@ -198,7 +198,7 @@ namespace RossyntBackendIntegrationTest {
 
             var parameters = ImmutableDictionary<string, string>.Empty;
             parameters = parameters.Add("NodeId", nodeId);
-            var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/getNodeInfo", new FormUrlEncodedContent(parameters!));
+            var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/getNodeInfo", new FormUrlEncodedContent(parameters));
             Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
             var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
             var dictionary = JsonConvert.DeserializeObject<IDictionary<string, string>>(responseBody);
@@ -210,7 +210,7 @@ namespace RossyntBackendIntegrationTest {
             if (httpClient == null) throw new ArgumentNullException(nameof(httpClient));
 
             var parameters = ImmutableDictionary<string, string>.Empty;
-            var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/resetActiveFile", new FormUrlEncodedContent(parameters!));
+            var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/resetActiveFile", new FormUrlEncodedContent(parameters));
             Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
         }
 
@@ -220,7 +220,7 @@ namespace RossyntBackendIntegrationTest {
             var parameters = ImmutableDictionary<string, string>.Empty;
             parameters = parameters.Add("Start", start.ToString());
             parameters = parameters.Add("End", end.ToString());
-            var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/findNode", new FormUrlEncodedContent(parameters!));
+            var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/findNode", new FormUrlEncodedContent(parameters));
             Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
             var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
             var dictionary = JsonConvert.DeserializeObject<IDictionary<string, string>>(responseBody);
