@@ -3,6 +3,12 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+### Added
+- Support .NET 7.
+
+### Removed
+- Dropped support for .NET Core 3.1, which [has already reached end of support on 2022-12-13](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core).
+
 ## [223.3.0] - 2023-02-06
 ### Changed
 - Updated [`Microsoft.CodeAnalysis.CSharp`](https://www.nuget.org/packages/Microsoft.CodeAnalysis.CSharp) (Roslyn) from 4.3.1 to 4.4.0 - 9175e4be8ffa08c302eec73d7575954198b51b6f
