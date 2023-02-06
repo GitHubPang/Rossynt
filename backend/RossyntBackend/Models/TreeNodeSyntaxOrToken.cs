@@ -7,52 +7,52 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 using RossyntBackend.Utils;
 
-namespace RossyntBackend.Models {
-    [DebuggerDisplay("{DebuggerDisplay,nq}")]
-    public sealed class TreeNodeSyntaxOrToken : TreeNode {
-        public SyntaxNodeOrToken SyntaxNodeOrToken { get; }
+namespace RossyntBackend.Models;
 
-        // ******************************************************************************** //
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
+public sealed class TreeNodeSyntaxOrToken : TreeNode {
+    public SyntaxNodeOrToken SyntaxNodeOrToken { get; }
 
-        public TreeNodeSyntaxOrToken(SyntaxNodeOrToken syntaxNodeOrToken, TreeNode? parentTreeNode) : base(parentTreeNode) => SyntaxNodeOrToken = syntaxNodeOrToken;
+    // ******************************************************************************** //
 
-        [Pure]
-        public override SyntaxKind SyntaxKind() => SyntaxNodeOrToken.Kind();
+    public TreeNodeSyntaxOrToken(SyntaxNodeOrToken syntaxNodeOrToken, TreeNode? parentTreeNode) : base(parentTreeNode) => SyntaxNodeOrToken = syntaxNodeOrToken;
 
-        [Pure]
-        public override TreeNodeCategory TreeNodeCategory() => SyntaxNodeOrToken.IsNode ? Models.TreeNodeCategory.SyntaxNode : Models.TreeNodeCategory.SyntaxToken;
+    [Pure]
+    public override SyntaxKind SyntaxKind() => SyntaxNodeOrToken.Kind();
 
-        [Pure]
-        public override string RawString() => SyntaxNodeOrToken.ToString();
+    [Pure]
+    public override TreeNodeCategory TreeNodeCategory() => SyntaxNodeOrToken.IsNode ? Models.TreeNodeCategory.SyntaxNode : Models.TreeNodeCategory.SyntaxToken;
 
-        [Pure]
-        public override Type RawType() => RawObject().GetType();
+    [Pure]
+    public override string RawString() => SyntaxNodeOrToken.ToString();
 
-        [Pure]
-        public override TextSpan Span() => SyntaxNodeOrToken.Span;
+    [Pure]
+    public override Type RawType() => RawObject().GetType();
 
-        [Pure]
-        public override bool IsMissing() => SyntaxNodeOrToken.IsMissing;
+    [Pure]
+    public override TextSpan Span() => SyntaxNodeOrToken.Span;
 
-        [Pure]
-        public override IReadOnlyDictionary<string, string> RawProperties() {
-            var basicProperties = ObjectUtil.GetObjectProperties(SyntaxNodeOrToken);
-            var moreProperties = ObjectUtil.GetObjectProperties(RawObject());
+    [Pure]
+    public override bool IsMissing() => SyntaxNodeOrToken.IsMissing;
 
-            var rawProperties = new Dictionary<string, string>(basicProperties);
-            foreach (var (moreKey, moreValue) in moreProperties) {
-                rawProperties[moreKey] = moreValue;
-            }
+    [Pure]
+    public override IReadOnlyDictionary<string, string> RawProperties() {
+        var basicProperties = ObjectUtil.GetObjectProperties(SyntaxNodeOrToken);
+        var moreProperties = ObjectUtil.GetObjectProperties(RawObject());
 
-            return rawProperties;
+        var rawProperties = new Dictionary<string, string>(basicProperties);
+        foreach (var (moreKey, moreValue) in moreProperties) {
+            rawProperties[moreKey] = moreValue;
         }
 
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public string DebuggerDisplay => $"({TreeNodeCategory()}) {SyntaxNodeOrToken}";
+        return rawProperties;
+    }
 
-        [Pure]
-        private object RawObject() {
-            return SyntaxNodeOrToken.IsNode ? SyntaxNodeOrToken.AsNode() ?? throw new InvalidOperationException($"{nameof(SyntaxNodeOrToken.AsNode)}() is null.") : SyntaxNodeOrToken.AsToken();
-        }
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public string DebuggerDisplay => $"({TreeNodeCategory()}) {SyntaxNodeOrToken}";
+
+    [Pure]
+    private object RawObject() {
+        return SyntaxNodeOrToken.IsNode ? SyntaxNodeOrToken.AsNode() ?? throw new InvalidOperationException($"{nameof(SyntaxNodeOrToken.AsNode)}() is null.") : SyntaxNodeOrToken.AsToken();
     }
 }

@@ -4,27 +4,27 @@ using Microsoft.Extensions.DependencyInjection;
 using RossyntBackend.ApplicationLifetime;
 using RossyntBackend.Repositories;
 
-namespace RossyntBackend {
-    public class Startup {
-        // ReSharper disable once UnusedParameter.Local
-        public Startup(IConfiguration configuration) {
-        }
+namespace RossyntBackend;
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services) {
-            services.AddSingleton<IProjectRepository, ProjectRepository>();
-            services.AddSingleton<IApplicationLifetimeService, ApplicationLifetimeService>();
-            services.AddControllers();
-        }
+public class Startup {
+    // ReSharper disable once UnusedParameter.Local
+    public Startup(IConfiguration configuration) {
+    }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app) {
-            app.UseMiddleware<ApplicationLifetimeMiddleware>();
-            app.UseRouting();
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+    // This method gets called by the runtime. Use this method to add services to the container.
+    public void ConfigureServices(IServiceCollection services) {
+        services.AddSingleton<IProjectRepository, ProjectRepository>();
+        services.AddSingleton<IApplicationLifetimeService, ApplicationLifetimeService>();
+        services.AddControllers();
+    }
 
-            var applicationLifetimeService = app.ApplicationServices.GetRequiredService<IApplicationLifetimeService>();
-            applicationLifetimeService.StartCountdown();
-        }
+    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+    public void Configure(IApplicationBuilder app) {
+        app.UseMiddleware<ApplicationLifetimeMiddleware>();
+        app.UseRouting();
+        app.UseEndpoints(endpoints => endpoints.MapControllers());
+
+        var applicationLifetimeService = app.ApplicationServices.GetRequiredService<IApplicationLifetimeService>();
+        applicationLifetimeService.StartCountdown();
     }
 }
