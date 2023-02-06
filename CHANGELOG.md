@@ -3,6 +3,7 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+## [223.3.0] - 2023-02-06
 ### Changed
 - Updated [`Microsoft.CodeAnalysis.CSharp`](https://www.nuget.org/packages/Microsoft.CodeAnalysis.CSharp) (Roslyn) from 4.3.1 to 4.4.0 - 9175e4be8ffa08c302eec73d7575954198b51b6f
   - Consequently, [`Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp11`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.codeanalysis.csharp.languageversion?view=roslyn-dotnet-4.4.0#fields) is added - 4a949389470e66f527e2ffcde685f172788a336d
