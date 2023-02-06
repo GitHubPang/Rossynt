@@ -4,7 +4,7 @@
 # Old ASP.NET Core runtimes are for unit test.
 # https://stackoverflow.com/a/65485962
 FROM mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim AS build
-COPY --from=mcr.microsoft.com/dotnet/aspnet:6.0-buster-slim /usr/share/dotnet /usr/share/dotnet
+COPY --from=mcr.microsoft.com/dotnet/aspnet:6.0-bullseye-slim /usr/share/dotnet /usr/share/dotnet
 COPY --from=mcr.microsoft.com/dotnet/sdk:7.0 /usr/share/dotnet /usr/share/dotnet
 
 # Copy csproj and restore as distinct layers.
