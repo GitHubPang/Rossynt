@@ -7,12 +7,14 @@ namespace RossyntBackendUnitTest;
 
 public class ObjectUtilTest {
     private sealed class Foo {
+#pragma warning disable CA1822
         // ReSharper disable UnusedMember.Local MemberCanBePrivate.Local UnusedAutoPropertyAccessor.Local ReplaceAutoPropertyWithComputedProperty
         public string PublicProperty { get; } = "Apple";
         public string PublicComputedProperty => "Backs";
         public int IntegerProperty { get; }
         private string PrivateProperty { get; } = "Missing";
         // ReSharper restore UnusedMember.Local MemberCanBePrivate.Local UnusedAutoPropertyAccessor.Local ReplaceAutoPropertyWithComputedProperty
+#pragma warning restore CA1822
 
         // ******************************************************************************** //
 
