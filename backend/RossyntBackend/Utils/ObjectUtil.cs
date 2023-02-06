@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 
-#nullable enable
-
 namespace RossyntBackend.Utils {
     public static class ObjectUtil {
         [Pure]

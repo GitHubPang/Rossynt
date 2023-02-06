@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-#nullable enable
-
 namespace RossyntBackend.ApplicationLifetime {
     public sealed class ApplicationLifetimeService : IApplicationLifetimeService, IDisposable {
         private static readonly TimeSpan CountdownInterval = TimeSpan.FromSeconds(60);
@@ -14,11 +12,11 @@ namespace RossyntBackend.ApplicationLifetime {
 
         private readonly IHostApplicationLifetime _applicationLifetime;
 
-        private readonly object _lock = new object();
+        private readonly object _lock = new();
         private readonly ILogger<ApplicationLifetimeService> _logger;
         private bool _isCountdownStarted;
         private bool _isRestartCountdown;
-        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _cancellationTokenSource = new();
 
         // ******************************************************************************** //
 

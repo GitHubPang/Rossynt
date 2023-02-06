@@ -12,8 +12,6 @@ using RossyntBackend.Models;
 using RossyntBackend.Repositories;
 using RossyntBackend.Utils;
 
-#nullable enable
-
 namespace RossyntBackend.Controllers {
     [ApiController]
     [Route("[controller]")]

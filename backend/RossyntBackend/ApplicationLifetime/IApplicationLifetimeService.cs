@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-namespace RossyntBackend.ApplicationLifetime {
+﻿namespace RossyntBackend.ApplicationLifetime {
     public interface IApplicationLifetimeService {
         public void StartCountdown();
         public void RestartCountdown();

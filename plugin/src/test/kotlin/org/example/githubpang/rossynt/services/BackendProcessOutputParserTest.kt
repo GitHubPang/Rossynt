@@ -12,18 +12,6 @@ class BackendProcessOutputParserTest internal constructor(private val line: Stri
         @Parameterized.Parameters
         fun data(): Array<Any> {
             return arrayOf(
-                // .NET Core 3.1
-                arrayOf("""info: Microsoft.Hosting.Lifetime[0]""", null, null),
-                arrayOf("""      Now listening on: https://localhost:5001""", "https", "5001"),
-                arrayOf("""info: Microsoft.Hosting.Lifetime[0]""", null, null),
-                arrayOf("""      Now listening on: http://localhost:5000""", "http", "5000"),
-                arrayOf("""info: Microsoft.Hosting.Lifetime[0]""", null, null),
-                arrayOf("""      Application started. Press Ctrl+C to shut down.""", null, null),
-                arrayOf("""info: Microsoft.Hosting.Lifetime[0]""", null, null),
-                arrayOf("""      Hosting environment: Development""", null, null),
-                arrayOf("""info: Microsoft.Hosting.Lifetime[0]""", null, null),
-                arrayOf("""      Content root path: C:\Rossynt\backend\RossyntBackend""", null, null),
-
                 // .NET 5.0
                 arrayOf("""info: Microsoft.Hosting.Lifetime[0] Now listening on: https://localhost:5001""", "https", "5001"),
                 arrayOf("""info: Microsoft.Hosting.Lifetime[0] Now listening on: http://localhost:5000""", "http", "5000"),
@@ -32,6 +20,13 @@ class BackendProcessOutputParserTest internal constructor(private val line: Stri
                 arrayOf("""info: Microsoft.Hosting.Lifetime[0] Content root path: C:\Rossynt\backend\RossyntBackend""", null, null),
 
                 // .NET 6.0
+                arrayOf("""info: Microsoft.Hosting.Lifetime[14] Now listening on: https://localhost:5001""", "https", "5001"),
+                arrayOf("""info: Microsoft.Hosting.Lifetime[14] Now listening on: http://localhost:5000""", "http", "5000"),
+                arrayOf("""info: Microsoft.Hosting.Lifetime[0] Application started. Press Ctrl+C to shut down.""", null, null),
+                arrayOf("""info: Microsoft.Hosting.Lifetime[0] Hosting environment: Development""", null, null),
+                arrayOf("""info: Microsoft.Hosting.Lifetime[0] Content root path: C:\Rossynt\backend\RossyntBackend""", null, null),
+
+                // .NET 7.0
                 arrayOf("""info: Microsoft.Hosting.Lifetime[14] Now listening on: https://localhost:5001""", "https", "5001"),
                 arrayOf("""info: Microsoft.Hosting.Lifetime[14] Now listening on: http://localhost:5000""", "http", "5000"),
                 arrayOf("""info: Microsoft.Hosting.Lifetime[0] Application started. Press Ctrl+C to shut down.""", null, null),

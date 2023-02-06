@@ -7,8 +7,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 
-#nullable enable
-
 namespace RossyntBackend.Models {
     public sealed class Tree {
         private readonly SyntaxNode _rootSyntaxNode;
@@ -17,7 +15,7 @@ namespace RossyntBackend.Models {
         /// <summary>
         /// Key is <see cref="TreeNode.NodeId"/> of <see cref="TreeNode"/>.
         /// </summary>
-        private readonly Dictionary<string, TreeNode> _treeNodes = new Dictionary<string, TreeNode>();
+        private readonly Dictionary<string, TreeNode> _treeNodes = new();
 
         /// <summary>
         /// Key is <see cref="TreeNode.NodeId"/> of <see cref="TreeNode"/>.

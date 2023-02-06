@@ -5,8 +5,6 @@ using JetBrains.Annotations;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 
-#nullable enable
-
 namespace RossyntBackend.Models {
     public abstract class TreeNode {
         public string NodeId { get; } = Guid.NewGuid().ToString("D");
@@ -14,7 +12,7 @@ namespace RossyntBackend.Models {
         // ReSharper disable once MemberCanBePrivate.Global UnusedAutoPropertyAccessor.Global
         public TreeNode? ParentTreeNode { get; }
 
-        private readonly List<TreeNode> _childTreeNodes = new List<TreeNode>();
+        private readonly List<TreeNode> _childTreeNodes = new();
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         // ReSharper disable once ReturnTypeCanBeEnumerable.Global

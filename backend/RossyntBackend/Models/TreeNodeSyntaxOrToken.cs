@@ -7,8 +7,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 using RossyntBackend.Utils;
 
-#nullable enable
-
 namespace RossyntBackend.Models {
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public sealed class TreeNodeSyntaxOrToken : TreeNode {
@@ -54,7 +52,7 @@ namespace RossyntBackend.Models {
 
         [Pure]
         private object RawObject() {
-            return SyntaxNodeOrToken.IsNode ? (object)(SyntaxNodeOrToken.AsNode() ?? throw new InvalidOperationException($"{nameof(SyntaxNodeOrToken.AsNode)}() is null.")) : SyntaxNodeOrToken.AsToken();
+            return SyntaxNodeOrToken.IsNode ? SyntaxNodeOrToken.AsNode() ?? throw new InvalidOperationException($"{nameof(SyntaxNodeOrToken.AsNode)}() is null.") : SyntaxNodeOrToken.AsToken();
         }
     }
 }
