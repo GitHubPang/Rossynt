@@ -109,7 +109,7 @@ public class SyntaxTreeController : ControllerBase {
             ["Id"] = treeNode.NodeId,
             ["Cat"] = treeNode.TreeNodeCategory().ToString(),
             ["Type"] = treeNode.RawType().Name,
-            ["Kind"] = treeNode.SyntaxKind().ToString(),
+            ["Kind"] = treeNode.SyntaxKind().ToString()
         };
 
         var shortString = ShortString(treeNode);

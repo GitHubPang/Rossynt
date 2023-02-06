@@ -30,7 +30,7 @@ public class CSharpVersionTest {
         CSharp11,
         Latest,
         LatestMajor,
-        Preview,
+        Preview
     }
 
     [Test]

@@ -36,7 +36,7 @@ public class ObjectUtilTest {
         var expectedDict = new Dictionary<string, string> {
             ["PublicProperty"] = "Apple",
             ["PublicComputedProperty"] = "Backs",
-            ["IntegerProperty"] = "-42",
+            ["IntegerProperty"] = "-42"
         };
         CollectionAssert.AreEquivalent(expectedDict, ObjectUtil.GetObjectProperties(new Foo()));
     }
