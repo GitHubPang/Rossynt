@@ -40,7 +40,7 @@ internal class BackendRuntimeVersionFinder(dotNetPath: String) {
             }
 
             val version = matcher.group(1)
-            val majorVersion = StringUtils.split(version, '.')[0].toInt()
+            val majorVersion = StringUtils.split(version, '.')[0].toIntOrNull() ?: return null
 
             return BackendRuntimeVersion.values().find { majorVersion == it.majorVersion }
         }

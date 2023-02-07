@@ -23,6 +23,13 @@ class BackendRuntimeVersionFinderTest internal constructor(private val line: Str
                 arrayOf("""Microsoft.WindowsDesktop.App 3.1.9 [C:\Users\User\.dotnet\shared\Microsoft.WindowsDesktop.App]""", null),
                 arrayOf("""Microsoft.WindowsDesktop.App 5.0.1 [C:\Users\User\.dotnet\shared\Microsoft.WindowsDesktop.App]""", null),
                 arrayOf("""Microsoft.WindowsDesktop.App 6.0.1 [C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App]""", null),
+                arrayOf("""Microsoft.AspNetCore.App a.b.c [/usr/local/share/dotnet/shared/Microsoft.AspNetCore.App]""", null),
+                arrayOf("""Microsoft.AspNetCore.App a.b.c """, null),
+                arrayOf("""Microsoft.AspNetCore.App a.b.c""", null),
+                arrayOf("""Microsoft.AspNetCore.App x""", null),
+                arrayOf("""Microsoft.AspNetCore.AppX""", null),
+                arrayOf("""Microsoft.AspNetCore.App """, null),
+                arrayOf("""Microsoft.AspNetCore.App""", null),
             )
         }
     }
