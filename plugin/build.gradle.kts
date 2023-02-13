@@ -9,7 +9,7 @@ plugins {
     // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "1.8.0"
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij") version "1.12.0"
+    id("org.jetbrains.intellij") version "1.13.0"
     // Gradle Changelog Plugin
 /* ROLL_BACK_CHANGELOG_PLUGIN BEGIN - https://github.com/JetBrains/gradle-changelog-plugin/issues/147
     id("org.jetbrains.changelog") version "2.0.0"
