@@ -3,6 +3,7 @@
 # Rossynt Changelog
 
 ## [Unreleased]
+## [223.4.0] - 2023-02-18
 ### Added
 - Support .NET 7.
 
