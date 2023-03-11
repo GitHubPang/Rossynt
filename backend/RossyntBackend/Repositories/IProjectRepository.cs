@@ -1,13 +1,13 @@
 ﻿using JetBrains.Annotations;
 using RossyntBackend.Models;
 
-namespace RossyntBackend.Repositories {
-    public interface IProjectRepository {
-        public void SetTree(Tree tree);
+namespace RossyntBackend.Repositories;
 
-        [Pure]
-        public Tree? GetTree();
+public interface IProjectRepository {
+    public void SetTree(Tree tree);
 
-        public void RemoveTree();
-    }
+    [Pure]
+    public Tree? GetTree();
+
+    public void RemoveTree();
 }
