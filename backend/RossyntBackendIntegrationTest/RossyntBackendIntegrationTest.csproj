@@ -10,8 +10,8 @@
 
     <ItemGroup>
         <PackageReference Include="AutoFixture" Version="4.17.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.13" Condition="'$(TargetFramework)' == 'net6.0'" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.2" Condition="'$(TargetFramework)' == 'net7.0'" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.4" Condition="'$(TargetFramework)' == 'net6.0'" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.4" Condition="'$(TargetFramework)' == 'net7.0'" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
         <PackageReference Include="NUnit" Version="3.13.3" />
         <PackageReference Include="NUnit3TestAdapter" Version="4.3.1" />
