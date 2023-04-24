@@ -165,7 +165,7 @@ jobs:
 
       # Run Qodana inspections
       - name: Qodana - Code Inspection
-        uses: JetBrains/qodana-action@v2022.3.0
+        uses: JetBrains/qodana-action@v2023.1.0
 
       # Store already-built plugin as an artifact for downloading
       - name: Upload artifact
