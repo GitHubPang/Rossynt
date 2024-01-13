@@ -15,7 +15,7 @@ Rossynt - **Ros**lyn **syn**tax **t**ree viewer for C#. Works on JetBrains Rider
 
 ## System Requirements
 
-* [ASP.NET Core Runtime](https://dotnet.microsoft.com/download/dotnet) (6.0 or 7.0)
+* [ASP.NET Core Runtime](https://dotnet.microsoft.com/download/dotnet) (6.0, 7.0 or 8.0)
 * [.NET CLI tool](https://docs.microsoft.com/en-us/dotnet/core/tools/)
 
 These are all included if you have installed [.NET SDK](https://dotnet.microsoft.com/download/dotnet) or [Visual Studio](https://visualstudio.microsoft.com/downloads/).

@@ -63,6 +63,7 @@ public class IntegrationTest {
             case LanguageVersion.CSharp9:
             case LanguageVersion.CSharp10:
             case LanguageVersion.CSharp11:
+            case LanguageVersion.CSharp12:
             case LanguageVersion.LatestMajor:
             case LanguageVersion.Preview:
             case LanguageVersion.Latest:
@@ -133,6 +134,7 @@ public class IntegrationTest {
         Assert.That(nodeInfo["IsToken"], Is.EqualTo("False"));
         Assert.That(nodeInfo["Language"], Is.EqualTo("C#"));
         Assert.That(nodeInfo["Name"], Is.EqualTo(""));
+        Assert.That(nodeInfo["NamespaceOrType"], Is.EqualTo(""));
         Assert.That(nodeInfo["Parent"], Is.EqualTo("using"));
         Assert.That(nodeInfo["ParentTrivia"], Is.EqualTo(""));
         Assert.That(nodeInfo["RawKind"], Is.EqualTo("8843"));
@@ -141,8 +143,9 @@ public class IntegrationTest {
         Assert.That(nodeInfo["SpanStart"], Is.EqualTo("0"));
         Assert.That(nodeInfo["StaticKeyword"], Is.EqualTo(""));
         Assert.That(nodeInfo["SyntaxTree"], Is.EqualTo("using"));
+        Assert.That(nodeInfo["UnsafeKeyword"], Is.EqualTo(""));
         Assert.That(nodeInfo["UsingKeyword"], Is.EqualTo("using"));
-        Assert.That(nodeInfo.Count, Is.EqualTo(25));
+        Assert.That(nodeInfo.Count, Is.EqualTo(27));
     });
 
     [Test]
