@@ -7,14 +7,14 @@ plugins {
     // Java support
     id("java")
     // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.8.0"
+    id("org.jetbrains.kotlin.jvm") version "1.9.22"
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij") version "1.12.0"
+    id("org.jetbrains.intellij") version "1.16.1"
     // Gradle Changelog Plugin
 /* ROLL_BACK_CHANGELOG_PLUGIN BEGIN - https://github.com/JetBrains/gradle-changelog-plugin/issues/147
     id("org.jetbrains.changelog") version "2.0.0"
 */
-    id("org.jetbrains.changelog") version "1.3.1"
+    id("org.jetbrains.changelog") version "2.2.0"
 /* ROLL_BACK_CHANGELOG_PLUGIN END */
     // Gradle Qodana Plugin
     id("org.jetbrains.qodana") version "0.1.13"
@@ -28,11 +28,11 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    implementation("io.ktor:ktor-client-content-negotiation:2.2.1")
-    implementation("io.ktor:ktor-client-core:2.2.1")
-    implementation("io.ktor:ktor-client-cio:2.2.1")
-    implementation("io.ktor:ktor-client-gson:2.2.1")
-    implementation("io.ktor:ktor-serialization-gson:2.2.1")
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.7")
+    implementation("io.ktor:ktor-client-core:2.3.7")
+    implementation("io.ktor:ktor-client-cio:2.3.7")
+    implementation("io.ktor:ktor-client-gson:2.3.7")
+    implementation("io.ktor:ktor-serialization-gson:2.3.7")
 }
 
 // Set the JVM language level used to build the project. Use Java 11 for 2020.3+, and Java 17 for 2022.2+.
@@ -93,19 +93,17 @@ tasks {
 
         // Get the latest available change notes from the changelog file
         changeNotes.set(provider {
-            with(changelog) {
 /* ROLL_BACK_CHANGELOG_PLUGIN BEGIN - https://github.com/JetBrains/gradle-changelog-plugin/issues/147
-                renderItem(
-                    getOrNull(properties("pluginVersion"))
-                        ?: runCatching { getLatest() }.getOrElse { getUnreleased() },
-                    Changelog.OutputType.HTML,
-                )
+            renderItem(
+                getOrNull(properties("pluginVersion"))
+                    ?: runCatching { getLatest() }.getOrElse { getUnreleased() },
+                Changelog.OutputType.HTML,
+            )
 */
-                changelog.run {
-                    getOrNull(properties("pluginVersion")) ?: getLatest()
-                }.toHTML()
+            changelog.renderItem(changelog.run {
+                getOrNull(properties("pluginVersion")) ?: getLatest()
+            }, Changelog.OutputType.HTML)
 /* ROLL_BACK_CHANGELOG_PLUGIN END */
-            }
         })
     }
 

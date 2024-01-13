@@ -16,13 +16,13 @@ import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.util.TextRange
 import com.intellij.util.LineSeparator
 import kotlinx.coroutines.*
+import net.jcip.annotations.Immutable
 import org.example.githubpang.rossynt.RossyntToolWindowStateNotifier
 import org.example.githubpang.rossynt.events.ITextEventThrottlerCallback
 import org.example.githubpang.rossynt.events.TextEventThrottler
 import org.example.githubpang.rossynt.settings.PluginSettingsNotifier
 import org.example.githubpang.rossynt.trees.TreeNode
 import java.util.*
-import javax.annotation.concurrent.Immutable
 import kotlin.coroutines.EmptyCoroutineContext
 
 @Service
