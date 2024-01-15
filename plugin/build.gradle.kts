@@ -127,12 +127,12 @@ tasks {
     //
     buildPlugin {
         exclude {
-            it.name.startsWith("kotlinx-coroutines-") || it.name.startsWith("kotlin-stdlib-") || it.name.startsWith("kotlin-reflect-")
+            it.name.startsWith("kotlinx-coroutines-") || it.name.startsWith("kotlin-stdlib-") || it.name.startsWith("kotlin-reflect-") || it.name.startsWith("slf4j-api-")
         }
     }
     prepareSandbox {
         exclude {
-            it.name.startsWith("kotlinx-coroutines-") || it.name.startsWith("kotlin-stdlib-") || it.name.startsWith("kotlin-reflect-")
+            it.name.startsWith("kotlinx-coroutines-") || it.name.startsWith("kotlin-stdlib-") || it.name.startsWith("kotlin-reflect-") || it.name.startsWith("slf4j-api-")
         }
     }
 
