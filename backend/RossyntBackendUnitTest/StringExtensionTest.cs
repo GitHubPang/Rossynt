@@ -23,7 +23,7 @@ public class StringExtensionTest {
     [TestCase("😀", 1, "")]
     [TestCase("😀", 0, "")]
     public void SurrogateSafeLeft(string inputString, int maxLength, string expectedResult) {
-        Assert.AreEqual(expectedResult, inputString.SurrogateSafeLeft(maxLength));
+        Assert.That(expectedResult, Is.EqualTo(inputString.SurrogateSafeLeft(maxLength)));
     }
 
     [Test]

@@ -63,6 +63,7 @@ public class IntegrationTest {
             case LanguageVersion.CSharp9:
             case LanguageVersion.CSharp10:
             case LanguageVersion.CSharp11:
+            case LanguageVersion.CSharp12:
             case LanguageVersion.LatestMajor:
             case LanguageVersion.Preview:
             case LanguageVersion.Latest:
@@ -115,43 +116,45 @@ public class IntegrationTest {
     public Task GetNodeInfo() => RunWithHttpClient(async httpClient => {
         var root = await CompileFile(httpClient, "using");
         var nodeId = root["Child"]?[0]?["Id"]?.Value<string>();
-        Assert.IsNotNull(nodeId);
+        Assert.That(nodeId, Is.Not.Null);
         var nodeInfo = await GetNodeInfo(httpClient, nodeId!);
-        Assert.AreEqual("", nodeInfo["Alias"]);
-        Assert.AreEqual("False", nodeInfo["ContainsAnnotations"]);
-        Assert.AreEqual("True", nodeInfo["ContainsDiagnostics"]);
-        Assert.AreEqual("False", nodeInfo["ContainsDirectives"]);
-        Assert.AreEqual("False", nodeInfo["ContainsSkippedText"]);
-        Assert.AreEqual("[0..5)", nodeInfo["FullSpan"]);
-        Assert.AreEqual("", nodeInfo["GlobalKeyword"]);
-        Assert.AreEqual("False", nodeInfo["HasLeadingTrivia"]);
-        Assert.AreEqual("False", nodeInfo["HasStructuredTrivia"]);
-        Assert.AreEqual("False", nodeInfo["HasTrailingTrivia"]);
-        Assert.AreEqual("False", nodeInfo["IsMissing"]);
-        Assert.AreEqual("True", nodeInfo["IsNode"]);
-        Assert.AreEqual("False", nodeInfo["IsStructuredTrivia"]);
-        Assert.AreEqual("False", nodeInfo["IsToken"]);
-        Assert.AreEqual("C#", nodeInfo["Language"]);
-        Assert.AreEqual("", nodeInfo["Name"]);
-        Assert.AreEqual("using", nodeInfo["Parent"]);
-        Assert.AreEqual("", nodeInfo["ParentTrivia"]);
-        Assert.AreEqual("8843", nodeInfo["RawKind"]);
-        Assert.AreEqual("", nodeInfo["SemicolonToken"]);
-        Assert.AreEqual("[0..5)", nodeInfo["Span"]);
-        Assert.AreEqual("0", nodeInfo["SpanStart"]);
-        Assert.AreEqual("", nodeInfo["StaticKeyword"]);
-        Assert.AreEqual("using", nodeInfo["SyntaxTree"]);
-        Assert.AreEqual("using", nodeInfo["UsingKeyword"]);
-        Assert.AreEqual(25, nodeInfo.Count);
+        Assert.That(nodeInfo["Alias"], Is.EqualTo(""));
+        Assert.That(nodeInfo["ContainsAnnotations"], Is.EqualTo("False"));
+        Assert.That(nodeInfo["ContainsDiagnostics"], Is.EqualTo("True"));
+        Assert.That(nodeInfo["ContainsDirectives"], Is.EqualTo("False"));
+        Assert.That(nodeInfo["ContainsSkippedText"], Is.EqualTo("False"));
+        Assert.That(nodeInfo["FullSpan"], Is.EqualTo("[0..5)"));
+        Assert.That(nodeInfo["GlobalKeyword"], Is.EqualTo(""));
+        Assert.That(nodeInfo["HasLeadingTrivia"], Is.EqualTo("False"));
+        Assert.That(nodeInfo["HasStructuredTrivia"], Is.EqualTo("False"));
+        Assert.That(nodeInfo["HasTrailingTrivia"], Is.EqualTo("False"));
+        Assert.That(nodeInfo["IsMissing"], Is.EqualTo("False"));
+        Assert.That(nodeInfo["IsNode"], Is.EqualTo("True"));
+        Assert.That(nodeInfo["IsStructuredTrivia"], Is.EqualTo("False"));
+        Assert.That(nodeInfo["IsToken"], Is.EqualTo("False"));
+        Assert.That(nodeInfo["Language"], Is.EqualTo("C#"));
+        Assert.That(nodeInfo["Name"], Is.EqualTo(""));
+        Assert.That(nodeInfo["NamespaceOrType"], Is.EqualTo(""));
+        Assert.That(nodeInfo["Parent"], Is.EqualTo("using"));
+        Assert.That(nodeInfo["ParentTrivia"], Is.EqualTo(""));
+        Assert.That(nodeInfo["RawKind"], Is.EqualTo("8843"));
+        Assert.That(nodeInfo["SemicolonToken"], Is.EqualTo(""));
+        Assert.That(nodeInfo["Span"], Is.EqualTo("[0..5)"));
+        Assert.That(nodeInfo["SpanStart"], Is.EqualTo("0"));
+        Assert.That(nodeInfo["StaticKeyword"], Is.EqualTo(""));
+        Assert.That(nodeInfo["SyntaxTree"], Is.EqualTo("using"));
+        Assert.That(nodeInfo["UnsafeKeyword"], Is.EqualTo(""));
+        Assert.That(nodeInfo["UsingKeyword"], Is.EqualTo("using"));
+        Assert.That(nodeInfo.Count, Is.EqualTo(27));
     });
 
     [Test]
     public Task ResetActiveFile() => RunWithHttpClient(async httpClient => {
         var root = await CompileFile(httpClient, "using");
         var nodeId = root["Id"]?.Value<string>();
-        Assert.IsNotNull(nodeId);
+        Assert.That(nodeId, Is.Not.Null);
         var nodeInfo = await GetNodeInfo(httpClient, nodeId!);
-        Assert.IsTrue(nodeInfo.Count > 0);
+        Assert.That(nodeInfo.Count, Is.GreaterThan(0));
         await ResetActiveFile(httpClient);
         Assert.CatchAsync<Exception>(() => GetNodeInfo(httpClient, nodeId!));
     });
@@ -165,7 +168,7 @@ public class IntegrationTest {
         node = node?["Child"]?[0]; // VariableDeclaration
         node = node?["Child"]?[1]; // VariableDeclarator
         node = node?["Child"]?[0]; // IdentifierToken
-        Assert.AreEqual(nodeId, node?["Id"]?.Value<string>());
+        Assert.That(nodeId, Is.EqualTo(node?["Id"]?.Value<string>()));
     });
 
     private static async Task RunWithHttpClient(Func<HttpClient, Task> func) {
@@ -188,7 +191,7 @@ public class IntegrationTest {
         }
 
         var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/compileFile", new FormUrlEncodedContent(parameters));
-        Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
+        Assert.That(httpResponseMessage.IsSuccessStatusCode, Is.True);
         var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
         return JObject.Parse(responseBody);
     }
@@ -200,10 +203,10 @@ public class IntegrationTest {
         var parameters = ImmutableDictionary<string, string>.Empty;
         parameters = parameters.Add("NodeId", nodeId);
         var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/getNodeInfo", new FormUrlEncodedContent(parameters));
-        Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
+        Assert.That(httpResponseMessage.IsSuccessStatusCode, Is.True);
         var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
         var dictionary = JsonConvert.DeserializeObject<IDictionary<string, string>>(responseBody);
-        Assert.IsNotNull(dictionary);
+        Assert.That(dictionary, Is.Not.Null);
         return dictionary!;
     }
 
@@ -212,7 +215,7 @@ public class IntegrationTest {
 
         var parameters = ImmutableDictionary<string, string>.Empty;
         var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/resetActiveFile", new FormUrlEncodedContent(parameters));
-        Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
+        Assert.That(httpResponseMessage.IsSuccessStatusCode, Is.True);
     }
 
     private static async Task<string> FindNode(HttpClient httpClient, int start, int end) {
@@ -222,14 +225,14 @@ public class IntegrationTest {
         parameters = parameters.Add("Start", start.ToString());
         parameters = parameters.Add("End", end.ToString());
         var httpResponseMessage = await httpClient.PostAsync("/syntaxTree/findNode", new FormUrlEncodedContent(parameters));
-        Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
+        Assert.That(httpResponseMessage.IsSuccessStatusCode, Is.True);
         var responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
         var dictionary = JsonConvert.DeserializeObject<IDictionary<string, string>>(responseBody);
-        Assert.IsNotNull(dictionary);
-        Assert.AreEqual(1, dictionary!.Count);
-        Assert.IsTrue(dictionary.ContainsKey("nodeId"));
+        Assert.That(dictionary, Is.Not.Null);
+        Assert.That(1, Is.EqualTo(dictionary!.Count));
+        Assert.That(dictionary.ContainsKey("nodeId"), Is.True);
         var nodeId = dictionary["nodeId"];
-        Assert.IsNotNull(nodeId);
+        Assert.That(nodeId, Is.Not.Null);
         return nodeId;
     }
 
@@ -240,13 +243,13 @@ public class IntegrationTest {
         if (str == null) throw new ArgumentNullException(nameof(str));
         if (span == null) throw new ArgumentNullException(nameof(span));
 
-        Assert.IsNotNull(node);
-        Assert.AreEqual(cat, node!["Cat"]?.Value<string>());
-        Assert.AreEqual(type, node["Type"]?.Value<string>());
-        Assert.AreEqual(kind, node["Kind"]?.Value<string>());
-        Assert.AreEqual(str.Length > 0 ? str : null, node["Str"]?.Value<string>());
-        Assert.AreEqual(span.Length > 0 ? span : null, node["Span"]?.Value<string>());
-        Assert.AreEqual(isMissing ? (int?)1 : null, node["IsMissing"]?.Value<int>());
-        Assert.AreEqual(childCount > 0 ? (int?)childCount : null, node["Child"]?.Count());
+        Assert.That(node, Is.Not.Null);
+        Assert.That(node!["Cat"]?.Value<string>(), Is.EqualTo(cat));
+        Assert.That(node["Type"]?.Value<string>(), Is.EqualTo(type));
+        Assert.That(node["Kind"]?.Value<string>(), Is.EqualTo(kind));
+        Assert.That(node["Str"]?.Value<string>(), Is.EqualTo(str.Length > 0 ? str : null));
+        Assert.That(node["Span"]?.Value<string>(), Is.EqualTo(span.Length > 0 ? span : null));
+        Assert.That(node["IsMissing"]?.Value<int>(), Is.EqualTo(isMissing ? (int?)1 : null));
+        Assert.That(node["Child"]?.Count(), Is.EqualTo(childCount > 0 ? (int?)childCount : null));
     }
 }

@@ -20,6 +20,7 @@ internal enum class CSharpVersion {
     CSharp9,
     CSharp10,
     CSharp11,
+    CSharp12,
     Latest,
     LatestMajor,
     Preview,
